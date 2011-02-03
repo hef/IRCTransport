@@ -4,6 +4,7 @@
 package com.bukkit.hef.IRCTransport;
 
 import java.io.IOException;
+import java.util.Random;
 
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
@@ -15,40 +16,15 @@ import org.bukkit.entity.Player;
  */
 public class PlayerBot extends PircBot {
 	private Player player;
+	Random r = new Random();
 
 	/**
 	 * 
 	 */
 	public PlayerBot(Player player) {
 		this.player = player;
-		setName(player.getName());
 		setVerbose(true);
-		//TODO: make try/catch a recursive function
-		try {
-			connect("acm.cs.uic.edu");
-		} catch (NickAlreadyInUseException e) {
-			setName(player.getName() + Math.random());
-			try {
-				connect("acm.cs.uic.edu");
-			} catch (NickAlreadyInUseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IrcException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IrcException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		connect("acm.cs.uic.edu", player.getName());
 		joinChannel("#minecraft");
 		
 		// TODO Auto-generated constructor stub
@@ -57,6 +33,22 @@ public class PlayerBot extends PircBot {
 	{
 		//TODO: replace channel names with numbers
 		player.sendMessage(sender + ": " + message);
+	}
+	private void connect(String server, String nick)
+	{
+		try{
+			setName(nick);
+			super.connect(server);
+		}  catch (NickAlreadyInUseException e1) {
+			  String randomString = Long.toString(Math.abs(r.nextLong()), 36);
+			  connect(server, nick + randomString);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IrcException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 }

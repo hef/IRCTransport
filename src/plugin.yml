@@ -20,6 +20,11 @@ commands:
            /<command> <channel> [message]
            Example: /<command> #warez
            Example: /<command> #porn see you guys tomorrow
-
-  	       
+  channel:
+    description: Switch active channel
+    usage: |
+           /<command> <channel>
+           Example: /<command> #minecraft
+           Example: /<command> #acm
+          
  
