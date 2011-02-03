@@ -2,17 +2,16 @@ package com.bukkit.hef.IRCTransport;
 
 import java.io.File;
 import java.util.HashMap;
-
+import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.Server;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event;
+import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginLoader;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * IRCTransport for Bukkit
@@ -21,8 +20,6 @@ import org.bukkit.plugin.PluginManager;
  */
 public class IRCTransport extends JavaPlugin {
 	private final IRCTransportPlayerListener playerListener = new IRCTransportPlayerListener(
-			this);
-	private final IRCTransportBlockListener blockListener = new IRCTransportBlockListener(
 			this);
 	final HashMap<Player, PlayerBot> bots = new HashMap<Player, PlayerBot>();
 
