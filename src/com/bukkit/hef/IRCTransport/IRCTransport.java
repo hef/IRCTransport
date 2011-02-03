@@ -43,18 +43,18 @@ public class IRCTransport extends JavaPlugin {
 		// EXAMPLE: Custom code, here we just output some info so we can check
 		// all is well
 		PluginDescriptionFile pdfFile = this.getDescription();
-		System.out.println(pdfFile.getName() + " version "
-				+ pdfFile.getVersion() + " is enabled!");
-		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener,
-				Priority.Normal, this);
-		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener,
-				Priority.Normal, this);
+		System.out.println(pdfFile.getFullName() + " is enabled!");
+		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
+		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
 	}
 
 	@Override
 	public void onDisable() {
 
 		System.out.println("Goodbye world!");
+		PluginDescriptionFile pdfFile = this.getDescription();
+		System.out.println(pdfFile.getFullName() + "is disabled" );
 	}
 
 	@Override
@@ -62,13 +62,37 @@ public class IRCTransport extends JavaPlugin {
 			String commandLabel, String[] args) {
 		Player player = (Player) sender;
 		PlayerBot bot = bots.get(player);
-		String[] trimmedArgs = args;
 		String commandName = command.getName().toLowerCase();
 
 		if (commandName.equals("join")) {
-			bot.joinChannel(args[0]);
+			return join(bot, args);
+		} else if(commandName.equals("leave"))
+		{
+			return leave(bot, args);
+		}
+		return false;
+	}
+	public boolean join(PlayerBot bot, String[] args)
+	{
+		bot.joinChannel(args[0]);
+		return true;
+	}
+	public boolean leave(PlayerBot bot, String[] args)
+	{
+		if( args.length == 1  )
+		{
+			bot.partChannel(args[0]);
+			return true;
+		}
+		else if(args.length > 1)
+		{
+			String message = new String();
+			for(int i = 1; i < args.length; ++i)
+				message += args[i] + " ";
+			bot.partChannel(args[0], message);
 			return true;
 		}
 		return false;
 	}
+	
 }

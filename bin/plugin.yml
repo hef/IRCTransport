@@ -9,8 +9,17 @@ description: >
              and all irc messages to minecraft players.
 commands:
   join:
-    description: join a channel
+    description: Join an IRC channel
     usage: |
            /<command> <channel>
            Example: /<command> #tutoring
            Example: /<command> #siggame
+  leave:
+    description: Leave an IRC channel.
+    usage: |
+           /<command> <channel> [message]
+           Example: /<command> #warez
+           Example: /<command> #porn see you guys tomorrow
+
+  	       
+ 

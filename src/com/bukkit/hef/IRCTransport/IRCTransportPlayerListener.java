@@ -36,6 +36,11 @@ public class IRCTransportPlayerListener extends PlayerListener {
     {
     	plugin.bots.put(event.getPlayer(), new PlayerBot(event.getPlayer()));
     }
+    public void onPlayerQuit(PlayerEvent event)
+    {
+    	plugin.bots.get(event.getPlayer()).disconnect();
+    	plugin.bots.remove(event.getPlayer());
+    }
     
 }
 
