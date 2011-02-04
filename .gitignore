@@ -1,3 +1,4 @@
 *.class
 *.html
 bin/*
+*.classpath
