@@ -12,8 +12,7 @@ commands:
     description: Join an IRC channel
     usage: |
            /<command> <channel>
-           Example: /<command> #tutoring
-           Example: /<command> #siggame
+           Example: /<command> #minecraft
   leave:
     description: Leave an IRC channel.
     usage: |
@@ -26,5 +25,10 @@ commands:
            /<command> <channel>
            Example: /<command> #minecraft
            Example: /<command> #acm
+  msg:
+    description: Send a private message
+    usage: |
+           /<command> <player> [message]
+           Example: /<command> pbrhef Awesome thing you built! 
           
  
