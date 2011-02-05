@@ -84,7 +84,6 @@ public class IRCTransport extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command,
 			String commandLabel, String[] args) {
 		Player player = (Player) sender;
-		player.
 		PlayerBot bot = bots.get(player);
 		String commandName = command.getName().toLowerCase();
 
