@@ -4,9 +4,9 @@
 Connects minecraft chat to an irc server.
 You must set irc.server=irc.example.com in server.properties first!
 
-  /join #channel
-  /leave #channel
-  /channel #channel -- changes active channel
+   /join #channel
+   /leave #channel
+   /channel #channel -- changes active channel
 
 
 Features:
