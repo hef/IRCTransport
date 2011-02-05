@@ -23,14 +23,16 @@ Available commands:
 
 Features:
 ---------
-  * IRC to in game chat
-  * in game chat to IRC
+  * Minecraft chat replaced with IRC chat
   * private messaging 
-  * IRC channels work
+  * IRC Channel are reflected in game.
 
 Changelog:
 ----------
 ### version 0.2
+  * nick already in use handling changed.
+  * active channel is switched on channel join
+  * Channel join messages
   * Channel autojoin now a setting.
 ### Version 0.1
 Basic irc features are functional in Minecraft.

@@ -28,6 +28,7 @@ public class PlayerBot extends PircBot {
 		this.player = player;
 		setVerbose(true);
 		setLogin(player.getName());
+		super.setAutoNickChange(true);
 		connect(plugin.ircserver, player.getName());
 		if(!plugin.autojoin.equals(""))
 		{
@@ -43,7 +44,7 @@ public class PlayerBot extends PircBot {
 			player.setDisplayName(nick);
 			super.connect(server);
 		}  catch (NickAlreadyInUseException e1) {
-			  //TODO: make this about 4 charachters long, and strip previous 4 if already done.
+			  //This should not be called anymore.
 			  String randomString = Long.toString(Math.abs(r.nextLong()), 36);
 			  connect(server, nick + randomString);
 		} catch (IOException e1) {
@@ -68,4 +69,12 @@ public class PlayerBot extends PircBot {
 		sendMessage(activeChannel, message);
 		player.sendMessage(String.format("[%s] %s: %s", activeChannel, player.getName(), message));
 	}
+	public void onJoin(String channel, String sender, String login, String hostname) 
+	{
+		if(login.equals(player.getName()))
+			activeChannel = channel;
+		else
+			player.sendMessage(String.format("[%s] %s has joined.", channel, sender)); //TODO: colorize
+	}
+	
 }
