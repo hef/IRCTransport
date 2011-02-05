@@ -2,6 +2,7 @@
 =============================================================
 
 Connects minecraft chat to an irc server.
+This is a bukkit plugin.
 You must set irc.server=irc.example.com in server.properties first!
 
     /join #channel
