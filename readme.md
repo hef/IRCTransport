@@ -11,6 +11,9 @@ You must set irc.server=irc.example.com in server.properties first!
     /msg user -- send a private message to a user
 
 
+[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-v0.1.jar)
+[Source](https://github.com/hef/IRCTransport)
+
 Features:
 ---------
   * IRC to in game chat
