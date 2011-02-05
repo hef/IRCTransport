@@ -18,17 +18,22 @@ public class PlayerBot extends PircBot {
 	private Player player;
 	String activeChannel;
 	Random r = new Random();
+	private final IRCTransport plugin;
 
 	/**
 	 * 
 	 */
-	public PlayerBot(Player player, String ircServer) {
+	public PlayerBot(IRCTransport instance, Player player) {
+		this.plugin = instance;
 		this.player = player;
 		setVerbose(true);
 		setLogin(player.getName());
-		connect(ircServer, player.getName());
-		joinChannel("#minecraft");
-		activeChannel = "#minecraft";
+		connect(plugin.ircserver, player.getName());
+		if(!plugin.autojoin.equals(""))
+		{
+			joinChannel(plugin.autojoin);
+			activeChannel = plugin.autojoin;
+		}
 	}
 	private void connect(String server, String nick)
 	{
@@ -46,7 +51,6 @@ public class PlayerBot extends PircBot {
 			e1.printStackTrace();
 		} catch (IrcException e1) {
 			System.out.println("IrcException: Failed to connect to irc server: " + server);
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}

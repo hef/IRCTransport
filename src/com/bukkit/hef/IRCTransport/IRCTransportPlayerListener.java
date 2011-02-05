@@ -19,7 +19,7 @@ public class IRCTransportPlayerListener extends PlayerListener {
         Player[] players = instance.getServer().getOnlinePlayers();
         for(Player player: players)
         {
-        	plugin.bots.put(player, new PlayerBot(player, plugin.ircserver));
+        	plugin.bots.put(player, new PlayerBot(plugin,player));
         }
     }
     public void onPlayerChat(PlayerChatEvent event)
@@ -31,7 +31,7 @@ public class IRCTransportPlayerListener extends PlayerListener {
     }
     public void onPlayerJoin(PlayerEvent event) 
     {
-    	plugin.bots.put(event.getPlayer(), new PlayerBot(event.getPlayer(), plugin.ircserver));
+    	plugin.bots.put(event.getPlayer(), new PlayerBot(plugin, event.getPlayer()));
     }
     public void onPlayerQuit(PlayerEvent event)
     {

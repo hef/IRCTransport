@@ -27,6 +27,7 @@ public class IRCTransport extends JavaPlugin {
 			this);
 	final HashMap<Player, PlayerBot> bots = new HashMap<Player, PlayerBot>();
 	String ircserver = "";
+	String autojoin ="";
 
 	public IRCTransport(PluginLoader pluginLoader, Server instance,
 			PluginDescriptionFile desc, File folder, File plugin,
@@ -41,9 +42,9 @@ public class IRCTransport extends JavaPlugin {
 		PluginDescriptionFile pdfFile = this.getDescription();
 		
 		FileInputStream spf;
+		Properties sp = new Properties();
 		try {
 			spf = new FileInputStream("server.properties");
-			Properties sp = new Properties();
 			sp.load(spf);
 			this.ircserver = sp.getProperty("irc.server","");
 		} catch (FileNotFoundException e) {
@@ -57,6 +58,7 @@ public class IRCTransport extends JavaPlugin {
 			System.out.println( pdfFile.getName() + ": set \"irc.server\" in server.properties" );		
 			return;
 		}
+		this.autojoin = sp.getProperty("irc.autojoin", "");
 	
 		System.out.println(pdfFile.getFullName() + " is enabled!");
 		//Event Registration
