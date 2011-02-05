@@ -19,4 +19,4 @@ Features:
 Changelog:
 ----------
 ### version 0.1
-Basic irc Features functional in game.
+Basic irc features are functional in Minecraft.
