@@ -16,6 +16,7 @@ Available commands:
     /leave #channel
     /channel #channel -- changes active channel
     /msg user -- send a private message to a user
+    /nick new_name  -- changes chat name
 
 
 [Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-v0.2.jar)  
