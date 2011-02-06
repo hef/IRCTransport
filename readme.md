@@ -30,6 +30,8 @@ Features:
 Changelog:
 ----------
 ### version 0.2
+  * players name displays correctly when there nick is changed
+  * nick change notification
   * nick already in use handling changed.
   * active channel is switched on channel join
   * Channel join messages
