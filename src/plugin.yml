@@ -30,5 +30,10 @@ commands:
     usage: |
            /<command> <player> [message]
            Example: /<command> pbrhef Awesome thing you built! 
+  nick:
+    description: Change your display name.
+    usage: |
+           /<command> <name>
+           Example: /<command> Sam
           
  

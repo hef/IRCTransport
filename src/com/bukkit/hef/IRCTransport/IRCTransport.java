@@ -97,6 +97,8 @@ public class IRCTransport extends JavaPlugin {
 			return channel(bot, args);
 		else if(commandName.equals("msg"))
 			return privateMessage(bot,args);
+		else if(commandName.equals("nick"))
+			return nick(bot,args);
 		return false;
 	}
 	public boolean join(PlayerBot bot, String[] args)
@@ -137,5 +139,17 @@ public class IRCTransport extends JavaPlugin {
 		}
 		return false;
 	}
+	public boolean nick(PlayerBot bot, String[] args)
+	{
+		if(args.length==1)
+		{
+			bot.changeNick(args[0]);
+			if(!bot.getNick().equalsIgnoreCase(args[0]))
+				//TODO: print error message to player.
+			return true;
+		}
+		return false;
+	}
+	
 	
 }

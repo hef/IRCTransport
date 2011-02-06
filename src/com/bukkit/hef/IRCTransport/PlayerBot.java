@@ -79,8 +79,9 @@ public class PlayerBot extends PircBot {
 	protected void onNickChange(String oldNick, String login, String hostname, String newNick) 
 	{
 		if(login.equals(player.getName()))
+		{
 			player.setDisplayName("newNick");
-		else
-			player.sendMessage(String.format("$s is now known as %s", oldNick , newNick));
+		}
+		player.sendMessage(String.format("%s is now known as %s", oldNick , newNick));
 	}
 }
