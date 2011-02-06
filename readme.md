@@ -29,12 +29,13 @@ Features:
 
 Changelog:
 ----------
-### version 0.2
+### Version 0.2
   * players name displays correctly when there nick is changed
   * nick change notification
   * nick already in use handling changed.
   * active channel is switched on channel join
   * Channel join messages
   * Channel autojoin now a setting.
+
 ### Version 0.1
-Basic irc features are functional in Minecraft.
+  * Basic irc features are functional in Minecraft.
