@@ -32,11 +32,11 @@ Features:
 Changelog:
 ----------
 ### Version 0.2
-  * Players name displays correctly when their name is changed
-  * Nick change notification added
+  * Player's name displays correctly when their name is changed.
+  * Nick change notification added.
   * Nick already in use handling changed.
-  * Active channel is switched on channel join
-  * Channel join messages
+  * Active channel is switched on channel join.
+  * Channel join messages.
   * Channel autojoin now a setting.
 
 ### Version 0.1
