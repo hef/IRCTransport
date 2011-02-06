@@ -1,15 +1,16 @@
-[CHAT] IRCTransport 0.2 - Minecraft Chat/IRC integration
+[CHAT] IRCTransport 0.2 - Minecraft Chat/IRC Integration
 =============================================================
 
 Replaces minecraft's in game chat with IRC clients.
 This is a bukkit plugin.  
-You must set irc.server=irc.example.com in server.properties first!
 
 Available settings:
 ------------------
-Put these in Minecraft server.properties file with appropriate values.
+Put these in Minecraft's server.properties file with appropriate values.
     irc.server=""
     irc.autojoin=""
+
+irc.server is mandatory.  All other settings are optional.
 
 Available commands:
 -------------------
@@ -31,10 +32,10 @@ Features:
 Changelog:
 ----------
 ### Version 0.2
-  * players name displays correctly when there nick is changed
-  * nick change notification
-  * nick already in use handling changed.
-  * active channel is switched on channel join
+  * Players name displays correctly when their name is changed
+  * Nick change notification added
+  * Nick already in use handling changed.
+  * Active channel is switched on channel join
   * Channel join messages
   * Channel autojoin now a setting.
 
