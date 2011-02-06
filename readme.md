@@ -1,4 +1,4 @@
-[CHAT] IRCTransport 0.1 - Minecraft Chat/IRC integration
+[CHAT] IRCTransport 0.2 - Minecraft Chat/IRC integration
 =============================================================
 
 Replaces minecraft's in game chat with IRC clients.
@@ -7,26 +7,26 @@ You must set irc.server=irc.example.com in server.properties first!
 
 Available settings:
 ------------------
-put these in server.properties
+Put these in Minecraft server.properties file with appropriate values.
     irc.server=""
     irc.autojoin=""
+
 Available commands:
 -------------------
     /join #channel
     /leave #channel
     /channel #channel -- changes active channel
     /msg user -- send a private message to a user
-    /nick new_name  -- changes chat name
-
+    /nick new_name  -- change your display name.
 
 [Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-v0.2.jar)  
 [Source](https://github.com/hef/IRCTransport)
 
 Features:
 ---------
-  * Minecraft chat replaced with IRC chat
-  * private messaging 
-  * IRC Channel are reflected in game.
+  * Minecraft chat is replaced with an IRC session.
+  * Private messaging works in game.
+  * IRC channels are accessible in game.
 
 Changelog:
 ----------
