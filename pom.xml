@@ -11,7 +11,7 @@
   </issueManagement>
   <scm>
       <connection>scm:git:git://github.com/hef/IRCTransport.git/</connection>
-    <developerConnection>scm:git:git@github.com:hef/IRCTransport.git</developerConnection>
+      <developerConnection>scm:git:git://github.com/hef/IRCTransport.git</developerConnection>
   </scm>
   <build>
       <plugins>
