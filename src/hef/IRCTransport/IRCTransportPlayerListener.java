@@ -1,4 +1,4 @@
-package com.bukkit.hef.IRCTransport;
+package hef.IRCTransport;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;

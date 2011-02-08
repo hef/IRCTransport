@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.bukkit.hef.IRCTransport;
+package hef.IRCTransport;
 
 import java.io.IOException;
 import java.util.Random;

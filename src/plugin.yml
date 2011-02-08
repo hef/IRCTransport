@@ -1,5 +1,5 @@
 name: IRCTransport
-main: com.bukkit.hef.IRCTransport.IRCTransport
+main: hef.IRCTransport.IRCTransport
 version: 0.2
 website: http://github.com/hef/IRCTransport
 author: hef

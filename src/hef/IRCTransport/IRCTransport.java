@@ -1,4 +1,4 @@
-package com.bukkit.hef.IRCTransport;
+package hef.IRCTransport;
 
 import java.io.File;
 import java.io.FileInputStream;
