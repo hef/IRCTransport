@@ -33,6 +33,7 @@ Changelog:
 ----------
 ### Version 0.3
   * Changed package name to hef.IRCTransport as per [request](http://forums.bukkit.org/threads/on-namespaces-please-do-not-use-bukkit-in-your-plugins.3732/).
+  * Changed build system to Maven.
 
 ### Version 0.2
   * Player's name displays correctly when their name is changed.

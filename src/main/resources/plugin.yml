@@ -1,7 +1,7 @@
-name: IRCTransport
-main: hef.IRCTransport.IRCTransport
-version: 0.2
-website: http://github.com/hef/IRCTransport
+name: ${pom.name}
+main: hef.IRCTransport
+version: ${pom.version}
+website: ${pom.url}
 author: hef
 description: >
              IRC Transport Plugin for minecraft chat.

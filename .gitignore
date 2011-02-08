@@ -1,4 +1,4 @@
-*.class
-*.html
-bin/*
-*.classpath
+target/
+.classpath
+.project
+.settings/
