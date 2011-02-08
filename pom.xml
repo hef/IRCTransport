@@ -10,9 +10,8 @@
   	<url>https://github.com/hef/IRCTransport/issues</url>
   </issueManagement>
   <scm>
-      <connection>scm:git:git://github.com/hef/IRCTransport.git</connection>
+      <connection>scm:git:git://github.com/hef/IRCTransport.git/</connection>
     <developerConnection>scm:git:git@github.com:hef/IRCTransport.git</developerConnection>
-  	<url>https://github.com/hef/IRCTransport/</url>
   </scm>
   <build>
       <plugins>
