@@ -19,19 +19,19 @@ public class IRCTransportPlayerListener extends PlayerListener {
         Player[] players = instance.getServer().getOnlinePlayers();
         for(Player player: players)
         {
-        	plugin.bots.put(player, new PlayerBot(plugin,player));
+        	plugin.bots.put(player, new IrcAgent(plugin,player));
         }
     }
     public void onPlayerChat(PlayerChatEvent event)
     {
-    	PlayerBot bot = plugin.bots.get(event.getPlayer());
+    	IrcAgent bot = plugin.bots.get(event.getPlayer());
     	bot.sendMessage(event.getMessage());
     	//prevent messages from being displayed twice.
     	event.setCancelled(true);
     }
     public void onPlayerJoin(PlayerEvent event) 
     {
-    	plugin.bots.put(event.getPlayer(), new PlayerBot(plugin, event.getPlayer()));
+    	plugin.bots.put(event.getPlayer(), new IrcAgent(plugin, event.getPlayer()));
     }
     public void onPlayerQuit(PlayerEvent event)
     {

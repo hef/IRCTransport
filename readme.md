@@ -32,6 +32,8 @@ Features:
 Changelog:
 ----------
 ### Version 0.3
+  * renamed PlayerBot to IrcAgent
+  * Fixed join message detection
   * Changed package name to hef.IRCTransport as per [request](http://forums.bukkit.org/threads/on-namespaces-please-do-not-use-bukkit-in-your-plugins.3732/).
   * Changed build system to Maven.
 

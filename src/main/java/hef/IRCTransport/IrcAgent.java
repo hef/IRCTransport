@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  * @author hef
  *
  */
-public class PlayerBot extends PircBot {
+public class IrcAgent extends PircBot {
 	private Player player;
 	String activeChannel;
 	Random r = new Random();
@@ -23,7 +23,7 @@ public class PlayerBot extends PircBot {
 	/**
 	 * 
 	 */
-	public PlayerBot(IRCTransport instance, Player player) {
+	public IrcAgent(IRCTransport instance, Player player) {
 		this.plugin = instance;
 		this.player = player;
 		setVerbose(true);
@@ -62,25 +62,27 @@ public class PlayerBot extends PircBot {
 	}
 	public void onPrivateMessage(String sender, String login, String hostname, String message)
 	{
+		//TODO: check validity of recipient or check for error response
 		player.sendMessage(String.format("%s: %s",sender, message));
 	}
 	public void sendMessage(String message)
 	{
+		// TODO: check ativeChannel for NULL, then just pick a random channel.
 		sendMessage(activeChannel, message);
 		player.sendMessage(String.format("[%s] %s: %s", activeChannel, player.getDisplayName(), message));
 	}
 	public void onJoin(String channel, String sender, String login, String hostname) 
 	{
-		if(login.equals(player.getName()))
+		//if I joined, change active channel.
+		if(sender.equals(getNick()))
 			activeChannel = channel;
-		else
-			player.sendMessage(String.format("[%s] %s has joined.", channel, sender)); //TODO: colorize
+		player.sendMessage(String.format("[%s] %s has joined.", channel, sender)); //TODO: colorize
 	}
 	protected void onNickChange(String oldNick, String login, String hostname, String newNick) 
 	{
-		if(login.equals(player.getName()))
+		if(getNick().equals(player.getName()))
 		{
-			player.setDisplayName("newNick");
+			player.setDisplayName(newNick);
 		}
 		player.sendMessage(String.format("%s is now known as %s", oldNick , newNick));
 	}

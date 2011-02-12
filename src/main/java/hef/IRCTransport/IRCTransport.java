@@ -25,7 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class IRCTransport extends JavaPlugin {
 	private final IRCTransportPlayerListener playerListener = new IRCTransportPlayerListener(
 			this);
-	final HashMap<Player, PlayerBot> bots = new HashMap<Player, PlayerBot>();
+	final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
 	String ircserver = "";
 	String autojoin ="";
 
@@ -36,7 +36,6 @@ public class IRCTransport extends JavaPlugin {
 
 	}
 
-	@Override
 	public void onEnable() {
 		PluginManager pm = getServer().getPluginManager();
 		PluginDescriptionFile pdfFile = this.getDescription();
@@ -74,7 +73,6 @@ public class IRCTransport extends JavaPlugin {
 		return message;
 	}
 
-	@Override
 	public void onDisable() {
 
 		System.out.println("Goodbye world!");
@@ -86,7 +84,7 @@ public class IRCTransport extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command,
 			String commandLabel, String[] args) {
 		Player player = (Player) sender;
-		PlayerBot bot = bots.get(player);
+		IrcAgent bot = bots.get(player);
 		String commandName = command.getName().toLowerCase();
 
 		if (commandName.equals("join"))
@@ -101,12 +99,12 @@ public class IRCTransport extends JavaPlugin {
 			return nick(bot,args);
 		return false;
 	}
-	public boolean join(PlayerBot bot, String[] args)
+	public boolean join(IrcAgent bot, String[] args)
 	{
 		bot.joinChannel(args[0]);
 		return true;
 	}
-	public boolean leave(PlayerBot bot, String[] args)
+	public boolean leave(IrcAgent bot, String[] args)
 	{
 		if( args.length == 1  )
 		{
@@ -121,7 +119,7 @@ public class IRCTransport extends JavaPlugin {
 		}
 		return false;
 	}
-	public boolean channel(PlayerBot bot, String[] args)
+	public boolean channel(IrcAgent bot, String[] args)
 	{
 		if(args.length == 1)
 		{
@@ -130,7 +128,7 @@ public class IRCTransport extends JavaPlugin {
 		}
 		return false;
 	}
-	public boolean privateMessage(PlayerBot bot, String[] args)
+	public boolean privateMessage(IrcAgent bot, String[] args)
 	{
 		if(args.length > 1)
 		{
@@ -139,7 +137,7 @@ public class IRCTransport extends JavaPlugin {
 		}
 		return false;
 	}
-	public boolean nick(PlayerBot bot, String[] args)
+	public boolean nick(IrcAgent bot, String[] args)
 	{
 		if(args.length==1)
 		{
