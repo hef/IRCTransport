@@ -20,7 +20,7 @@ Available commands:
     /msg user -- send a private message to a user
     /nick new_name  -- change your display name.
 
-[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-v0.2.jar)  
+[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.3.jar)  
 [Source](https://github.com/hef/IRCTransport)
 
 Features:
