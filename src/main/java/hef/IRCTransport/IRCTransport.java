@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -28,12 +30,13 @@ public class IRCTransport extends JavaPlugin {
 	final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
 	String ircserver = "";
 	String autojoin ="";
+	private static final Logger log = Logger.getLogger("Minecraft");
+	
 
 	public IRCTransport(PluginLoader pluginLoader, Server instance,
 			PluginDescriptionFile desc, File folder, File plugin,
 			ClassLoader cLoader) {
 		super(pluginLoader, instance, desc, folder, plugin, cLoader);
-
 	}
 
 	public void onEnable() {
@@ -47,9 +50,9 @@ public class IRCTransport extends JavaPlugin {
 			sp.load(spf);
 			this.ircserver = sp.getProperty("irc.server","");
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			log.log(Level.SEVERE, e.getMessage(), e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.log(Level.SEVERE, e.getMessage(), e);
 		}
 		
 		if(this.ircserver.equals(""))

@@ -5,6 +5,8 @@ package hef.IRCTransport;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
@@ -17,8 +19,8 @@ import org.bukkit.entity.Player;
 public class IrcAgent extends PircBot {
 	private Player player;
 	String activeChannel;
-	Random r = new Random();
 	private final IRCTransport plugin;
+	private static final Logger log = Logger.getLogger("Minecraft");
 
 	/**
 	 * 
@@ -26,7 +28,7 @@ public class IrcAgent extends PircBot {
 	public IrcAgent(IRCTransport instance, Player player) {
 		this.plugin = instance;
 		this.player = player;
-		setVerbose(true);
+		//setVerbose(true);
 		setLogin(player.getName());
 		super.setAutoNickChange(true);
 		connect(plugin.ircserver, player.getName());
@@ -35,6 +37,10 @@ public class IrcAgent extends PircBot {
 			joinChannel(plugin.autojoin);
 			activeChannel = plugin.autojoin;
 		}
+	}
+	public void log(String line)
+	{
+		log.log(Level.FINE,line);
 	}
 	private void connect(String server, String nick)
 	{
@@ -45,14 +51,13 @@ public class IrcAgent extends PircBot {
 			super.connect(server);
 		}  catch (NickAlreadyInUseException e1) {
 			  //This should not be called anymore.
-			  String randomString = Long.toString(Math.abs(r.nextLong()), 36);
-			  connect(server, nick + randomString);
+			log.log(Level.SEVERE, e1.getMessage(), e1);
 		} catch (IOException e1) {
 			System.out.println("IOException: Failed to connect to irc server: " + server);
-			e1.printStackTrace();
+			log.log(Level.SEVERE, e1.getMessage(), e1);
 		} catch (IrcException e1) {
 			System.out.println("IrcException: Failed to connect to irc server: " + server);
-			e1.printStackTrace();
+			log.log(Level.SEVERE, e1.getMessage(), e1);
 		}
 	}
 	public void onMessage(String channel, String sender, String login, String hostname, String message)
@@ -80,7 +85,7 @@ public class IrcAgent extends PircBot {
 	}
 	protected void onNickChange(String oldNick, String login, String hostname, String newNick) 
 	{
-		if(getNick().equals(player.getName()))
+		if(oldNick.equals(player.getName()))
 		{
 			player.setDisplayName(newNick);
 		}

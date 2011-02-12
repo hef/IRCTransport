@@ -31,6 +31,9 @@ Features:
 
 Changelog:
 ----------
+### Version 0.4
+  * Changed output messages to use logging
+  * Fixed bug in nickname changing.
 ### Version 0.3
   * renamed PlayerBot to IrcAgent
   * Fixed join message detection
