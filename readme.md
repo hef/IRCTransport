@@ -1,4 +1,4 @@
-[CHAT] IRCTransport 0.2 - Minecraft Chat/IRC Integration
+[CHAT] IRCTransport 0.3 - Minecraft Chat/IRC Integration
 =============================================================
 
 Replaces minecraft's in game chat with IRC clients.
