@@ -7,8 +7,8 @@ This is a bukkit plugin.
 Available settings:
 ------------------
 Put these in Minecraft's server.properties file with appropriate values.
-    irc.server=""
-    irc.autojoin=""
+    irc.server=
+    irc.autojoin=
 
 irc.server is mandatory.  All other settings are optional.
 
