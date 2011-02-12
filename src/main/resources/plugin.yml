@@ -1,5 +1,5 @@
 name: ${pom.name}
-main: hef.IRCTransport
+main: hef.IRCTransport.IRCTransport
 version: ${pom.version}
 website: ${pom.url}
 author: hef
