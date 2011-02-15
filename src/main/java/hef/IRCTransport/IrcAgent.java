@@ -4,14 +4,14 @@
 package hef.IRCTransport;
 
 import java.io.IOException;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.entity.Player;
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
-import org.bukkit.entity.Player;
+
 /**
  * @author hef
  *
@@ -21,7 +21,7 @@ public class IrcAgent extends PircBot {
 	String activeChannel;
 	private final IRCTransport plugin;
 	private static final Logger log = Logger.getLogger("Minecraft");
-
+	
 	/**
 	 * 
 	 */
@@ -37,6 +37,7 @@ public class IrcAgent extends PircBot {
 			joinChannel(plugin.autojoin);
 			activeChannel = plugin.autojoin;
 		}
+
 	}
 	public void log(String line)
 	{
