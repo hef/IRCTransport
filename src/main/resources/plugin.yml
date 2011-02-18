@@ -35,5 +35,11 @@ commands:
     usage: |
            /<command> <name>
            Example: /<command> Sam
+  names:
+    description: get a list of channel members
+    usage: |
+           /<command> [channel]
+           /<command>
+           /<command> #minecraft
           
  

@@ -4,6 +4,7 @@
 package hef.IRCTransport;
 
 import java.io.IOException;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
+import org.jibble.pircbot.User;
 
 /**
  * @author hef
@@ -65,7 +67,7 @@ public class IrcAgent extends PircBot {
 	public void onMessage(String channel, String sender, String login, String hostname, String message)
 	{
 		//TODO: replace channel names with numbers
-		player.sendMessage(String.format("[%s] %s: %s", channel, sender, message));
+		player.sendMessage(String.format("[%s] %s: %s", channel, sender, ColorMap.fromIrc(message)));
 	}
 	public void onPrivateMessage(String sender, String login, String hostname, String message)
 	{
@@ -93,4 +95,41 @@ public class IrcAgent extends PircBot {
 		}
 		player.sendMessage(String.format("%s is now known as %s", oldNick , newNick));
 	}
+	protected void onUserList(String channel, User[] users)
+	{
+		String usersString = "";
+		for(User user: users)
+		{
+			usersString += user + " ";
+			
+		}
+		player.sendMessage(String.format("[%s] names: ", channel, users));
+	}
+	protected void onServerResponse(int code, String response)
+	{
+		switch(code)
+		{
+			case ERR_INVITEONLYCHAN:
+				int firstSpace = response.indexOf(' ');
+	            int secondSpace = response.indexOf(' ', firstSpace + 1);
+	            int colon = response.indexOf(':');
+	            String channel = response.substring(firstSpace + 1, secondSpace);
+	            String message = response.substring(colon + 1);		
+				onErrInviteOnlyChan(channel, message);
+				break;
+		}
+	}
+	protected void onErrInviteOnlyChan(String channel, String message)
+	{
+		player.sendMessage(channel + " is invite only");	
+	}
+	protected void names()
+	{
+		names(activeChannel);
+	}
+	protected void names(String channel)
+	{
+		sendRawLine("NAMES " + "channel");
+	}
+	
 }

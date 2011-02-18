@@ -10,43 +10,46 @@ import org.jibble.pircbot.Colors;
  *
  */
 public class ColorMap {
-	private HashMap<String, ChatColor> ircToMineColor; 
-	ColorMap()
+	//TODO: char to char mapping
+	private static final HashMap<String, String> ircToMineColor = new HashMap<String, String>(); 
+	static
 	{	
-		this.ircToMineColor = new HashMap<String, ChatColor>();
-		ircToMineColor.put( Colors.BLACK, ChatColor.WHITE );
-		ircToMineColor.put( Colors.WHITE, ChatColor.BLACK );
-		ircToMineColor.put( Colors.DARK_BLUE, ChatColor.DARK_BLUE );
-		ircToMineColor.put( Colors.DARK_GREEN, ChatColor.DARK_GREEN );
-		ircToMineColor.put( Colors.RED, ChatColor.RED );
-		ircToMineColor.put( Colors.BROWN, ChatColor.DARK_RED );
-		ircToMineColor.put( Colors.PURPLE, ChatColor.DARK_PURPLE );
-		ircToMineColor.put( Colors.OLIVE, ChatColor.GOLD );
-		ircToMineColor.put( Colors.YELLOW, ChatColor.YELLOW );
-		ircToMineColor.put( Colors.GREEN, ChatColor.GREEN );
-		ircToMineColor.put( Colors.TEAL, ChatColor.DARK_AQUA );
-		ircToMineColor.put( Colors.CYAN, ChatColor.AQUA );
-		ircToMineColor.put( Colors.BLUE, ChatColor.BLUE );
-		ircToMineColor.put( Colors.MAGENTA, ChatColor.LIGHT_PURPLE );
-		ircToMineColor.put( Colors.DARK_GRAY, ChatColor.DARK_GRAY );
-		ircToMineColor.put( Colors.LIGHT_GRAY, ChatColor.GRAY );
+		ircToMineColor.put( Colors.BLACK, ChatColor.WHITE.toString() );
+		ircToMineColor.put( Colors.WHITE, ChatColor.BLACK.toString() );
+		ircToMineColor.put( Colors.DARK_BLUE, ChatColor.DARK_BLUE.toString() );
+		ircToMineColor.put( Colors.DARK_GREEN, ChatColor.DARK_GREEN.toString() );
+		ircToMineColor.put( Colors.RED, ChatColor.RED.toString() );
+		ircToMineColor.put( Colors.BROWN, ChatColor.DARK_RED.toString() );
+		ircToMineColor.put( Colors.PURPLE, ChatColor.DARK_PURPLE.toString() );
+		ircToMineColor.put( Colors.OLIVE, ChatColor.GOLD.toString() );
+		ircToMineColor.put( Colors.YELLOW, ChatColor.YELLOW.toString() );
+		ircToMineColor.put( Colors.GREEN, ChatColor.GREEN.toString() );
+		ircToMineColor.put( Colors.TEAL, ChatColor.DARK_AQUA.toString() );
+		ircToMineColor.put( Colors.CYAN, ChatColor.AQUA.toString() );
+		ircToMineColor.put( Colors.BLUE, ChatColor.BLUE.toString() );
+		ircToMineColor.put( Colors.MAGENTA, ChatColor.LIGHT_PURPLE.toString() );
+		ircToMineColor.put( Colors.DARK_GRAY, ChatColor.DARK_GRAY.toString() );
+		ircToMineColor.put( Colors.LIGHT_GRAY, ChatColor.GRAY.toString() );
 	}
 	
-	/** Convert message from irc to minecraft
+	/** Convert message from IRC to Minecraft
 	 * Translates a colored irc message into a colored minecraft message.
 	 * @param message the incoming irc message.
 	 * @return The converted minecraft string.
+	 * TODO minecraft color doesn't span line wrap, force it by checking for last active color at linebreak.
 	 */
-	public String fromIrc(String message)
+	public static String fromIrc(String message)
 	{
-		char[] messageArray = message.toCharArray();
+		char[] messageBytes=message.toCharArray();
 		for(int i = 0; i < message.length(); ++i)
 		{
-			if(ircToMineColor.containsKey( messageArray[i] ))
+			//search an replace irc color byte with minecraft color byte
+			if(ircToMineColor.containsKey( Character.toString(messageBytes[i]) ))
 			{
-				messageArray[i]= ircToMineColor.get(messageArray[i]).toString().charAt(0);
+				messageBytes[i]= ircToMineColor.get(messageBytes[i]).toString().charAt(0);
 			}
+			
 		}
-		return new String(messageArray);
+		return new String(messageBytes);
 	}
 }
