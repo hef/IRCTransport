@@ -87,12 +87,13 @@ public class IrcAgent extends PircBot {
 	public void sendAction(String action)
 	{
 		sendAction(activeChannel, action);
+		player.sendMessage(String.format("[%s] %s: %s", activeChannel, player.getDisplayName(), action));
 	}
-	public final void sendAction(String target, String action)
+	/*public void sendAction(String target, String action)
 	{
-		super.sendAction(target, action);
+		sendAction(target, action);
 		player.sendMessage(String.format("[%s] %s: %s", target, player.getDisplayName(), action));
-	}
+	}*/
 	public void onJoin(String channel, String sender, String login, String hostname) 
 	{
 		//if I joined, change active channel.
