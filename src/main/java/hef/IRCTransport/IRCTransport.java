@@ -82,7 +82,7 @@ public class IRCTransport extends JavaPlugin {
 
 		System.out.println("Goodbye world!");
 		PluginDescriptionFile pdfFile = this.getDescription();
-		System.out.println(pdfFile.getFullName() + "is disabled" );
+		System.out.println(pdfFile.getFullName() + " is disabled" );
 	}
 
 	@Override
@@ -166,7 +166,7 @@ public class IRCTransport extends JavaPlugin {
 		}
 		else
 		{
-			bot.names(args[1]);
+			bot.names(args[0]);
 			return true;
 		}
 			

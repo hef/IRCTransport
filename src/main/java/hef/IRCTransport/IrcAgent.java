@@ -28,6 +28,7 @@ public class IrcAgent extends PircBot {
 	 * 
 	 */
 	public IrcAgent(IRCTransport instance, Player player) {
+		//TODO: see how long this takes to construct
 		this.plugin = instance;
 		this.player = player;
 		setLogin(player.getName());
@@ -114,10 +115,10 @@ public class IrcAgent extends PircBot {
 		String usersString = "";
 		for(User user: users)
 		{
-			usersString += user + " ";
+			usersString += user.toString() + " ";
 			
 		}
-		player.sendMessage(String.format("[%s names] ", channel, users));
+		player.sendMessage(String.format("[%s names] %s", channel, usersString));
 	}
 	protected void onServerResponse(int code, String response)
 	{
@@ -143,7 +144,7 @@ public class IrcAgent extends PircBot {
 	}
 	protected void names(String channel)
 	{
-		sendRawLine("NAMES " + "channel");
+		sendRawLine("NAMES " + channel);
 	}
 	
 	
