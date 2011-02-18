@@ -58,7 +58,7 @@ public class IRCTransport extends JavaPlugin {
 		
 		if(this.ircserver.equals(""))
 		{
-			System.out.println( pdfFile.getName() + ": set \"irc.server\" in server.properties" );		
+			log.log(Level.SEVERE, pdfFile.getName() + ": set \"irc.server\" in server.properties" );		
 			return;
 		}
 		this.autojoin = sp.getProperty("irc.autojoin", "");
