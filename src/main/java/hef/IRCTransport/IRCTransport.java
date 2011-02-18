@@ -62,7 +62,7 @@ public class IRCTransport extends JavaPlugin {
 			return;
 		}
 		this.autojoin = sp.getProperty("irc.autojoin", "");
-		this.verbose = Boolean.getBoolean(sp.getProperty("irc.verbose", "false"));
+		this.verbose = Boolean.parseBoolean(sp.getProperty("irc.verbose", "false"));
 	
 		System.out.println(pdfFile.getFullName() + " is enabled!");
 		//Event Registration
