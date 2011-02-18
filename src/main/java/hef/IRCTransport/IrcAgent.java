@@ -74,11 +74,24 @@ public class IrcAgent extends PircBot {
 		//TODO: check validity of recipient or check for error response
 		player.sendMessage(String.format("%s: %s",sender, message));
 	}
+	public void onAction(String sender, String login, String hostname, String target, String action)
+	{
+		player.sendMessage(String.format("[%s] %s: %s", target, sender, action));
+	}
 	public void sendMessage(String message)
 	{
 		// TODO: check ativeChannel for NULL, then just pick a random channel.
 		sendMessage(activeChannel, message);
 		player.sendMessage(String.format("[%s] %s: %s", activeChannel, player.getDisplayName(), message));
+	}
+	public void sendAction(String action)
+	{
+		sendAction(activeChannel, action);
+	}
+	public final void sendAction(String target, String action)
+	{
+		super.sendAction(target, action);
+		player.sendMessage(String.format("[%s] %s: %s", target, player.getDisplayName(), action));
 	}
 	public void onJoin(String channel, String sender, String login, String hostname) 
 	{
@@ -131,5 +144,6 @@ public class IrcAgent extends PircBot {
 	{
 		sendRawLine("NAMES " + "channel");
 	}
+	
 	
 }

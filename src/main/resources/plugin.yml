@@ -41,5 +41,10 @@ commands:
            /<command> [channel]
            /<command>
            /<command> #minecraft
+  me:
+    description: perform an action
+    usage: |
+           /<command> <action>
+           /<command> dances with the devil in the pale moonlight.
           
  
