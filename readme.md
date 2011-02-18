@@ -20,6 +20,7 @@ Available commands:
     /channel #channel -- changes active channel
     /msg user -- send a private message to a user
     /nick new_name  -- change your display name.
+    /names #channel -- show users in channel
 
 [Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.3.jar)  
 [Source](https://github.com/hef/IRCTransport)
@@ -33,6 +34,8 @@ Features:
 Changelog:
 ----------
 ### Version 0.4
+  * /names support.
+  * invite only error message.
   * Changed output messages to use logging
   * Fixed bug in nickname changing.
 
