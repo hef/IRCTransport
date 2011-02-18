@@ -9,6 +9,7 @@ Available settings:
 Put these in Minecraft's server.properties file with appropriate values.
     irc.server=
     irc.autojoin=
+    irc.verbose=false
 
 irc.server is mandatory.  All other settings are optional.
 

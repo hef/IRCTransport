@@ -28,7 +28,6 @@ public class IrcAgent extends PircBot {
 	public IrcAgent(IRCTransport instance, Player player) {
 		this.plugin = instance;
 		this.player = player;
-		//setVerbose(true);
 		setLogin(player.getName());
 		super.setAutoNickChange(true);
 		connect(plugin.ircserver, player.getName());
@@ -37,11 +36,13 @@ public class IrcAgent extends PircBot {
 			joinChannel(plugin.autojoin);
 			activeChannel = plugin.autojoin;
 		}
-
 	}
 	public void log(String line)
 	{
-		log.log(Level.FINE,line);
+		if(plugin.verbose)
+		{
+			log.log(Level.INFO,line);
+		}
 	}
 	private void connect(String server, String nick)
 	{

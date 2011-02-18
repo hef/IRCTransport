@@ -30,6 +30,7 @@ public class IRCTransport extends JavaPlugin {
 	final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
 	String ircserver = "";
 	String autojoin ="";
+	boolean verbose;
 	private static final Logger log = Logger.getLogger("Minecraft");
 	
 
@@ -61,6 +62,7 @@ public class IRCTransport extends JavaPlugin {
 			return;
 		}
 		this.autojoin = sp.getProperty("irc.autojoin", "");
+		this.verbose = Boolean.getBoolean(sp.getProperty("irc.verbose", "false"));
 	
 		System.out.println(pdfFile.getFullName() + " is enabled!");
 		//Event Registration
