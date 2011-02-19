@@ -133,7 +133,7 @@ public class IrcAgent extends PircBot {
 			usersString += user.toString() + " ";
 			
 		}
-		player.sendMessage(String.format("[%s names] %s", channel, usersString));
+		player.sendMessage(String.format("%s members: %s", channel, usersString));
 	}
 	protected void onServerResponse(int code, String response)
 	{
