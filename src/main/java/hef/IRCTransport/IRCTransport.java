@@ -27,12 +27,31 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class IRCTransport extends JavaPlugin {
 	private final IRCTransportPlayerListener playerListener = new IRCTransportPlayerListener(
 			this);
-	final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
-	String ircserver = "";
-	String autojoin ="";
-	boolean verbose;
+	private final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
+	private String ircserver = "";
+	private String autojoin ="";
+	private boolean verbose;
 	private static final Logger log = Logger.getLogger("Minecraft");
 	
+	public String getIrcServer()
+	{
+		return this.ircserver;
+	}
+	
+	public String getAutoJoin()
+	{
+		return this.autojoin;
+	}
+	
+	public boolean getVerbose()
+	{
+		return this.verbose;
+	}
+	
+	public HashMap<Player, IrcAgent> getBots()
+	{
+		return this.bots;
+	}
 
 	public IRCTransport(PluginLoader pluginLoader, Server instance,
 			PluginDescriptionFile desc, File folder, File plugin,
@@ -132,7 +151,7 @@ public class IRCTransport extends JavaPlugin {
 	{
 		if(args.length == 1)
 		{
-			bot.activeChannel = args[0];
+			bot.setActiveChannel(args[0]);
 			return true;
 		}
 		return false;

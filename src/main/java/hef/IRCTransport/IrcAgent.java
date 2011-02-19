@@ -20,7 +20,7 @@ import org.jibble.pircbot.User;
  */
 public class IrcAgent extends PircBot {
 	private Player player;
-	String activeChannel;
+	private String activeChannel;
 	private final IRCTransport plugin;
 	private static final Logger log = Logger.getLogger("Minecraft");
 	
@@ -33,20 +33,32 @@ public class IrcAgent extends PircBot {
 		this.player = player;
 		setLogin(player.getName());
 		super.setAutoNickChange(true);
-		connect(plugin.ircserver, player.getName());
-		if(!plugin.autojoin.equals(""))
+		connect(plugin.getIrcServer(), player.getName());
+		
+		if(!plugin.getAutoJoin().equals(""))
 		{
-			joinChannel(plugin.autojoin);
-			activeChannel = plugin.autojoin;
+			activeChannel = plugin.getAutoJoin();
+			joinChannel(activeChannel);
 		}
 	}
 	public void log(String line)
 	{
-		if(plugin.verbose)
+		if(plugin.getVerbose())
 		{
 			log.log(Level.INFO,line);
 		}
 	}
+	
+	public String getActiveChannel()
+	{
+		return this.activeChannel;
+	}
+	
+	public void setActiveChannel(String channel)
+	{
+		this.activeChannel = channel;
+	}
+	
 	private void connect(String server, String nick)
 	{
 		try{
