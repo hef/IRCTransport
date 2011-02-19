@@ -95,7 +95,10 @@ public class IrcAgent extends PircBot {
 	{
 		// TODO: check ativeChannel for NULL, then just pick a random channel.
 		sendMessage(activeChannel, message);
-		player.sendMessage(String.format("[%s] %s: %s", activeChannel, player.getDisplayName(), message));
+		String msg = String.format("[%s] %s: %s", activeChannel, player.getDisplayName(), message);
+		// if verbose, log all chat
+		if(plugin.getVerbose()) log.log(Level.INFO, msg);
+		player.sendMessage(msg);
 	}
 	public void sendAction(String action)
 	{

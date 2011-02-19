@@ -83,7 +83,7 @@ public class IRCTransport extends JavaPlugin {
 		this.autojoin = sp.getProperty("irc.autojoin", "");
 		this.verbose = Boolean.parseBoolean(sp.getProperty("irc.verbose", "false"));
 	
-		System.out.println(pdfFile.getFullName() + " is enabled!");
+		log.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
 		//Event Registration
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
@@ -98,10 +98,7 @@ public class IRCTransport extends JavaPlugin {
 	}
 
 	public void onDisable() {
-
-		System.out.println("Goodbye world!");
-		PluginDescriptionFile pdfFile = this.getDescription();
-		System.out.println(pdfFile.getFullName() + " is disabled" );
+		log.log(Level.INFO, this.getDescription().getFullName() + " is disabled" );
 	}
 
 	@Override
