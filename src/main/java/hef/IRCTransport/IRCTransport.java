@@ -104,7 +104,7 @@ public class IRCTransport extends JavaPlugin {
 			return nick(bot,args);
 		else if(commandName.equals("names"))
 			return names(bot,args);
-		else if(command.equals("me"))
+		else if(commandName.equals("me"))
 			return action(bot,args);
 		return false;
 	}
@@ -173,7 +173,7 @@ public class IRCTransport extends JavaPlugin {
 	}
 	public boolean action(IrcAgent bot, String[] args)
 	{
-		if(args.length > 1)
+		if(args.length > 0)
 		{
 			String message = makeMessage(args, 0);
 			bot.sendAction(message);

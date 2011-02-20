@@ -77,7 +77,7 @@ public class IrcAgent extends PircBot {
 	}
 	public void onAction(String sender, String login, String hostname, String target, String action)
 	{
-		player.sendMessage(String.format("[%s] %s: %s", target, sender, action));
+		player.sendMessage(String.format("[%s] * %s %s", target, sender, action));
 	}
 	public void sendMessage(String message)
 	{
@@ -88,7 +88,7 @@ public class IrcAgent extends PircBot {
 	public void sendAction(String action)
 	{
 		sendAction(activeChannel, action);
-		player.sendMessage(String.format("[%s] %s: %s", activeChannel, player.getDisplayName(), action));
+		player.sendMessage(String.format("[%s] * %s %s", activeChannel, player.getDisplayName(), action));
 	}
 	/*public void sendAction(String target, String action)
 	{
@@ -116,7 +116,6 @@ public class IrcAgent extends PircBot {
 		for(User user: users)
 		{
 			usersString += user.toString() + " ";
-			
 		}
 		player.sendMessage(String.format("%s members: %s", channel, usersString));
 	}
