@@ -46,5 +46,9 @@ commands:
     usage: |
            /<command> <action>
            /<command> dances with the devil in the pale moonlight.
-          
- 
+  topic:
+    description: see the channel topic
+    usage: |
+           /<command> [channel]
+           /<command>
+           /<command> #minecraft

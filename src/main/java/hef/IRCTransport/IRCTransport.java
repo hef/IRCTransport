@@ -25,14 +25,32 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author hef
  */
 public class IRCTransport extends JavaPlugin {
-	private final IRCTransportPlayerListener playerListener = new IRCTransportPlayerListener(
-			this);
-	final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
-	String ircserver = "";
-	String autojoin ="";
-	boolean verbose;
+	private IRCTransportPlayerListener playerListener;
+	private final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
+	private String ircserver = "";
+	private String autojoin ="";
+	private boolean verbose;
 	private static final Logger log = Logger.getLogger("Minecraft");
 	
+	public String getIrcServer()
+	{
+		return this.ircserver;
+	}
+	
+	public String getAutoJoin()
+	{
+		return this.autojoin;
+	}
+	
+	public boolean getVerbose()
+	{
+		return this.verbose;
+	}
+	
+	public HashMap<Player, IrcAgent> getBots()
+	{
+		return this.bots;
+	}
 
 	public IRCTransport(PluginLoader pluginLoader, Server instance,
 			PluginDescriptionFile desc, File folder, File plugin,
@@ -41,6 +59,8 @@ public class IRCTransport extends JavaPlugin {
 	}
 
 	public void onEnable() {
+		this.playerListener = new IRCTransportPlayerListener(this);
+		
 		PluginManager pm = getServer().getPluginManager();
 		PluginDescriptionFile pdfFile = this.getDescription();
 		
@@ -64,7 +84,7 @@ public class IRCTransport extends JavaPlugin {
 		this.autojoin = sp.getProperty("irc.autojoin", "");
 		this.verbose = Boolean.parseBoolean(sp.getProperty("irc.verbose", "false"));
 	
-		System.out.println(pdfFile.getFullName() + " is enabled!");
+		log.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
 		//Event Registration
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
@@ -79,15 +99,16 @@ public class IRCTransport extends JavaPlugin {
 	}
 
 	public void onDisable() {
-
-		System.out.println("Goodbye world!");
-		PluginDescriptionFile pdfFile = this.getDescription();
-		System.out.println(pdfFile.getFullName() + " is disabled" );
+		log.log(Level.INFO, this.getDescription().getFullName() + " is disabled" );
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
 			String commandLabel, String[] args) {
+		if(this.getVerbose()){
+			log.log(Level.INFO, String.format("Command '%s' received from %s with %d arguments", commandLabel, sender, args.length));
+		}
+
 		Player player = (Player) sender;
 		IrcAgent bot = bots.get(player);
 		String commandName = command.getName().toLowerCase();
@@ -106,6 +127,8 @@ public class IRCTransport extends JavaPlugin {
 			return names(bot,args);
 		else if(commandName.equals("me"))
 			return action(bot,args);
+		else if(commandName.equals("topic"))
+			return topic(bot, args);
 		return false;
 	}
 	public boolean join(IrcAgent bot, String[] args)
@@ -132,7 +155,7 @@ public class IRCTransport extends JavaPlugin {
 	{
 		if(args.length == 1)
 		{
-			bot.activeChannel = args[0];
+			bot.setActiveChannel(args[0]);
 			return true;
 		}
 		return false;
@@ -171,6 +194,18 @@ public class IRCTransport extends JavaPlugin {
 		}
 			
 	}
+	
+	public boolean topic(IrcAgent bot, String[] args)
+	{
+		if(args.length < 1){
+			bot.topic();
+			return true;
+		} else {
+			bot.topic(args[0]);
+			return true;
+		}
+	}
+	
 	public boolean action(IrcAgent bot, String[] args)
 	{
 		if(args.length > 0)

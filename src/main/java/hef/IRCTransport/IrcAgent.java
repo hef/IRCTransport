@@ -20,7 +20,7 @@ import org.jibble.pircbot.User;
  */
 public class IrcAgent extends PircBot {
 	private Player player;
-	String activeChannel;
+	private String activeChannel;
 	private final IRCTransport plugin;
 	private static final Logger log = Logger.getLogger("Minecraft");
 	
@@ -33,20 +33,32 @@ public class IrcAgent extends PircBot {
 		this.player = player;
 		setLogin(player.getName());
 		super.setAutoNickChange(true);
-		connect(plugin.ircserver, player.getName());
-		if(!plugin.autojoin.equals(""))
+		connect(plugin.getIrcServer(), player.getName());
+		
+		if(!plugin.getAutoJoin().equals(""))
 		{
-			joinChannel(plugin.autojoin);
-			activeChannel = plugin.autojoin;
+			activeChannel = plugin.getAutoJoin();
+			joinChannel(activeChannel);
 		}
 	}
 	public void log(String line)
 	{
-		if(plugin.verbose)
+		if(plugin.getVerbose())
 		{
 			log.log(Level.INFO,line);
 		}
 	}
+	
+	public String getActiveChannel()
+	{
+		return this.activeChannel;
+	}
+	
+	public void setActiveChannel(String channel)
+	{
+		this.activeChannel = channel;
+	}
+	
 	private void connect(String server, String nick)
 	{
 		try{
@@ -83,7 +95,10 @@ public class IrcAgent extends PircBot {
 	{
 		// TODO: check ativeChannel for NULL, then just pick a random channel.
 		sendMessage(activeChannel, message);
-		player.sendMessage(String.format("[%s] %s: %s", activeChannel, player.getDisplayName(), message));
+		String msg = String.format("[%s] %s: %s", activeChannel, player.getDisplayName(), message);
+		// if verbose, log all chat
+		if(plugin.getVerbose()) log.log(Level.INFO, msg);
+		player.sendMessage(msg);
 	}
 	public void sendAction(String action)
 	{
@@ -146,5 +161,26 @@ public class IrcAgent extends PircBot {
 		sendRawLine("NAMES " + channel);
 	}
 	
+	@Override
+	protected void onTopic(String channel, String topic, String setBy, long date, boolean changed) {
+		if(plugin.getVerbose())	{
+			log.log(Level.INFO, String.format("On %tc, %s changed the topic of %s to: %s", date, setBy, channel, topic));
+		}			
+		if(changed){
+			player.sendMessage(String.format("%s changed the topic of %s to: %s", setBy, channel, topic));
+		} else {
+			player.sendMessage(String.format("Topic for %s: %s", channel, topic));
+			player.sendMessage(String.format("Topic set by %s [%tc]", setBy, date));
+		}
+	}
 	
+	
+	protected void topic()
+	{
+		topic(activeChannel);
+	}
+	protected void topic(String channel)
+	{
+		sendRawLine("TOPIC " + channel);
+	}
 }
