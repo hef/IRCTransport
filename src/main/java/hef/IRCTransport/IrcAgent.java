@@ -162,5 +162,18 @@ public class IrcAgent extends PircBot {
 		sendRawLine("NAMES " + channel);
 	}
 	
+	@Override
+	protected void onTopic(String channel, String topic, String setBy, long date, boolean changed) {
+		if(plugin.getVerbose())	{
+			log.log(Level.INFO, String.format("On %tc, %s changed the topic of %s to: %s", date, setBy, channel, topic));
+		}			
+		if(changed){
+			player.sendMessage(String.format("%s changed the topic of %s to: %s", setBy, channel, topic));
+		} else {
+			player.sendMessage(String.format("Topic for %s: %s", channel, topic));
+			player.sendMessage(String.format("Topic set by %s [%tc]", setBy, date));
+		}
+	}
+	
 	
 }
