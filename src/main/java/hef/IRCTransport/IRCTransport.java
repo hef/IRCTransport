@@ -25,8 +25,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author hef
  */
 public class IRCTransport extends JavaPlugin {
-	private final IRCTransportPlayerListener playerListener = new IRCTransportPlayerListener(
-			this);
+	private IRCTransportPlayerListener playerListener;
 	private final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
 	private String ircserver = "";
 	private String autojoin ="";
@@ -60,6 +59,8 @@ public class IRCTransport extends JavaPlugin {
 	}
 
 	public void onEnable() {
+		this.playerListener = new IRCTransportPlayerListener(this);
+		
 		PluginManager pm = getServer().getPluginManager();
 		PluginDescriptionFile pdfFile = this.getDescription();
 		
