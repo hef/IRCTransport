@@ -105,6 +105,10 @@ public class IRCTransport extends JavaPlugin {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
 			String commandLabel, String[] args) {
+		if(this.getVerbose()){
+			log.log(Level.INFO, String.format("Command '%s' received from %s with %d arguments", commandLabel, sender, args.length));
+		}
+
 		Player player = (Player) sender;
 		IrcAgent bot = bots.get(player);
 		String commandName = command.getName().toLowerCase();
