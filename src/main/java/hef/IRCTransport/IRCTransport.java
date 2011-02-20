@@ -201,7 +201,7 @@ public class IRCTransport extends JavaPlugin {
 			bot.topic();
 			return true;
 		} else {
-			bot.topic(args[0]);
+			bot.setTopic(makeMessage(args, 0));
 			return true;
 		}
 	}
@@ -216,6 +216,4 @@ public class IRCTransport extends JavaPlugin {
 		}
 		return false;
 	}
-	
-	
 }

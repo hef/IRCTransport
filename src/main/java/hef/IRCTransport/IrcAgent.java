@@ -135,6 +135,14 @@ public class IrcAgent extends PircBot {
 		}
 		player.sendMessage(String.format("%s members: %s", channel, usersString));
 	}
+	/** Handles response codes not handled by pircbot
+	 * This methods handles irc response codes, slices up the response, and then
+	 * calls the appropriate method
+	 * @see org.jibble.pircbot.PircBot#onServerResponse(int, java.lang.String)
+	 * @see org.jibble.pircbot.PircBot.ReplyConstants
+	 * @param code the irc response code.
+	 * @param response The message that came with the response
+	 */
 	protected void onServerResponse(int code, String response)
 	{
 		switch(code)
@@ -174,14 +182,12 @@ public class IrcAgent extends PircBot {
 			player.sendMessage(String.format("Topic set by %s [%tc]", setBy, date));
 		}
 	}
-	
-	
 	protected void topic()
 	{
-		topic(activeChannel);
+		sendRawLine(String.format("TOPIC %s", activeChannel));
 	}
-	protected void topic(String channel)
+	protected void setTopic(String topic)
 	{
-		sendRawLine("TOPIC " + channel);
+		setTopic(activeChannel, topic);
 	}
 }
