@@ -176,4 +176,12 @@ public class IrcAgent extends PircBot {
 	}
 	
 	
+	protected void topic()
+	{
+		topic(activeChannel);
+	}
+	protected void topic(String channel)
+	{
+		sendRawLine("TOPIC " + channel);
+	}
 }

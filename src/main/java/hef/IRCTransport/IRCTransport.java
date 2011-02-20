@@ -127,6 +127,8 @@ public class IRCTransport extends JavaPlugin {
 			return names(bot,args);
 		else if(command.equals("me"))
 			return action(bot,args);
+		else if(commandName.equals("topic"))
+			return topic(bot, args);
 		return false;
 	}
 	public boolean join(IrcAgent bot, String[] args)
@@ -192,6 +194,18 @@ public class IRCTransport extends JavaPlugin {
 		}
 			
 	}
+	
+	public boolean topic(IrcAgent bot, String[] args)
+	{
+		if(args.length < 1){
+			bot.topic();
+			return true;
+		} else {
+			bot.topic(args[0]);
+			return true;
+		}
+	}
+	
 	public boolean action(IrcAgent bot, String[] args)
 	{
 		if(args.length > 1)
