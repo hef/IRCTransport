@@ -1,4 +1,4 @@
-[CHAT] IRCTransport 0.3 - Minecraft Chat/IRC Integration
+[CHAT] IRCTransport 0.4 - Minecraft Chat/IRC Integration
 =============================================================
 
 Replaces minecraft's in game chat with IRC clients.
@@ -23,7 +23,7 @@ Available commands:
     /names #channel -- show users in channel
     /me acton to perform -- performs an irc action
 
-[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.3.jar)  
+[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.4.jar)  
 [Source](https://github.com/hef/IRCTransport)
 
 Features:
