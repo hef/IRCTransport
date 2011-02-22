@@ -47,8 +47,8 @@ commands:
            /<command> <action>
            /<command> dances with the devil in the pale moonlight.
   topic:
-    description: see the channel topic
+    description: get and set the channel topic
     usage: |
-           /<command> [channel]
+           /<command> [topic]
            /<command>
-           /<command> #minecraft
+           /<command> Our hearts are extended to the 17 victims of the recent internet fraud

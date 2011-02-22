@@ -22,6 +22,7 @@ Available commands:
     /nick new_name  -- change your display name.
     /names #channel -- show users in channel
     /me action to perform -- performs an irc action
+    /topic -- get or set the channel topic
 
 [Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.4.jar)  
 [Source](https://github.com/hef/IRCTransport)
@@ -34,6 +35,8 @@ Features:
 
 Changelog:
 ----------
+### Version 0.5
+  * channel topic support
 ### Version 0.4
   * /me support
   * /names support.
