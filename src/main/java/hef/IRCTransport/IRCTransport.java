@@ -52,12 +52,6 @@ public class IRCTransport extends JavaPlugin {
 		return this.bots;
 	}
 
-	public IRCTransport(PluginLoader pluginLoader, Server instance,
-			PluginDescriptionFile desc, File folder, File plugin,
-			ClassLoader cLoader) {
-		super(pluginLoader, instance, desc, folder, plugin, cLoader);
-	}
-
 	public void onEnable() {
 		this.playerListener = new IRCTransportPlayerListener(this);
 		
