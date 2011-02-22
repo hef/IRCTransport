@@ -11,25 +11,25 @@ import org.jibble.pircbot.Colors;
  */
 public class ColorMap {
 	//TODO: char to char mapping
-	private static final HashMap<String, String> ircToMineColor = new HashMap<String, String>(); 
+	private static HashMap<Character, Character> ircToMineColor = new HashMap<Character, Character>(); 
 	static
 	{	
-		ircToMineColor.put( Colors.BLACK, ChatColor.WHITE.toString() );
-		ircToMineColor.put( Colors.WHITE, ChatColor.BLACK.toString() );
-		ircToMineColor.put( Colors.DARK_BLUE, ChatColor.DARK_BLUE.toString() );
-		ircToMineColor.put( Colors.DARK_GREEN, ChatColor.DARK_GREEN.toString() );
-		ircToMineColor.put( Colors.RED, ChatColor.RED.toString() );
-		ircToMineColor.put( Colors.BROWN, ChatColor.DARK_RED.toString() );
-		ircToMineColor.put( Colors.PURPLE, ChatColor.DARK_PURPLE.toString() );
-		ircToMineColor.put( Colors.OLIVE, ChatColor.GOLD.toString() );
-		ircToMineColor.put( Colors.YELLOW, ChatColor.YELLOW.toString() );
-		ircToMineColor.put( Colors.GREEN, ChatColor.GREEN.toString() );
-		ircToMineColor.put( Colors.TEAL, ChatColor.DARK_AQUA.toString() );
-		ircToMineColor.put( Colors.CYAN, ChatColor.AQUA.toString() );
-		ircToMineColor.put( Colors.BLUE, ChatColor.BLUE.toString() );
-		ircToMineColor.put( Colors.MAGENTA, ChatColor.LIGHT_PURPLE.toString() );
-		ircToMineColor.put( Colors.DARK_GRAY, ChatColor.DARK_GRAY.toString() );
-		ircToMineColor.put( Colors.LIGHT_GRAY, ChatColor.GRAY.toString() );
+		ircToMineColor.put( Colors.BLACK.charAt(0), ChatColor.WHITE.toString().charAt(0) );
+		ircToMineColor.put( Colors.WHITE.charAt(0), ChatColor.BLACK.toString().charAt(0) );
+		ircToMineColor.put( Colors.DARK_BLUE.charAt(0), ChatColor.DARK_BLUE.toString().charAt(0) );
+		ircToMineColor.put( Colors.DARK_GREEN.charAt(0), ChatColor.DARK_GREEN.toString().charAt(0) );
+		ircToMineColor.put( Colors.RED.charAt(0), ChatColor.RED.toString().charAt(0) );
+		ircToMineColor.put( Colors.BROWN.charAt(0), ChatColor.DARK_RED.toString().charAt(0) );
+		ircToMineColor.put( Colors.PURPLE.charAt(0), ChatColor.DARK_PURPLE.toString().charAt(0) );
+		ircToMineColor.put( Colors.OLIVE.charAt(0), ChatColor.GOLD.toString().charAt(0) );
+		ircToMineColor.put( Colors.YELLOW.charAt(0), ChatColor.YELLOW.toString().charAt(0) );
+		ircToMineColor.put( Colors.GREEN.charAt(0), ChatColor.GREEN.toString().charAt(0) );
+		ircToMineColor.put( Colors.TEAL.charAt(0), ChatColor.DARK_AQUA.toString().charAt(0) );
+		ircToMineColor.put( Colors.CYAN.charAt(0), ChatColor.AQUA.toString().charAt(0) );
+		ircToMineColor.put( Colors.BLUE.charAt(0), ChatColor.BLUE.toString().charAt(0) );
+		ircToMineColor.put( Colors.MAGENTA.charAt(0), ChatColor.LIGHT_PURPLE.toString().charAt(0) );
+		ircToMineColor.put( Colors.DARK_GRAY.charAt(0), ChatColor.DARK_GRAY.toString().charAt(0) );
+		ircToMineColor.put( Colors.LIGHT_GRAY.charAt(0), ChatColor.GRAY.toString().charAt(0) );
 	}
 	
 	/** Convert message from IRC to Minecraft
@@ -46,7 +46,7 @@ public class ColorMap {
 			//search an replace irc color byte with minecraft color byte
 			if(ircToMineColor.containsKey( Character.toString(messageBytes[i]) ))
 			{
-				messageBytes[i]= ircToMineColor.get(messageBytes[i]).toString().charAt(0);
+				messageBytes[i]= ircToMineColor.get(messageBytes[i]);
 			}
 			
 		}
