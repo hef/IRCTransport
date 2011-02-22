@@ -43,7 +43,7 @@ public class IrcAgent extends PircBot {
 	}
 	public void log(String line)
 	{
-		if(plugin.getVerbose())
+		if(plugin.isVerbose())
 		{
 			log.log(Level.INFO,line);
 		}
@@ -97,7 +97,7 @@ public class IrcAgent extends PircBot {
 		sendMessage(activeChannel, message);
 		String msg = String.format("[%s] %s: %s", activeChannel, player.getDisplayName(), message);
 		// if verbose, log all chat
-		if(plugin.getVerbose()) log.log(Level.INFO, msg);
+		if(plugin.isVerbose()) log.log(Level.INFO, msg);
 		player.sendMessage(msg);
 	}
 	public void sendAction(String action)
@@ -171,7 +171,7 @@ public class IrcAgent extends PircBot {
 	
 	@Override
 	protected void onTopic(String channel, String topic, String setBy, long date, boolean changed) {
-		if(plugin.getVerbose())	{
+		if(plugin.isVerbose())	{
 			log.log(Level.INFO, String.format("On %tc, %s changed the topic of %s to: %s", date, setBy, channel, topic));
 		}			
 		if(changed){

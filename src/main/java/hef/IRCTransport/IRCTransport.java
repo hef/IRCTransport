@@ -42,7 +42,7 @@ public class IRCTransport extends JavaPlugin {
 		return this.autojoin;
 	}
 	
-	public boolean getVerbose()
+	public boolean isVerbose()
 	{
 		return this.verbose;
 	}
@@ -105,7 +105,7 @@ public class IRCTransport extends JavaPlugin {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
 			String commandLabel, String[] args) {
-		if(this.getVerbose()){
+		if(this.isVerbose()){
 			log.log(Level.INFO, String.format("Command '%s' received from %s with %d arguments", commandLabel, sender, args.length));
 		}
 
@@ -191,10 +191,8 @@ public class IRCTransport extends JavaPlugin {
 		{
 			bot.names(args[0]);
 			return true;
-		}
-			
+		}	
 	}
-	
 	public boolean topic(IrcAgent bot, String[] args)
 	{
 		if(args.length < 1){
