@@ -19,12 +19,6 @@ public class IRCTransportPlayerListener extends PlayerListener {
     public IRCTransportPlayerListener(IRCTransport instance) {
     	this.bots = instance.getBots();
         plugin = instance;
-        //establish list of players
-        Player[] players = instance.getServer().getOnlinePlayers();
-        for(Player player: players)
-        {
-        	this.bots.put(player, new IrcAgent(plugin,player));
-        }
     }
     public void onPlayerChat(PlayerChatEvent event)
     {

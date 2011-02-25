@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,6 +81,14 @@ public class IRCTransport extends JavaPlugin {
 	
 		log.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
 		//Event Registration
+		
+        //establish list of players
+        Player[] players = getServer().getOnlinePlayers();
+        for(Player player: players)
+        {
+        	this.bots.put(player, new IrcAgent(this,player));
+        }
+        
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
@@ -93,6 +102,13 @@ public class IRCTransport extends JavaPlugin {
 	}
 
 	public void onDisable() {
+		//disconnect all agents
+		for(Entry<Player, IrcAgent> entry: bots.entrySet())
+		{
+			entry.getValue().disconnect();
+		}
+		bots.clear();
+		
 		log.log(Level.INFO, this.getDescription().getFullName() + " is disabled" );
 	}
 
