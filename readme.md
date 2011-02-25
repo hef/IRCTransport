@@ -36,6 +36,7 @@ Features:
 Changelog:
 ----------
 ### Version 0.5
+  * irc color to minecraft color support in chat.
   * channel topic support
 ### Version 0.4
   * /me support
