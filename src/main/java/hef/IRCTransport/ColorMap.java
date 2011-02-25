@@ -1,5 +1,6 @@
 package hef.IRCTransport;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
@@ -11,25 +12,25 @@ import org.jibble.pircbot.Colors;
  */
 public class ColorMap {
 	//TODO: char to char mapping
-	private static HashMap<Character, Character> ircToMineColor = new HashMap<Character, Character>(); 
+	private static ArrayList<String> minecraftColor = new ArrayList<String>(16);
 	static
 	{	
-		ircToMineColor.put( Colors.BLACK.charAt(0), ChatColor.WHITE.toString().charAt(0) );
-		ircToMineColor.put( Colors.WHITE.charAt(0), ChatColor.BLACK.toString().charAt(0) );
-		ircToMineColor.put( Colors.DARK_BLUE.charAt(0), ChatColor.DARK_BLUE.toString().charAt(0) );
-		ircToMineColor.put( Colors.DARK_GREEN.charAt(0), ChatColor.DARK_GREEN.toString().charAt(0) );
-		ircToMineColor.put( Colors.RED.charAt(0), ChatColor.RED.toString().charAt(0) );
-		ircToMineColor.put( Colors.BROWN.charAt(0), ChatColor.DARK_RED.toString().charAt(0) );
-		ircToMineColor.put( Colors.PURPLE.charAt(0), ChatColor.DARK_PURPLE.toString().charAt(0) );
-		ircToMineColor.put( Colors.OLIVE.charAt(0), ChatColor.GOLD.toString().charAt(0) );
-		ircToMineColor.put( Colors.YELLOW.charAt(0), ChatColor.YELLOW.toString().charAt(0) );
-		ircToMineColor.put( Colors.GREEN.charAt(0), ChatColor.GREEN.toString().charAt(0) );
-		ircToMineColor.put( Colors.TEAL.charAt(0), ChatColor.DARK_AQUA.toString().charAt(0) );
-		ircToMineColor.put( Colors.CYAN.charAt(0), ChatColor.AQUA.toString().charAt(0) );
-		ircToMineColor.put( Colors.BLUE.charAt(0), ChatColor.BLUE.toString().charAt(0) );
-		ircToMineColor.put( Colors.MAGENTA.charAt(0), ChatColor.LIGHT_PURPLE.toString().charAt(0) );
-		ircToMineColor.put( Colors.DARK_GRAY.charAt(0), ChatColor.DARK_GRAY.toString().charAt(0) );
-		ircToMineColor.put( Colors.LIGHT_GRAY.charAt(0), ChatColor.GRAY.toString().charAt(0) );
+		minecraftColor.add(0, ChatColor.WHITE.toString());			//black
+		minecraftColor.add(1, ChatColor.BLACK.toString());  		//white
+		minecraftColor.add(2, ChatColor.DARK_BLUE.toString()); 		//dark_blue
+		minecraftColor.add(3, ChatColor.DARK_GREEN.toString());		//dark_green
+		minecraftColor.add(4, ChatColor.RED.toString());			//red
+		minecraftColor.add(5, ChatColor.DARK_RED.toString());		//brown
+		minecraftColor.add(6, ChatColor.DARK_PURPLE.toString());	//purple
+		minecraftColor.add(7, ChatColor.GOLD.toString());			//olive
+		minecraftColor.add(8, ChatColor.YELLOW.toString());			//yellow
+		minecraftColor.add(9, ChatColor.GREEN.toString());			//green
+		minecraftColor.add(10, ChatColor.DARK_AQUA.toString());		//teal
+		minecraftColor.add(11, ChatColor.AQUA.toString());			//cyan
+		minecraftColor.add(12, ChatColor.BLUE.toString());			//blue
+		minecraftColor.add(13, ChatColor.LIGHT_PURPLE.toString());	//magenta
+		minecraftColor.add(14, ChatColor.DARK_GRAY.toString());		//dark_gray
+		minecraftColor.add(15, ChatColor.GRAY.toString());			//light_gray
 	}
 	
 	/** Convert message from IRC to Minecraft
@@ -40,16 +41,68 @@ public class ColorMap {
 	 */
 	public static String fromIrc(String message)
 	{
-		char[] messageBytes=message.toCharArray();
-		for(int i = 0; i < message.length(); ++i)
-		{
-			//search an replace irc color byte with minecraft color byte
-			if(ircToMineColor.containsKey( Character.toString(messageBytes[i]) ))
-			{
-				messageBytes[i]= ircToMineColor.get(messageBytes[i]);
-			}
-			
-		}
-		return new String(messageBytes);
+        StringBuffer buffer = new StringBuffer();
+        int i = 0;
+        char digit1;
+        char digit2;
+        while (i < message.length())
+        {
+        	digit1='\0';
+        	digit2='\0';
+        	//if char is irc color code
+        	if (message.charAt(i) == '\u0003')
+        	{
+        		++i;
+        		//if char is digit x in x or xy
+        		if( i < message.length() && Character.isDigit(message.charAt(i)))
+        		{
+        			digit1 = message.charAt(i);
+        			++i;
+        			//if char is digit y in xy
+        			if( i< message.length() && Character.isDigit(message.charAt(i)))
+        			{
+        				digit2 = message.charAt(i);
+        				++i;
+        			}
+        			//we have a color code and at least 1 digit, check for background color (,x) or (,xy)
+        			if( i < message.length() && message.charAt(i) == ',')
+        			{
+        				++i;
+        				if( i < message.length())
+        				{
+        					if( Character.isDigit(message.charAt(i)) )
+        					{
+        						++i;
+        						if(i < message.length() && Character.isDigit(message.charAt(i)))
+        						{
+        							++i;
+        						}
+        					}
+        					else
+        					{
+        						//a comma was detected, but there was no color code.
+        						//put the comma back
+        						--i;
+        					}
+        				}
+        			}
+        			//deal with digit1 and digit2
+        			String colorcode = "";
+        			if(digit1 != '\0')
+        				colorcode += Character.toString(digit1);
+        			if(digit2 != '\0')
+        				colorcode += Character.toString(digit2);
+        			if(digit1 != '\0')
+        			{
+        				int ircCode = Integer.parseInt(colorcode);
+        				String mineCode = minecraftColor.get(ircCode);
+        				buffer.append(mineCode);
+        			}
+        		}
+        	}
+        	buffer.append(message.charAt(i));
+			++i;
+        }
+        return buffer.toString();
 	}
 }
