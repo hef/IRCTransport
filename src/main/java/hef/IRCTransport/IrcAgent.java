@@ -119,7 +119,7 @@ public class IrcAgent extends PircBot {
 	}
 	protected void onNickChange(String oldNick, String login, String hostname, String newNick) 
 	{
-		if(oldNick.equals(player.getName()))
+		if(oldNick.equals(player.getDisplayName()))
 		{
 			player.setDisplayName(newNick);
 		}
