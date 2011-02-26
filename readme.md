@@ -11,16 +11,17 @@ Put these in Minecraft's server.properties file with appropriate values.
     irc.autojoin=
     irc.verbose=false
 
-irc.server is mandatory.  All other settings are optional.
+The irc.server setting is mandatory.  All other settings are optional.
+Set irc.autojoin to a channel to have your users autojoin that channel.
 
 Available commands:
 -------------------
     /join #channel
     /leave #channel
-    /channel #channel -- changes active channel
+    /channel #channel -- changes your active channel
     /msg user -- send a private message to a user
     /nick new_name  -- change your display name.
-    /names #channel -- show users in channel
+    /names -- shows users in your channel
     /me action to perform -- performs an irc action
     /topic -- get or set the channel topic
 
@@ -31,7 +32,7 @@ Features:
 ---------
   * Minecraft chat is replaced with an IRC session.
   * Private messaging works in game.
-  * IRC channels are accessible in game.
+  * IRC channels are joinable in game.
 
 Changelog:
 ----------
@@ -39,18 +40,18 @@ Changelog:
   * Fixed a nickname change bug.
   * IRC color to minecraft color support in chat.
   * Removed [TSLPC](http://forums.bukkit.org/threads/oops-i-broke-your-plugins.599/#post-70677).
-  * channel topic support
+  * Channel topic support
 
 ### Version 0.4
-  * /me support
-  * /names support.
-  * invite only error message.
-  * Changed output messages to use logging
+  * Added /me support
+  * Added /names support.
+  * Added channel is invite only error message.
+  * Changed output messages to use logging.
   * Fixed bug in nickname changing.
 
 ### Version 0.3
-  * renamed PlayerBot to IrcAgent
-  * Fixed join message detection
+  * Renamed PlayerBot to IrcAgent.
+  * Fixed join message detection.
   * Changed package name to hef.IRCTransport as per [request](http://forums.bukkit.org/threads/on-namespaces-please-do-not-use-bukkit-in-your-plugins.3732/).
   * Changed build system to Maven.
 
