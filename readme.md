@@ -40,6 +40,7 @@ Changelog:
   * IRC color to minecraft color support in chat.
   * Removed [TSLPC](http://forums.bukkit.org/threads/oops-i-broke-your-plugins.599/#post-70677).
   * channel topic support
+
 ### Version 0.4
   * /me support
   * /names support.
