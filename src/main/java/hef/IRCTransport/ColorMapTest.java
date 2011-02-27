@@ -54,10 +54,40 @@ public class ColorMapTest {
 	@Test
 	public final void testFromIrc() {
 		String ircRed = "string is " + Colors.RED.toString() + "red";
+		//System.out.println(ircRed);
 		String minecraftRed = "string is " + ChatColor.RED + "red";
+		//System.out.println(minecraftRed);
 		
 		String result = ColorMap.fromIrc(ircRed);
+		//System.out.println(result);
 		assertTrue(minecraftRed.equals(result));
-		}
+	}
+	
+	/**
+	 * Test method for {@link hef.IRCTransport.ColorMap#toIrc(java.lang.String)}.
+	 */
+	@Test
+	public final void testToIrc() {
+		String ircRed = "string is " + Colors.RED.toString() + "red";
+		//System.out.println(ircRed);
+		String minecraftRed = "string is " + ChatColor.RED + "red";
+		//System.out.println(minecraftRed);
+		//System.out.println(ChatColor.BLACK);
+		//System.out.println(ChatColor.AQUA);
+		
+		String result = ColorMap.toIrc(minecraftRed);
+		//System.out.println(result);
+		assertTrue(ircRed.equals(result));
+	}
+	
+	
+	/**
+	 * Test method for {@link hef.IRCTransport.ColorMap#chatToIrcColor(java.lang.String)}.
+	 */
+	@Test
+	public final void testChatToIrcColor() {
+		assertTrue(ColorMap.chatToIrcColor("wrong").equals(Colors.BLACK.toString()));
+		assertTrue(ColorMap.chatToIrcColor(ChatColor.WHITE.toString()).equals(Colors.WHITE.toString()));
+	}
 
 }

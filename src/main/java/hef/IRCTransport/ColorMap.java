@@ -2,6 +2,8 @@ package hef.IRCTransport;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.jibble.pircbot.Colors;
@@ -33,6 +35,58 @@ public class ColorMap {
 		minecraftColor.add(15, ChatColor.GRAY.toString());			//light_gray
 	}
 	
+	/**
+	 * Convert a MineCraft color code to an IRC color code
+	 * @param code A MineCraft color code
+	 * @return An IRC color code, black if the string did not match any code.
+	 */
+	public static String chatToIrcColor(String code)
+	{
+		for(int i = 0; i < minecraftColor.size() ;  i++)
+		{
+			if(minecraftColor.get(i).equals(code))
+			{
+				String result = "\u0003";
+				if(i < 10) result += "0";
+				return result + i;
+			}
+		}
+		return "\u000301"; // Let's just make it black by default, good for IRC 
+	}
+	
+	/**
+	 * Convert message from Minecraft to IRC
+	 * Translates a colored minecraft message into a colored irc message.
+	 * @param message the incoming minecraft message.
+	 * @return The converted irc string.
+	 * TODO minecraft color doesn't span line wrap, force it by checking for last active color at linebreak.
+	 */
+	public static String toIrc(String message)
+	{
+		Pattern minecraftColor = Pattern.compile('§'+"[0-9a-z]");
+		Matcher m = minecraftColor.matcher(message);
+		String result = "";
+		int prev = 0;
+		
+		while(m.find())	{
+			int start = m.start();
+			int end = m.end();
+			// Add the unmatched parts to the result
+			result += message.substring(prev, start);
+			String code = ""+message.charAt(start) + message.charAt(start+1);
+			//System.out.println("Found code: " + code);
+			result += chatToIrcColor(code);
+			prev = end;
+		}
+		// Add the remaining string
+		if(prev < message.length())
+			result += message.substring(prev, message.length());
+		
+		return result;
+	}
+	
+	
+	
 	/** Convert message from IRC to Minecraft
 	 * Translates a colored irc message into a colored minecraft message.
 	 * @param message the incoming irc message.
@@ -41,68 +95,30 @@ public class ColorMap {
 	 */
 	public static String fromIrc(String message)
 	{
-        StringBuffer buffer = new StringBuffer();
-        int i = 0;
-        char digit1;
-        char digit2;
-        while (i < message.length())
-        {
-        	digit1='\0';
-        	digit2='\0';
-        	//if char is irc color code
-        	if (message.charAt(i) == '\u0003')
-        	{
-        		++i;
-        		//if char is digit x in x or xy
-        		if( i < message.length() && Character.isDigit(message.charAt(i)))
-        		{
-        			digit1 = message.charAt(i);
-        			++i;
-        			//if char is digit y in xy
-        			if( i< message.length() && Character.isDigit(message.charAt(i)))
-        			{
-        				digit2 = message.charAt(i);
-        				++i;
-        			}
-        			//we have a color code and at least 1 digit, check for background color (,x) or (,xy)
-        			if( i < message.length() && message.charAt(i) == ',')
-        			{
-        				++i;
-        				if( i < message.length())
-        				{
-        					if( Character.isDigit(message.charAt(i)) )
-        					{
-        						++i;
-        						if(i < message.length() && Character.isDigit(message.charAt(i)))
-        						{
-        							++i;
-        						}
-        					}
-        					else
-        					{
-        						//a comma was detected, but there was no color code.
-        						//put the comma back
-        						--i;
-        					}
-        				}
-        			}
-        			//deal with digit1 and digit2
-        			String colorcode = "";
-        			if(digit1 != '\0')
-        				colorcode += Character.toString(digit1);
-        			if(digit2 != '\0')
-        				colorcode += Character.toString(digit2);
-        			if(digit1 != '\0')
-        			{
-        				int ircCode = Integer.parseInt(colorcode);
-        				String mineCode = minecraftColor.get(ircCode);
-        				buffer.append(mineCode);
-        			}
-        		}
-        	}
-        	buffer.append(message.charAt(i));
-			++i;
-        }
-        return buffer.toString();
+		// define IRC color pattern
+		Pattern ircColor = Pattern.compile('\u0003'+"[0-9]{1,2}(?:,[0-9]{1,2})?");
+		Matcher m = ircColor.matcher(message);
+		String result = "";
+		int prev = 0;
+		// Find all matches
+		while(m.find())	{
+			int start = m.start();
+			int end = m.end();
+			// Add the unmatched parts to the result
+			result += message.substring(prev, start);
+			char digit1 = message.charAt(start+1);
+			char digit2 = message.charAt(start+2);
+			// We don't need to catch a numberformatexception
+			// because the regular expression took care of that
+			int code = Integer.parseInt("" + digit1 + digit2);
+			// Replace matched parts by the other color code
+			result += minecraftColor.get(code);
+			prev = end;
+		}
+		// Add the remaining string
+		if(prev < message.length())
+			result += message.substring(prev, message.length());
+			
+		return result;
 	}
 }
