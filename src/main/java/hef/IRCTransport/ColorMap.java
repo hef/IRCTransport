@@ -1,12 +1,10 @@
 package hef.IRCTransport;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
-import org.jibble.pircbot.Colors;
 
 /**
  * @author hef
