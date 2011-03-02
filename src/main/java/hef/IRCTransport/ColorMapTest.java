@@ -56,20 +56,22 @@ public class ColorMapTest {
 	 */
 	@Test
 	public final void testFromIrc() {
-		List<String> ircLines = new ArrayList<String>();
-		ircLines.add("string is " + Colors.RED.toString() + "red");
-		ircLines.add("string is "+'\u0003'+"4red");
-		ircLines.add("string is " + Colors.RED.toString() + "red" + Colors.WHITE.toString()); // test line ending with a color
 		
-		List<String> mcLines = new ArrayList<String>();
-		mcLines.add("string is " + ChatColor.RED + "red");
-		mcLines.add("string is " + ChatColor.RED + "red");
-		mcLines.add("string is " + ChatColor.RED + "red" + ChatColor.WHITE);
+		String input1 = "string is " + Colors.RED.toString() + "red";
+		String expected1 = "string is " + ChatColor.RED + "red";
+		String output1 = ColorMap.fromIrc(input1);
+		assertTrue(expected1.equals(output1));
 		
-		for(int i = 0; i < ircLines.size(); i++) {
-			assertTrue(mcLines.get(i).equals(ColorMap.fromIrc(ircLines.get(i))));
-		}
+		String input2 = "string is "+'\u0003'+"4red";
+		String expected2 = "string is " + ChatColor.RED + "red";
+		String output2 = ColorMap.fromIrc(input2);
+		assertTrue(expected2.equals(output2));
 		
+		// test line ending with a color
+		String input3 = "string is " + Colors.RED.toString() + "red" + Colors.WHITE.toString();
+		String expected3 = "string is " + ChatColor.RED + "red" + ChatColor.WHITE;
+		String output3 = ColorMap.fromIrc(input3);
+		assertTrue(expected3.equals(output3));
 	}
 	
 	/**
@@ -78,14 +80,8 @@ public class ColorMapTest {
 	@Test
 	public final void testToIrc() {
 		String ircRed = "string is " + Colors.RED.toString() + "red";
-		//System.out.println(ircRed);
 		String minecraftRed = "string is " + ChatColor.RED + "red";
-		//System.out.println(minecraftRed);
-		//System.out.println(ChatColor.BLACK);
-		//System.out.println(ChatColor.AQUA);
-		
 		String result = ColorMap.toIrc(minecraftRed);
-		//System.out.println(result);
 		assertTrue(ircRed.equals(result));
 	}
 	
