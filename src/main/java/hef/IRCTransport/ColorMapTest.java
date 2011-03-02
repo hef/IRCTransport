@@ -85,7 +85,6 @@ public class ColorMapTest {
 		assertTrue(ircRed.equals(result));
 	}
 	
-	
 	/**
 	 * Test method for {@link hef.IRCTransport.ColorMap#chatToIrcColor(java.lang.String)}.
 	 */
