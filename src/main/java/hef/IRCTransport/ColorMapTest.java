@@ -5,6 +5,9 @@ package hef.IRCTransport;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jibble.pircbot.Colors;
 
 import org.bukkit.ChatColor;
@@ -53,14 +56,20 @@ public class ColorMapTest {
 	 */
 	@Test
 	public final void testFromIrc() {
-		String ircRed = "string is " + Colors.RED.toString() + "red";
-		//System.out.println(ircRed);
-		String minecraftRed = "string is " + ChatColor.RED + "red";
-		//System.out.println(minecraftRed);
+		List<String> ircLines = new ArrayList<String>();
+		ircLines.add("string is " + Colors.RED.toString() + "red");
+		ircLines.add("string is "+'\u0003'+"4red");
+		ircLines.add("string is " + Colors.RED.toString() + "red" + Colors.WHITE.toString()); // test line ending with a color
 		
-		String result = ColorMap.fromIrc(ircRed);
-		//System.out.println(result);
-		assertTrue(minecraftRed.equals(result));
+		List<String> mcLines = new ArrayList<String>();
+		mcLines.add("string is " + ChatColor.RED + "red");
+		mcLines.add("string is " + ChatColor.RED + "red");
+		mcLines.add("string is " + ChatColor.RED + "red" + ChatColor.WHITE);
+		
+		for(int i = 0; i < ircLines.size(); i++) {
+			assertTrue(mcLines.get(i).equals(ColorMap.fromIrc(ircLines.get(i))));
+		}
+		
 	}
 	
 	/**

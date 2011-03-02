@@ -107,10 +107,13 @@ public class ColorMap {
 			// Add the unmatched parts to the result
 			result += message.substring(prev, start);
 			char digit1 = message.charAt(start+1);
-			char digit2 = message.charAt(start+2);
+			char digit2 = 'a';
+			if(start+2 < message.length())
+				digit2 = message.charAt(start+2);
 			// We don't need to catch a numberformatexception
 			// because the regular expression took care of that
-			int code = Integer.parseInt("" + digit1 + digit2);
+			String color = "" + digit1 + (Character.isDigit(digit2) ? digit2 : "");
+			int code = Integer.parseInt(color);
 			// Replace matched parts by the other color code
 			result += minecraftColor.get(code);
 			prev = end;
