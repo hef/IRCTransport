@@ -15,6 +15,8 @@ import org.jibble.pircbot.Colors;
 public class ColorMap {
 	//TODO: char to char mapping
 	private static ArrayList<String> minecraftColor = new ArrayList<String>(16);
+	private static Pattern minecraftColorPattern = Pattern.compile('\u00A7'+"[0-9a-z]");
+	private static Pattern ircColorPattern = Pattern.compile('\u0003'+"[0-9]{1,2}(?:,[0-9]{1,2})?");
 	static
 	{	
 		minecraftColor.add(0, ChatColor.WHITE.toString());			//black
@@ -63,8 +65,7 @@ public class ColorMap {
 	 */
 	public static String toIrc(String message)
 	{
-		Pattern minecraftColor = Pattern.compile('§'+"[0-9a-z]");
-		Matcher m = minecraftColor.matcher(message);
+		Matcher m = minecraftColorPattern.matcher(message);
 		String result = "";
 		int prev = 0;
 		
@@ -96,8 +97,7 @@ public class ColorMap {
 	public static String fromIrc(String message)
 	{
 		// define IRC color pattern
-		Pattern ircColor = Pattern.compile('\u0003'+"[0-9]{1,2}(?:,[0-9]{1,2})?");
-		Matcher m = ircColor.matcher(message);
+		Matcher m = ircColorPattern.matcher(message);
 		String result = "";
 		int prev = 0;
 		// Find all matches
