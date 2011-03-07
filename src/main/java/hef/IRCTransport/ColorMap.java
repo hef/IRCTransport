@@ -84,8 +84,6 @@ public class ColorMap {
 		return result;
 	}
 	
-	
-	
 	/** Convert message from IRC to Minecraft
 	 * Translates a colored irc message into a colored minecraft message.
 	 * @param message the incoming irc message.
