@@ -23,6 +23,8 @@ public class IrcAgent extends PircBot {
 	private String activeChannel;
 	private final IRCTransport plugin;
 	private static final Logger log = Logger.getLogger("Minecraft");
+	//flag to indicate we should not reconnect
+	private boolean shutdown; 
 	
 	/**
 	 * 
@@ -31,6 +33,7 @@ public class IrcAgent extends PircBot {
 		//TODO: see how long this takes to construct
 		this.plugin = instance;
 		this.player = player;
+		this.shutdown = false;
 		setLogin(player.getName());
 		super.setAutoNickChange(true);
 		connect(plugin.getIrcServer(), player.getName());
@@ -66,16 +69,23 @@ public class IrcAgent extends PircBot {
 			//this doesn't have much in game affect, but might help other plugins.
 			player.setDisplayName(nick);
 			super.connect(server);
-		}  catch (NickAlreadyInUseException e1) {
+		}  catch (NickAlreadyInUseException e) {
 			  //This should not be called anymore.
-			log.log(Level.SEVERE, e1.getMessage(), e1);
-		} catch (IOException e1) {
+			log.log(Level.SEVERE, e.getMessage(), e);
+		} catch (IOException e) {
 			System.out.println("IOException: Failed to connect to irc server: " + server);
-			log.log(Level.SEVERE, e1.getMessage(), e1);
-		} catch (IrcException e1) {
+			log.log(Level.SEVERE, e.getMessage(), e);
+		} catch (IrcException e) {
 			System.out.println("IrcException: Failed to connect to irc server: " + server);
-			log.log(Level.SEVERE, e1.getMessage(), e1);
+			log.log(Level.SEVERE, e.getMessage(), e);
 		}
+		
+	}
+	public void onDisconnect()
+	{
+		player.sendMessage("ChatService Disconnected.");
+		Reconnect reconnectTask = new Reconnect(this);
+		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(this.plugin, reconnectTask, 20);
 	}
 	public void onMessage(String channel, String sender, String login, String hostname, String message)
 	{
