@@ -19,9 +19,10 @@ import org.jibble.pircbot.User;
  *
  */
 public class IrcAgent extends PircBot {
-	private Player player;
+	//todo protect player again
+	Player player;
 	private String activeChannel;
-	private final IRCTransport plugin;
+	final IRCTransport plugin;
 	private static final Logger log = Logger.getLogger("Minecraft");
 	//flag to indicate we should not reconnect
 	private boolean shutdown; 
@@ -64,6 +65,8 @@ public class IrcAgent extends PircBot {
 	
 	private void connect(String server, String nick)
 	{
+		//TODO get rid of this line
+		player.sendMessage("attempting to connect to chat server");
 		try{
 			setName(nick);
 			//this doesn't have much in game affect, but might help other plugins.
@@ -73,6 +76,7 @@ public class IrcAgent extends PircBot {
 			  //This should not be called anymore.
 			log.log(Level.SEVERE, e.getMessage(), e);
 		} catch (IOException e) {
+			//TODO schedule a reconnect attempte
 			System.out.println("IOException: Failed to connect to irc server: " + server);
 			log.log(Level.SEVERE, e.getMessage(), e);
 		} catch (IrcException e) {
@@ -85,7 +89,7 @@ public class IrcAgent extends PircBot {
 	{
 		player.sendMessage("ChatService Disconnected.");
 		Reconnect reconnectTask = new Reconnect(this);
-		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(this.plugin, reconnectTask, 20);
+		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(this.plugin, reconnectTask);
 	}
 	public void onMessage(String channel, String sender, String login, String hostname, String message)
 	{
@@ -105,10 +109,13 @@ public class IrcAgent extends PircBot {
 	{
 		// TODO: check ativeChannel for NULL, then just pick a random channel.
 		sendMessage(activeChannel, message);
-		String msg = String.format("[%s] %s: %s", activeChannel, player.getDisplayName(), message);
-		// if verbose, log all chat
-		if(plugin.isVerbose()) log.log(Level.INFO, msg);
-		player.sendMessage(msg);
+		if(isConnected())
+		{
+			String msg = String.format("[%s] %s: %s", activeChannel, player.getDisplayName(), message);
+			// if verbose, log all chat
+			//if(plugin.isVerbose()) log.log(Level.INFO, msg);
+			player.sendMessage(msg);
+		}
 	}
 	public void sendAction(String action)
 	{
