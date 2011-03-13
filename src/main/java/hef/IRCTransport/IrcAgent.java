@@ -175,7 +175,7 @@ public class IrcAgent extends PircBot {
 			getPlayer().sendMessage(String.format("%s changed the topic of %s to: %s", setBy, channel, topic));
 		} else {
 			getPlayer().sendMessage(String.format("Topic for %s: %s", channel, topic));
-			getPlayer().sendMessage(String.format("Topic set by %s [%tc]", setBy, date));
+			//getPlayer().sendMessage(String.format("Topic set by %s [%tc]", setBy, date));
 		}
 	}
 	protected void topic()
