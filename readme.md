@@ -40,6 +40,7 @@ Changelog:
   * Attempts to reconnect to IRC server on connection failure/disconnect.
   * Minecraft color to IRC color support in chat.
   * Color conversion code refactored.
+
 ### Version 0.5
   * Fixed a nickname change bug.
   * IRC color to minecraft color support in chat.
