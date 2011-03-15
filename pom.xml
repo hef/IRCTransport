@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>hef.IRCTransport</groupId>
   <artifactId>IRCTransport</artifactId>
-  <version>0.6</version>
+  <version>0.7-SNAPSHOT</version>
   <name>IRCTransport</name>
   <url>http://github.com/hef/IRCTransport</url>
   <issueManagement>
