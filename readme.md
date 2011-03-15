@@ -1,4 +1,4 @@
-[CHAT] IRCTransport 0.6 - Minecraft Chat/IRC Integration
+[CHAT] IRCTransport 0.7 - Minecraft Chat/IRC Integration
 =============================================================
 
 Replaces minecraft's in game chat with IRC clients.
@@ -25,7 +25,7 @@ Available commands:
     /me action to perform -- performs an irc action
     /topic -- get or set the channel topic
 
-[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.6.jar)  
+[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.7.jar)  
 [Source](https://github.com/hef/IRCTransport)
 
 Features:
@@ -38,6 +38,7 @@ Changelog:
 ----------
 ### Version 0.7
   * Fixed bug where IRC agent would reconnect after player disconnected.
+
 ### Version 0.6
   * Attempts to reconnect to IRC server on connection failure/disconnect.
   * Minecraft color to IRC color support in chat.
