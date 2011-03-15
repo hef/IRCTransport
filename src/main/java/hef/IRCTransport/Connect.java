@@ -28,35 +28,38 @@ public class Connect implements Runnable {
 	 */
 	public void run()
 	{
-		try {
-			agent.setNick(agent.getPlayer().getName());
-			if(agent.getServer()==null)
-				agent.connect(agent.getPlugin().getIrcServer());
-			else
-				agent.reconnect();
-		} catch (NickAlreadyInUseException e) {
-			//This should not happen.
-			log.log(Level.SEVERE, e.getMessage(), e);
-		} catch (IOException e) {
-			if(e.getMessage().equalsIgnoreCase("Connection refused"))
-			{
-				agent.getPlayer().sendMessage("Failed to connect to Chat Server.");
-				//400 seems to be 20 seconds
-				agent.getPlugin().getServer().getScheduler().scheduleAsyncDelayedTask(agent.getPlugin(), this, 400);
-			}
-			else
-			{
+		if(!agent.isShuttingDown())
+		{
+			try {
+				agent.setNick(agent.getPlayer().getName());
+				if(agent.getServer()==null)
+					agent.connect(agent.getPlugin().getIrcServer());
+				else
+					agent.reconnect();
+			} catch (NickAlreadyInUseException e) {
+				//This should not happen.
+				log.log(Level.SEVERE, e.getMessage(), e);
+			} catch (IOException e) {
+				if(e.getMessage().equalsIgnoreCase("Connection refused"))
+				{
+					agent.getPlayer().sendMessage("Failed to connect to Chat Server.");
+					//400 seems to be 20 seconds
+					agent.getPlugin().getServer().getScheduler().scheduleAsyncDelayedTask(agent.getPlugin(), this, 400);
+				}
+				else
+				{
+					log.log(Level.SEVERE, e.getMessage(), e);
+				}
+			} catch (IrcException e) {
 				log.log(Level.SEVERE, e.getMessage(), e);
 			}
-		} catch (IrcException e) {
-			log.log(Level.SEVERE, e.getMessage(), e);
-		}
-		
-		agent.getPlayer().setDisplayName(agent.getNick());
-		if(!agent.getPlugin().getAutoJoin().equals(""))
-		{
-			agent.setActiveChannel(agent.getPlugin().getAutoJoin());
-			agent.joinChannel(agent.getActiveChannel());
+
+			agent.getPlayer().setDisplayName(agent.getNick());
+			if(!agent.getPlugin().getAutoJoin().equals(""))
+			{
+				agent.setActiveChannel(agent.getPlugin().getAutoJoin());
+				agent.joinChannel(agent.getActiveChannel());
+			}
 		}
 	}
 

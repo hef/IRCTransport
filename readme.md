@@ -36,6 +36,8 @@ Features:
 
 Changelog:
 ----------
+### Version 0.7
+  * Fixed bug where IRC agent would reconnect after player disconnected.
 ### Version 0.6
   * Attempts to reconnect to IRC server on connection failure/disconnect.
   * Minecraft color to IRC color support in chat.

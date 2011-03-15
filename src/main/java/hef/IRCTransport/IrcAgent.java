@@ -20,7 +20,7 @@ public class IrcAgent extends PircBot {
 	final private IRCTransport plugin;
 	private static final Logger log = Logger.getLogger("Minecraft");
 	//flag to indicate we should not reconnect
-	private boolean shutdown; 
+	private boolean shuttingDown; 
 	
 	/**
 	 * 
@@ -28,7 +28,7 @@ public class IrcAgent extends PircBot {
 	public IrcAgent(IRCTransport instance, Player player) {
 		this.plugin = instance;
 		this.player = player;
-		this.shutdown = false;
+		this.shuttingDown=false;
 		setLogin(player.getName());
 		super.setAutoNickChange(true);
 		new Connect(this).run();
@@ -71,7 +71,7 @@ public class IrcAgent extends PircBot {
 	public void onDisconnect()
 	{
 		getPlayer().sendMessage("ChatService Disconnected.");
-		if(!shutdown)
+		if(!shuttingDown)
 		{
 			//Reconnect reconnectTask = new Reconnect(this);
 			//plugin.getServer().getScheduler().scheduleAsyncDelayedTask(this.plugin, reconnectTask);
@@ -191,5 +191,13 @@ public class IrcAgent extends PircBot {
 	}
 	public IRCTransport getPlugin() {
 		return plugin;
+	}
+	public void shutdown()
+	{
+		shuttingDown=true;
+		disconnect();
+	}
+	public boolean isShuttingDown() {
+		return shuttingDown;
 	}
 }
