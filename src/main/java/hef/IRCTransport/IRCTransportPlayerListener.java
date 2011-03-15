@@ -7,7 +7,6 @@ import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
 
-
 /**
  * Handle events for all Player related events
  * @author hef
@@ -15,7 +14,7 @@ import org.bukkit.event.player.PlayerListener;
 public class IRCTransportPlayerListener extends PlayerListener {
     private final IRCTransport plugin;
     private HashMap<Player, IrcAgent> bots;
-
+    
     public IRCTransportPlayerListener(IRCTransport instance) {
     	this.bots = instance.getBots();
         plugin = instance;

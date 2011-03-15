@@ -186,10 +186,12 @@ public class IrcAgent extends PircBot {
 	{
 		setTopic(activeChannel, topic);
 	}
-	public Player getPlayer() {
+	public Player getPlayer()
+	{
 		return player;
 	}
-	public IRCTransport getPlugin() {
+	public IRCTransport getPlugin()
+	{
 		return plugin;
 	}
 	public void shutdown()
@@ -197,7 +199,8 @@ public class IrcAgent extends PircBot {
 		shuttingDown=true;
 		disconnect();
 	}
-	public boolean isShuttingDown() {
+	public boolean isShuttingDown()
+	{
 		return shuttingDown;
 	}
 }
