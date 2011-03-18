@@ -90,11 +90,18 @@ public class IRCTransport extends JavaPlugin {
         {
         	this.bots.put(player, new IrcAgent(this,player));
         }
-        
+        //register for events we care about
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
 	}
+	/** Turns arguments into a string
+	 * 
+	 * @bug bug: multiple spaces are not detected in args strings, so they get turned into a single space.
+	 * @param args the list of commands
+	 * @param position First word of non-command text
+	 * @return a string representing the non-command text.
+	 */
 	private static String makeMessage(String[] args, int position)
 	{
 		String message = new String();

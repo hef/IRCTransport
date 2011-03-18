@@ -4,10 +4,6 @@
 package hef.IRCTransport;
 
 import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jibble.pircbot.Colors;
 
 import org.bukkit.ChatColor;
