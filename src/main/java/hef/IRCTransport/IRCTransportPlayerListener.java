@@ -32,7 +32,7 @@ public class IRCTransportPlayerListener extends PlayerListener {
     }
     public void onPlayerQuit(PlayerEvent event)
     {
-    	this.bots.get(event.getPlayer()).disconnect();
+    	this.bots.get(event.getPlayer()).shutdown();
     	this.bots.remove(event.getPlayer());
     }
     
