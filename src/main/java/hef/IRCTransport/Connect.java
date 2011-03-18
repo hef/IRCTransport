@@ -35,7 +35,7 @@ public class Connect implements Runnable {
 			try {
 				agent.setNick(agent.getPlayer().getName());
 				if(agent.getServer()==null)
-					agent.connect(agent.getPlugin().getIrcServer());
+					agent.connect(agent.getPlugin().getIrcServer(), agent.getPlugin().getIrcPort(), agent.getPlugin().getIrcPassword());
 				else
 					agent.reconnect();
 			} catch (NickAlreadyInUseException e) {

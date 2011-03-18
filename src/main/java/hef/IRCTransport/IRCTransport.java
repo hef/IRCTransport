@@ -25,14 +25,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class IRCTransport extends JavaPlugin {
 	private IRCTransportPlayerListener playerListener;
 	private final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
-	private String ircserver = "";
+	private String ircServer = "";
+	private int ircPort;
+	private String ircPassword ;
 	private String autojoin ="";
 	private boolean verbose;
 	private static final Logger log = Logger.getLogger("Minecraft");
 	
 	public String getIrcServer()
 	{
-		return this.ircserver;
+		return this.ircServer;
 	}
 	
 	public String getAutoJoin()
@@ -56,23 +58,26 @@ public class IRCTransport extends JavaPlugin {
 		PluginManager pm = getServer().getPluginManager();
 		PluginDescriptionFile pdfFile = this.getDescription();
 		
+		//handle plugin settings.
 		FileInputStream spf;
 		Properties sp = new Properties();
 		try {
 			spf = new FileInputStream("server.properties");
 			sp.load(spf);
-			this.ircserver = sp.getProperty("irc.server","");
+			this.ircServer = sp.getProperty("irc.server","");
 		} catch (FileNotFoundException e) {
 			log.log(Level.SEVERE, e.getMessage(), e);
 		} catch (IOException e) {
 			log.log(Level.SEVERE, e.getMessage(), e);
 		}
 		
-		if(this.ircserver.equals(""))
+		if(this.ircServer.equals(""))
 		{
 			log.log(Level.SEVERE, pdfFile.getName() + ": set \"irc.server\" in server.properties" );		
 			return;
 		}
+		this.ircPort = Integer.parseInt(sp.getProperty("irc.port", "6697"));
+		this.ircPassword = sp.getProperty("irc.password","");
 		this.autojoin = sp.getProperty("irc.autojoin", "");
 		this.verbose = Boolean.parseBoolean(sp.getProperty("irc.verbose", "false"));
 	
@@ -220,5 +225,21 @@ public class IRCTransport extends JavaPlugin {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * @return the ircPort
+	 */
+	public int getIrcPort()
+	{
+		return ircPort;
+	}
+
+	/**
+	 * @return the ircPassword
+	 */
+	public String getIrcPassword()
+	{
+		return ircPassword;
 	}
 }
