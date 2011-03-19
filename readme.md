@@ -8,6 +8,8 @@ Available settings:
 ------------------
 Put these in Minecraft's server.properties file with appropriate values.
     irc.server=
+    irc.port=6697
+    irc.password=
     irc.autojoin=
     irc.verbose=false
 
@@ -36,6 +38,10 @@ Features:
 
 Changelog:
 ----------
+### Version 0.8
+  * Actually fixed bug that 0.7 was supposed to fix.
+  * Added irc.password and irc.port configuration options. 
+
 ### Version 0.7
   * Fixed bug where IRC agent would reconnect after player disconnected.
 
