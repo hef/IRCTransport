@@ -76,7 +76,7 @@ public class IRCTransport extends JavaPlugin {
 			log.log(Level.SEVERE, pdfFile.getName() + ": set \"irc.server\" in server.properties" );		
 			return;
 		}
-		this.ircPort = Integer.parseInt(sp.getProperty("irc.port", "6697"));
+		this.ircPort = Integer.parseInt(sp.getProperty("irc.port", "6667"));
 		this.ircPassword = sp.getProperty("irc.password","");
 		this.autojoin = sp.getProperty("irc.autojoin", "");
 		this.verbose = Boolean.parseBoolean(sp.getProperty("irc.verbose", "false"));
