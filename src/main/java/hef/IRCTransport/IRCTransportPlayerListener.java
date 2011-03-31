@@ -4,8 +4,9 @@ import java.util.HashMap;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
  * Handle events for all Player related events
@@ -26,11 +27,11 @@ public class IRCTransportPlayerListener extends PlayerListener {
     	//prevent messages from being displayed twice.
     	event.setCancelled(true);
     }
-    public void onPlayerJoin(PlayerEvent event) 
+    public void onPlayerJoin(PlayerJoinEvent event) 
     {
     	this.bots.put(event.getPlayer(), new IrcAgent(plugin, event.getPlayer()));
     }
-    public void onPlayerQuit(PlayerEvent event)
+    public void onPlayerQuit(PlayerQuitEvent event)
     {
     	this.bots.get(event.getPlayer()).shutdown();
     	this.bots.remove(event.getPlayer());
