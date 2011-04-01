@@ -35,6 +35,5 @@ public class IRCTransportPlayerListener extends PlayerListener {
     	this.bots.get(event.getPlayer()).shutdown();
     	this.bots.remove(event.getPlayer());
     }
-    
 }
 
