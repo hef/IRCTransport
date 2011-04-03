@@ -149,6 +149,7 @@ public class IrcAgent extends PircBot {
 		responseMatcher.find();
 		switch(code)
 		{
+			case ERR_NOSUCHCHANNEL:
 			case ERR_INVITEONLYCHAN:
 			case ERR_BADCHANNELKEY:
 				onErrorMessage(responseMatcher.group(2),responseMatcher.group(3));
