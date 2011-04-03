@@ -152,8 +152,17 @@ public class IRCTransport extends JavaPlugin {
 	}
 	public boolean join(IrcAgent bot, String[] args)
 	{
-		bot.joinChannel(args[0]);
-		return true;
+		if(args.length == 1)
+		{
+			bot.joinChannel(args[0]);
+			return true;
+		}
+		else if(args.length == 2)
+		{
+			bot.joinChannel(args[0], args[1]);
+			return true;
+		}
+		return false;
 	}
 	public boolean leave(IrcAgent bot, String[] args)
 	{

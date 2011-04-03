@@ -5,10 +5,13 @@ package hef.IRCTransport;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.entity.Player;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
+import org.bukkit.ChatColor;
 
 /**
  * @author hef
@@ -141,21 +144,21 @@ public class IrcAgent extends PircBot {
 	 */
 	protected void onServerResponse(int code, String response)
 	{
+		Pattern responsePattern = Pattern.compile("(\\S*) (\\S*) :(.*)");
+		Matcher responseMatcher = responsePattern.matcher(response);
+		responseMatcher.find();
 		switch(code)
 		{
 			case ERR_INVITEONLYCHAN:
-				int firstSpace = response.indexOf(' ');
-	            int secondSpace = response.indexOf(' ', firstSpace + 1);
-	            int colon = response.indexOf(':');
-	            String channel = response.substring(firstSpace + 1, secondSpace);
-	            String message = response.substring(colon + 1);		
-				onErrInviteOnlyChan(channel, message);
+			case ERR_BADCHANNELKEY:
+				onErrorMessage(responseMatcher.group(2),responseMatcher.group(3));
 				break;
+			 
 		}
 	}
-	protected void onErrInviteOnlyChan(String channel, String message)
+	protected void onErrorMessage(String channel, String message)
 	{
-		getPlayer().sendMessage(channel + " is invite only");	
+		getPlayer().sendMessage(ChatColor.YELLOW.toString() + String.format("<%s> %s",channel, message));	
 	}
 	protected void names()
 	{
