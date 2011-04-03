@@ -18,7 +18,7 @@ Set irc.autojoin to a channel to have your users autojoin that channel.
 
 Available commands:
 -------------------
-    /join #channel
+    /join #channel [key]
     /leave #channel
     /channel #channel -- changes your active channel
     /msg user -- send a private message to a user
@@ -40,6 +40,7 @@ Changelog:
 ----------
 ### Version 0.9
   * fixed PlayerJoinEvent/PlayerQuitEvent [changes](http://forums.bukkit.org/threads/oops-i-broke-your-plugins.599/#post-156352)
+  * added channel key support
 
 ### Version 0.8
   * Actually fixed bug that 0.7 was supposed to fix.
