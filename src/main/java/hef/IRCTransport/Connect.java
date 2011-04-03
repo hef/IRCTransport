@@ -59,7 +59,18 @@ public class Connect implements Runnable {
 			agent.getPlayer().setDisplayName(agent.getNick());
 			if(!agent.getPlugin().getAutoJoin().equals(""))
 			{
+				//if no key is set
+				if(!agent.getPlugin().getAutoJoinKey().equals(""))
+				{
+					agent.joinChannel(agent.getPlugin().getAutoJoin());
+				}
+				else
+				{
+					agent.joinChannel(agent.getPlugin().getAutoJoin(),agent.getPlugin().getAutoJoinKey());
+
+				}
 				agent.setActiveChannel(agent.getPlugin().getAutoJoin());
+
 				agent.joinChannel(agent.getActiveChannel());
 			}
 		}
