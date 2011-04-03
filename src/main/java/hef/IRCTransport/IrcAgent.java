@@ -31,16 +31,16 @@ public class IrcAgent extends PircBot {
 	public IrcAgent(IRCTransport instance, Player player) {
 		this.plugin = instance;
 		this.player = player;
-		this.shuttingDown=false;
+		this.shuttingDown = false;
 		setLogin(player.getName());
 		super.setAutoNickChange(true);
 		new Connect(this).run();
 		
-		if(!getPlugin().getAutoJoin().equals(""))
+		/*if(!getPlugin().getAutoJoin().equals(""))
 		{
 			activeChannel = getPlugin().getAutoJoin();
 			joinChannel(activeChannel);
-		}
+		}*/
 	}
 	public void log(String line)
 	{
@@ -115,7 +115,7 @@ public class IrcAgent extends PircBot {
 		//if I joined, change active channel.
 		if(sender.equals(getNick()))
 			activeChannel = channel;
-		getPlayer().sendMessage(String.format("[%s] %s has joined.", channel, sender)); 
+		getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has joined.", channel, sender)); 
 	}
 	protected void onNickChange(String oldNick, String login, String hostname, String newNick) 
 	{
@@ -159,7 +159,7 @@ public class IrcAgent extends PircBot {
 	}
 	protected void onErrorMessage(String channel, String message)
 	{
-		getPlayer().sendMessage(ChatColor.YELLOW.toString() + String.format("<%s> %s",channel, message));	
+		getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s",channel, message));	
 	}
 	protected void names()
 	{
@@ -172,13 +172,13 @@ public class IrcAgent extends PircBot {
 	
 	@Override
 	protected void onTopic(String channel, String topic, String setBy, long date, boolean changed) {
-		if(getPlugin().isVerbose())	{
-			log.log(Level.INFO, String.format("On %tc, %s changed the topic of %s to: %s", date, setBy, channel, topic));
-		}			
+		//if(getPlugin().isVerbose())	{
+		//	log.log(Level.INFO, String.format("On %tc, %s changed the topic of %s to: %s", date, setBy, channel, topic));
+		//}			
 		if(changed){
-			getPlayer().sendMessage(String.format("%s changed the topic of %s to: %s", setBy, channel, topic));
+			getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] Topic changed: %s", channel, topic));
 		} else {
-			getPlayer().sendMessage(String.format("Topic for %s: %s", channel, topic));
+			getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] Topic: %s", channel, topic));
 			//getPlayer().sendMessage(String.format("Topic set by %s [%tc]", setBy, date));
 		}
 	}

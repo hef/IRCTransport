@@ -28,7 +28,8 @@ public class IRCTransport extends JavaPlugin {
 	private String ircServer = "";
 	private int ircPort;
 	private String ircPassword ;
-	private String autojoin ="";
+	private String autoJoin ="";
+	private String autoJoinKey = "";
 	private boolean verbose;
 	private static final Logger log = Logger.getLogger("Minecraft");
 	
@@ -39,7 +40,7 @@ public class IRCTransport extends JavaPlugin {
 	
 	public String getAutoJoin()
 	{
-		return this.autojoin;
+		return this.autoJoin;
 	}
 	
 	public boolean isVerbose()
@@ -78,7 +79,8 @@ public class IRCTransport extends JavaPlugin {
 		}
 		this.ircPort = Integer.parseInt(sp.getProperty("irc.port", "6667"));
 		this.ircPassword = sp.getProperty("irc.password","");
-		this.autojoin = sp.getProperty("irc.autojoin", "");
+		this.autoJoin = sp.getProperty("irc.autojoin", "");
+		this.autoJoinKey = sp.getProperty("irc.autojoinkey", "");
 		this.verbose = Boolean.parseBoolean(sp.getProperty("irc.verbose", "false"));
 	
 		log.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
@@ -257,5 +259,13 @@ public class IRCTransport extends JavaPlugin {
 	public String getIrcPassword()
 	{
 		return ircPassword;
+	}
+
+	/**
+	 * @return the autoJoinKey
+	 */
+	public String getAutoJoinKey()
+	{
+		return autoJoinKey;
 	}
 }
