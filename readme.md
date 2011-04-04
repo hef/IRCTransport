@@ -11,6 +11,7 @@ Put these in Minecraft's server.properties file with appropriate values.
     irc.port=6697
     irc.password=
     irc.autojoin=
+    irc.autojoinkey=
     irc.verbose=false
 
 The irc.server setting is mandatory.  All other settings are optional.
