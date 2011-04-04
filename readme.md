@@ -1,4 +1,4 @@
-[CHAT] IRCTransport 0.8 - Minecraft Chat/IRC Integration
+[CHAT] IRCTransport 0.9 - Minecraft Chat/IRC Integration
 =============================================================
 
 Replaces minecraft's in game chat with IRC clients.
@@ -28,7 +28,7 @@ Available commands:
     /me action to perform -- performs an irc action
     /topic -- get or set the channel topic
 
-[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.8.jar)  
+[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.9.jar)  
 [Source](https://github.com/hef/IRCTransport)
 
 Features:
