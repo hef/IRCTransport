@@ -12,6 +12,7 @@
   <scm>
       <connection>scm:git:git://github.com/hef/IRCTransport.git/</connection>
       <developerConnection>scm:git:git://github.com/hef/IRCTransport.git</developerConnection>
+      <url>https://github.com/hef/IRCTransport.git</url>
   </scm>
   <build>
       <plugins>
