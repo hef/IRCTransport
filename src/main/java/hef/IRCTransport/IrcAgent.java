@@ -32,7 +32,7 @@ public class IrcAgent extends PircBot {
 		this.plugin = instance;
 		this.player = player;
 		this.shuttingDown = false;
-		setLogin(player.getName());
+		setLogin(String.format("%s%s%s",plugin.getNickPrefix(),player.getName(),plugin.getNickSuffix()));
 		super.setAutoNickChange(true);
 		new Connect(this).run();
 		

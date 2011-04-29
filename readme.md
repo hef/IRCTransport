@@ -5,13 +5,16 @@ Replaces minecraft's in game chat with IRC clients.
 This is a bukkit plugin.  
 
 Available settings:
-------------------
+-------------------
 Put these in Minecraft's server.properties file with appropriate values.
+
     irc.server=
     irc.port=6697
     irc.password=
     irc.autojoin=
     irc.autojoinkey=
+    irc.prefix=
+    irc.suffix=
     irc.verbose=false
 
 The irc.server setting is mandatory.  All other settings are optional.

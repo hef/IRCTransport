@@ -30,6 +30,8 @@ public class IRCTransport extends JavaPlugin {
 	private String ircPassword ;
 	private String autoJoin ="";
 	private String autoJoinKey = "";
+	private String nickPrefix = "";
+	private String nickSuffix = "";
 	private boolean verbose;
 	private static final Logger log = Logger.getLogger("Minecraft");
 	
@@ -81,6 +83,8 @@ public class IRCTransport extends JavaPlugin {
 		this.ircPassword = sp.getProperty("irc.password","");
 		this.autoJoin = sp.getProperty("irc.autojoin", "");
 		this.autoJoinKey = sp.getProperty("irc.autojoinkey", "");
+		this.nickPrefix = sp.getProperty("irc.nickprefix", "");
+		this.nickSuffix = sp.getProperty("irc.nicksuffix","");
 		this.verbose = Boolean.parseBoolean(sp.getProperty("irc.verbose", "false"));
 	
 		log.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
@@ -267,5 +271,22 @@ public class IRCTransport extends JavaPlugin {
 	public String getAutoJoinKey()
 	{
 		return autoJoinKey;
+	}
+
+	/**
+	 * Nick prefix is only used as a default
+	 * @return the nickPrefix
+	 */
+	public String getNickPrefix() {
+		return nickPrefix;
+	}
+
+	/**
+	 * nick suffix is only used as a default
+	 * If the plugin has a suffix of "_mc" and a player with nick of "player" will become "player_mc"
+	 * @return the nickSuffix
+	 */
+	public String getNickSuffix() {
+		return nickSuffix;
 	}
 }
