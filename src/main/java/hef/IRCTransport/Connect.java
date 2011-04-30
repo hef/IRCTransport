@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bukkit.ChatColor;
 import org.jibble.pircbot.IrcException;
 import org.jibble.pircbot.NickAlreadyInUseException;
 
@@ -44,8 +45,13 @@ public class Connect implements Runnable {
 			} catch (IOException e) {
 				if(e.getMessage().equalsIgnoreCase("Connection refused"))
 				{
-					agent.getPlayer().sendMessage("Failed to connect to Chat Server.");
+					agent.getPlayer().sendMessage(ChatColor.YELLOW + "Failed to connect to Chat Server.");
 					//400 seems to be 20 seconds
+					agent.getPlugin().getServer().getScheduler().scheduleAsyncDelayedTask(agent.getPlugin(), this, 400);
+				}
+				else if(e.getMessage().equalsIgnoreCase("Connection reset"))
+				{
+					agent.getPlayer().sendMessage(ChatColor.YELLOW + "Connection reset while connecting to Chat Server");
 					agent.getPlugin().getServer().getScheduler().scheduleAsyncDelayedTask(agent.getPlugin(), this, 400);
 				}
 				else
