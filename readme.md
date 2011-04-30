@@ -42,6 +42,10 @@ Features:
 
 Changelog:
 ----------
+### Version 0.10
+  * Added nickanme prefix and suffix options.
+  * Fixed Automatic reconnect after plugin is disabled or server is stopped
+
 ### Version 0.9
   * fixed PlayerJoinEvent/PlayerQuitEvent [changes](http://forums.bukkit.org/threads/oops-i-broke-your-plugins.599/#post-156352)
   * added channel key support
