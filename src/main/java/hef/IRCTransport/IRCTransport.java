@@ -73,12 +73,9 @@ public class IRCTransport extends JavaPlugin {
 		} catch (IOException e) {
 			log.log(Level.SEVERE, e.getMessage(), e);
 		}
-		
-		if(this.ircServer.equals(""))
-		{
-			log.log(Level.SEVERE, pdfFile.getName() + ": set \"irc.server\" in server.properties" );		
-			return;
-		}
+				
+		//grab data from server.properties
+		this.ircServer = sp.getProperty("irc.server","");
 		this.ircPort = Integer.parseInt(sp.getProperty("irc.port", "6667"));
 		this.ircPassword = sp.getProperty("irc.password","");
 		this.autoJoin = sp.getProperty("irc.autojoin", "");
@@ -86,6 +83,13 @@ public class IRCTransport extends JavaPlugin {
 		this.nickPrefix = sp.getProperty("irc.nickprefix", "");
 		this.nickSuffix = sp.getProperty("irc.nicksuffix","");
 		this.verbose = Boolean.parseBoolean(sp.getProperty("irc.verbose", "false"));
+		
+		//validate data
+		if(this.ircServer.equals(""))
+		{
+			log.log(Level.SEVERE, pdfFile.getName() + ": set \"irc.server\" in server.properties" );		
+			return;
+		}
 	
 		log.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
 		//Event Registration
