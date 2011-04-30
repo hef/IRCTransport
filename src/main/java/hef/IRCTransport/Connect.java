@@ -33,7 +33,7 @@ public class Connect implements Runnable {
 		if(!agent.isShuttingDown())
 		{
 			try {
-				agent.setNick(agent.getPlayer().getName());
+				agent.setNick(String.format("%s%s%s",agent.getPlugin().getNickPrefix(),agent.getPlayer().getName(),agent.getPlugin().getNickSuffix()));
 				if(agent.getServer()==null)
 					agent.connect(agent.getPlugin().getIrcServer(), agent.getPlugin().getIrcPort(), agent.getPlugin().getIrcPassword());
 				else
