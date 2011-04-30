@@ -124,7 +124,7 @@ public class IRCTransport extends JavaPlugin {
 		//disconnect all agents
 		for(Entry<Player, IrcAgent> entry: bots.entrySet())
 		{
-			entry.getValue().disconnect();
+			entry.getValue().shutdown();
 		}
 		bots.clear();
 		
