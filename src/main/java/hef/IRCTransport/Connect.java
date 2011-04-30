@@ -34,13 +34,19 @@ public class Connect implements Runnable {
 		if(!agent.isShuttingDown())
 		{
 			try {
-				agent.setNick(String.format("%s%s%s",agent.getPlugin().getNickPrefix(),agent.getPlayer().getName(),agent.getPlugin().getNickSuffix()));
+				//If we never set the server i.e. havn't connected yet
 				if(agent.getServer()==null)
+				{
+					agent.setNick(String.format("%s%s%s",agent.getPlugin().getNickPrefix(),agent.getPlayer().getName(),agent.getPlugin().getNickSuffix()));
 					agent.connect(agent.getPlugin().getIrcServer(), agent.getPlugin().getIrcPort(), agent.getPlugin().getIrcPassword());
+				}
 				else
+				{
+					//reconnect should recycle settings the user already has
 					agent.reconnect();
+				}
 			} catch (NickAlreadyInUseException e) {
-				//This should not happen.
+				//This should not happen, the agent is set to auto retry new names
 				log.log(Level.SEVERE, e.getMessage(), e);
 			} catch (IOException e) {
 				if(e.getMessage().equalsIgnoreCase("Connection refused"))
