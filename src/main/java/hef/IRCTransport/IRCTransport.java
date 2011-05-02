@@ -17,6 +17,8 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.sun.xml.internal.ws.client.SenderException;
 /**
  * IRCTransport for Bukkit
  * 
@@ -137,7 +139,12 @@ public class IRCTransport extends JavaPlugin {
 		if(this.isVerbose()){
 			log.log(Level.INFO, String.format("Command '%s' received from %s with %d arguments", commandLabel, sender, args.length));
 		}
-
+		
+		if(! (sender instanceof Player) )
+		{
+			sender.sendMessage("Irc commands are only runnable as a Player");
+			return false;
+		}
 		Player player = (Player) sender;
 		IrcAgent bot = bots.get(player);
 		String commandName = command.getName().toLowerCase();
