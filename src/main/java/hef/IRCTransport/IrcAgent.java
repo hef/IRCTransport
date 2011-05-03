@@ -36,11 +36,6 @@ public class IrcAgent extends PircBot {
 		super.setAutoNickChange(true);
 		new Connect(this).run();
 		
-		/*if(!getPlugin().getAutoJoin().equals(""))
-		{
-			activeChannel = getPlugin().getAutoJoin();
-			joinChannel(activeChannel);
-		}*/
 	}
 	public void log(String line)
 	{
@@ -117,6 +112,11 @@ public class IrcAgent extends PircBot {
 			activeChannel = channel;
 		getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has joined.", channel, sender)); 
 	}
+	public void onPart(String channel, String sender, String login, String hostname)
+	{
+		getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has parted.", channel, sender));
+	}
+	
 	protected void onNickChange(String oldNick, String login, String hostname, String newNick) 
 	{
 		if(oldNick.equals(getPlayer().getDisplayName()))
