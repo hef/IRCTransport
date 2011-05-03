@@ -192,6 +192,10 @@ public class IrcAgent extends PircBot {
 	{
 		setTopic(activeChannel, topic);
 	}
+	protected void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason)
+	{
+		player.sendMessage(ChatColor.YELLOW + String.format("[%s] %s kicked by %s: %s", channel, recipientNick, kickerNick, reason));
+	}
 	public Player getPlayer()
 	{
 		return player;
