@@ -5,6 +5,9 @@
   <version>0.10-SNAPSHOT</version>
   <name>IRCTransport</name>
   <url>http://github.com/hef/IRCTransport</url>
+  <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <issueManagement>
   	<system>github</system>
   	<url>https://github.com/hef/IRCTransport/issues</url>
