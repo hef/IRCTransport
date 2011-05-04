@@ -116,7 +116,10 @@ public class IrcAgent extends PircBot {
 	{
 		getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has parted.", channel, sender));
 	}
-	
+	public void onQuit(String sourceNick, String sourceLogin, String sourceHostname, String reason)
+	{
+		getPlayer().sendMessage(ChatColor.YELLOW + String.format("%s has quit: %s", sourceNick, reason));
+	}
 	protected void onNickChange(String oldNick, String login, String hostname, String newNick) 
 	{
 		if(oldNick.equals(getPlayer().getDisplayName()))
