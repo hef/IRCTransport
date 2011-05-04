@@ -58,7 +58,7 @@ public class Connect implements Runnable {
 				else if(e.getMessage().equalsIgnoreCase("Connection reset"))
 				{
 					agent.getPlayer().sendMessage(ChatColor.YELLOW + "Connection reset while connecting to Chat Server");
-					agent.getPlugin().getServer().getScheduler().scheduleAsyncDelayedTask(agent.getPlugin(), this, 400);
+					agent.getPlugin().getServer().getScheduler().scheduleAsyncDelayedTask(agent.getPlugin(), this, 100);
 				}
 				else
 				{
