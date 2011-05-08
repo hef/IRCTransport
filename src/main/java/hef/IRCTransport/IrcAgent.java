@@ -140,8 +140,6 @@ public class IrcAgent extends PircBot {
 	/** Handles response codes not handled by pircbot
 	 * This methods handles irc response codes, slices up the response, and then
 	 * calls the appropriate method
-	 * @see org.jibble.pircbot.PircBot#onServerResponse(int, java.lang.String)
-	 * @see org.jibble.pircbot.PircBot.ReplyConstants
 	 * @param code the irc response code.
 	 * @param response The message that came with the response
 	 */
