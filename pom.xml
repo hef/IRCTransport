@@ -8,12 +8,6 @@
   <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  <distributionManagement>
-      <repository>
-          <id>gh-pages</id>
-          <url>file:///${basedir}/gh-pages/repository/</url>
-      </repository>
-  </distributionManagement>
   <issueManagement>
   	<system>github</system>
   	<url>https://github.com/hef/IRCTransport/issues</url>
