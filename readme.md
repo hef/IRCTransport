@@ -1,8 +1,7 @@
 [CHAT] IRCTransport 0.9 - Minecraft Chat/IRC Integration
 =============================================================
 
-Replaces minecraft's in game chat with IRC clients.
-This is a bukkit plugin.  
+This [Bukkit](http://bukkit.org/) plugin replaces minecraft chat system with a connection to an IRC Server.  All IRC Connections happen Bukkit server side, so either run your own IRC server, or make sure that you are allowed to use mutiple connections on the IRC server of your choice.
 
 Available settings:
 -------------------
@@ -18,7 +17,12 @@ Put these in Minecraft's server.properties file with appropriate values.
     irc.verbose=false
 
 The irc.server setting is mandatory.  All other settings are optional.
-Set irc.autojoin to a channel to have your users autojoin that channel.
+
+### Normal Settings
+Your config will look a lot like this:
+  
+    irc.server=irc.example.com
+    irc.autojoin=#minecraft
 
 Available commands:
 -------------------
