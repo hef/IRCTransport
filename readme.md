@@ -13,8 +13,8 @@ Put these in Minecraft's server.properties file with appropriate values.
     irc.password=
     irc.autojoin=
     irc.autojoinkey=
-    irc.prefix=
-    irc.suffix=
+    irc.nickprefix=
+    irc.nicksuffix=
     irc.verbose=false
 
 The irc.server setting is mandatory.  All other settings are optional.
@@ -44,15 +44,18 @@ Changelog:
 ----------
 ### Version 0.10
   * Added nickanme prefix and suffix options.
-  * Fixed Automatic reconnect after plugin is disabled or server is stopped
+  * Fixed Automatic reconnect after plugin is disabled or server is stopped.
   * Added Error message for nick name already in use.
-  * Fixed a null exception when the console tries to use irc commands
+  * Fixed a null exception when the console tries to use irc commands.
+  * Channel parts (leaving a channel) are now announced.
+  * Channel kicks is now announced.
+  * Added some handling for "Connection reset" errors.
 
 ### Version 0.9
-  * fixed PlayerJoinEvent/PlayerQuitEvent [changes](http://forums.bukkit.org/threads/oops-i-broke-your-plugins.599/#post-156352)
-  * added channel key support
-  * added auto join key support.
-  * made system messages yellow.
+  * Fixed PlayerJoinEvent/PlayerQuitEvent [changes](http://forums.bukkit.org/threads/oops-i-broke-your-plugins.599/#post-156352)
+  * Added channel key support.
+  * Added auto join key support.
+  * Made system messages yellow.
 
 ### Version 0.8
   * Actually fixed bug that 0.7 was supposed to fix.
