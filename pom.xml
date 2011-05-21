@@ -12,6 +12,10 @@
   	<system>github</system>
   	<url>https://github.com/hef/IRCTransport/issues</url>
   </issueManagement>
+  <ciManagement>
+  	<system>Jenkins</system>
+  	<url>http://acm.cs.uic.edu:8070</url>
+  </ciManagement>
   <scm>
       <connection>scm:git:git://github.com/hef/IRCTransport.git/</connection>
       <developerConnection>scm:git:git@github.com:hef/IRCTransport.git</developerConnection>
