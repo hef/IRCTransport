@@ -30,7 +30,7 @@ public class Connect implements Runnable {
 	public void run()
 	{
 		//If a task where scheduled, and the user disconnected, this would
-		//coninually keep the agent alive.
+		//continually keep the agent alive.
 		if(!agent.isShuttingDown())
 		{
 			try {
