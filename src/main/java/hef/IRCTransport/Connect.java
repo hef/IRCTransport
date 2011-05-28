@@ -37,7 +37,17 @@ public class Connect implements Runnable {
 				//If we never set the server i.e. havn't connected yet
 				if(agent.getServer()==null)
 				{
-					agent.setNick(String.format("%s%s%s",agent.getPlugin().getNickPrefix(),agent.getPlayer().getName(),agent.getPlugin().getNickSuffix()));
+					IrcPlayerPersistentState state = agent.getPlugin().getPersistentState(agent.getPlayer());
+					String nick = state.getIrcNick();
+					if (nick != null)
+					{
+						log.log(Level.INFO, String.format("Player '%s' using persistent nick '%s'", agent.getPlayer().getName(), nick));
+					}
+					else
+					{
+					    nick = String.format("%s%s%s",agent.getPlugin().getNickPrefix(),agent.getPlayer().getName(),agent.getPlugin().getNickSuffix());
+					}
+					agent.setNick(nick);
 					agent.connect(agent.getPlugin().getIrcServer(), agent.getPlugin().getIrcPort(), agent.getPlugin().getIrcPassword());
 				}
 				else

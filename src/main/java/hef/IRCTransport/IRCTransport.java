@@ -16,6 +16,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -217,6 +218,10 @@ public class IRCTransport extends JavaPlugin {
 	{
 		if(args.length==1)
 		{
+			IrcPlayerPersistentState state = getPersistentState(bot.getPlayer());
+			state.setIrcNick(args[0]);
+			savePersistentSate(state);
+			
 			bot.changeNick(args[0]);
 			if(!bot.getNick().equalsIgnoreCase(args[0]))
 				//TODO: print error message to player.
@@ -224,6 +229,12 @@ public class IRCTransport extends JavaPlugin {
 		}
 		return false;
 	}
+	
+	private void savePersistentSate(IrcPlayerPersistentState state) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public boolean names(IrcAgent bot, String[] args)
 	{
 		if(args.length < 1)
@@ -258,7 +269,26 @@ public class IRCTransport extends JavaPlugin {
 		}
 		return false;
 	}
+	
+	protected IrcPlayerPersistentState getPersistentState(Player player)
+	{
+		IrcPlayerPersistentState state = null; // TODO getDatabase().find(IrcPlayerPersistentState.class, player.getName());
+		// FIXME - Make this go!
+		if (null == state)
+		{
+		  log.info("NULL state");
+		  state = new IrcPlayerPersistentState(player);
+		  state.setIrcNick("fred");
+		}
+		return state;
+	}
 
+	protected void savePersistentState(IrcPlayerPersistentState state)
+	{
+		// getDatabase().save(state);
+		// FIXME - TODO
+	}
+	
 	/**
 	 * @return the ircPort
 	 */
