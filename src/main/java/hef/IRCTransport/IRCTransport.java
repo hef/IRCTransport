@@ -3,11 +3,15 @@ package hef.IRCTransport;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.PersistenceException;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -16,6 +20,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -34,6 +39,7 @@ public class IRCTransport extends JavaPlugin {
 	private String nickPrefix = "";
 	private String nickSuffix = "";
 	private boolean verbose;
+	private boolean useDB;
 	private static final Logger log = Logger.getLogger("Minecraft");
 	
 	public String getIrcServer()
@@ -84,6 +90,7 @@ public class IRCTransport extends JavaPlugin {
 		this.nickPrefix = sp.getProperty("irc.nickprefix", "");
 		this.nickSuffix = sp.getProperty("irc.nicksuffix","");
 		this.verbose = Boolean.parseBoolean(sp.getProperty("irc.verbose", "false"));
+		this.useDB = Boolean.parseBoolean(sp.getProperty("irc.useDB", "false"));
 		
 		//validate data
 		if(this.ircServer.equals(""))
@@ -93,6 +100,9 @@ public class IRCTransport extends JavaPlugin {
 		}
 	
 		log.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
+		
+		initDatabase();
+		
 		//Event Registration
 		
         //establish list of players
@@ -119,6 +129,37 @@ public class IRCTransport extends JavaPlugin {
 		for(int i = position; i < args.length; ++i)
 			message += args[i] + " ";
 		return message;
+	}
+	
+	public void initDatabase()
+	{
+      // Always do this, since it will quiet unnecessary warnings
+      File file = new File("ebean.properties");
+      if(!file.exists())
+      {
+        try
+        {
+          file.createNewFile();
+        }
+        catch (Exception e)
+        {
+          log.log(Level.WARNING, this.getDescription().getName() + " Failed to create ebean.properties file.");
+        }
+      }
+
+      // The rest we only try if the database is actually in use
+      if (useDB)
+      {
+        try
+        {
+          getDatabase().find(IrcPlayerPersistentState.class).findRowCount();
+        }
+        catch (PersistenceException e)
+        {
+    	  log.log(Level.INFO, this.getDescription().getName() + " configuring database for the first time" );
+          installDDL();
+        }
+      }
 	}
 
 	public void onDisable() {
@@ -217,6 +258,10 @@ public class IRCTransport extends JavaPlugin {
 	{
 		if(args.length==1)
 		{
+			IrcPlayerPersistentState state = getPersistentState(bot.getPlayer());
+			state.setIrcNick(args[0]);
+			savePersistentState(state);
+			
 			bot.changeNick(args[0]);
 			if(!bot.getNick().equalsIgnoreCase(args[0]))
 				//TODO: print error message to player.
@@ -224,6 +269,16 @@ public class IRCTransport extends JavaPlugin {
 		}
 		return false;
 	}
+	
+    @Override
+    public List<Class<?>> getDatabaseClasses()
+    {
+        List<Class<?>> list = new ArrayList<Class<?>>();
+        list.add(IrcPlayerPersistentState.class);
+        return list;
+    }
+
+
 	public boolean names(IrcAgent bot, String[] args)
 	{
 		if(args.length < 1)
@@ -258,7 +313,30 @@ public class IRCTransport extends JavaPlugin {
 		}
 		return false;
 	}
+	
+	protected IrcPlayerPersistentState getPersistentState(Player player)
+	{
+		IrcPlayerPersistentState state = null;
+		if (useDB)
+		{
+		  state = getDatabase().find(IrcPlayerPersistentState.class, player.getName());
+		}
+		
+		if (null == state)
+		{
+		  state = new IrcPlayerPersistentState(player);
+		}
+		return state;
+	}
 
+	protected void savePersistentState(IrcPlayerPersistentState state)
+	{
+		if (useDB)
+		{
+		  getDatabase().save(state);
+		}
+	}
+	
 	/**
 	 * @return the ircPort
 	 */

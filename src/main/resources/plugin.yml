@@ -3,6 +3,7 @@ main: hef.IRCTransport.IRCTransport
 version: ${pom.version}
 website: ${pom.url}
 author: hef
+database: true
 description: >
              IRC Transport Plugin for minecraft chat.
              Forwards all chat messages from minecraft to irc,
