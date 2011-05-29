@@ -37,6 +37,7 @@ public class IrcAgent extends PircBot {
 		new Connect(this).run();
 		
 	}
+	@Override
 	public void log(String line)
 	{
 		if(getPlugin().isVerbose())
@@ -66,6 +67,7 @@ public class IrcAgent extends PircBot {
 		super.setName(name);
 	}
 	
+	@Override
 	public void onDisconnect()
 	{
 		getPlayer().sendMessage("ChatService Disconnected.");
@@ -76,16 +78,19 @@ public class IrcAgent extends PircBot {
 			new Connect(this).run();
 		}
 	}
+	@Override
 	public void onMessage(String channel, String sender, String login, String hostname, String message)
 	{
 		//TODO: replace channel names with numbers
 		getPlayer().sendMessage(String.format("[%s] %s: %s", channel, sender, ColorMap.fromIrc(message)));
 	}
+	@Override
 	public void onPrivateMessage(String sender, String login, String hostname, String message)
 	{
 		//TODO: check validity of recipient or check for error response
 		getPlayer().sendMessage(String.format("%s: %s",sender, message));
 	}
+	@Override
 	public void onAction(String sender, String login, String hostname, String target, String action)
 	{
 		getPlayer().sendMessage(String.format("[%s] * %s %s", target, sender, action));
@@ -105,6 +110,7 @@ public class IrcAgent extends PircBot {
 		sendAction(activeChannel, action);
 		getPlayer().sendMessage(String.format("[%s] * %s %s", activeChannel, getPlayer().getDisplayName(), action));
 	}
+	@Override
 	public void onJoin(String channel, String sender, String login, String hostname) 
 	{
 		//if I joined, change active channel.
@@ -112,14 +118,17 @@ public class IrcAgent extends PircBot {
 			activeChannel = channel;
 		getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has joined.", channel, sender)); 
 	}
+	@Override
 	public void onPart(String channel, String sender, String login, String hostname)
 	{
 		getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has parted.", channel, sender));
 	}
+	@Override
 	public void onQuit(String sourceNick, String sourceLogin, String sourceHostname, String reason)
 	{
 		getPlayer().sendMessage(ChatColor.YELLOW + String.format("%s has quit: %s", sourceNick, reason));
 	}
+	@Override
 	protected void onNickChange(String oldNick, String login, String hostname, String newNick) 
 	{
 		if(oldNick.equals(getPlayer().getDisplayName()))
@@ -128,6 +137,7 @@ public class IrcAgent extends PircBot {
 		}
 		getPlayer().sendMessage(String.format("%s is now known as %s", oldNick , newNick));
 	}
+	@Override
 	protected void onUserList(String channel, User[] users)
 	{
 		String usersString = "";
@@ -143,6 +153,7 @@ public class IrcAgent extends PircBot {
 	 * @param code the irc response code.
 	 * @param response The message that came with the response
 	 */
+	@Override
 	protected void onServerResponse(int code, String response)
 	{
 		Pattern responsePattern = Pattern.compile("(\\S*) (\\S*) :(.*)");
@@ -189,6 +200,7 @@ public class IrcAgent extends PircBot {
 	{
 		setTopic(activeChannel, topic);
 	}
+	@Override
 	protected void onKick(String channel, String kickerNick, String kickerLogin, String kickerHostname, String recipientNick, String reason)
 	{
 		player.sendMessage(ChatColor.YELLOW + String.format("[%s] %s kicked by %s: %s", channel, recipientNick, kickerNick, reason));

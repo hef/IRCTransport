@@ -20,18 +20,21 @@ public class IRCTransportPlayerListener extends PlayerListener {
     	this.bots = instance.getBots();
         plugin = instance;
     }
-    public void onPlayerChat(PlayerChatEvent event)
+    @Override
+	public void onPlayerChat(PlayerChatEvent event)
     {
     	IrcAgent bot = this.bots.get(event.getPlayer());
     	bot.sendMessage(event.getMessage());
     	//prevent messages from being displayed twice.
     	event.setCancelled(true);
     }
-    public void onPlayerJoin(PlayerJoinEvent event) 
+    @Override
+	public void onPlayerJoin(PlayerJoinEvent event) 
     {
     	this.bots.put(event.getPlayer(), new IrcAgent(plugin, event.getPlayer()));
     }
-    public void onPlayerQuit(PlayerQuitEvent event)
+    @Override
+	public void onPlayerQuit(PlayerQuitEvent event)
     {
     	this.bots.get(event.getPlayer()).shutdown();
     	this.bots.remove(event.getPlayer());
