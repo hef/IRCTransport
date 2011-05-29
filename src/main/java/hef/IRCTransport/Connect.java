@@ -41,7 +41,7 @@ public class Connect implements Runnable {
 					String nick = state.getIrcNick();
 					if (nick != null)
 					{
-						log.log(Level.INFO, String.format("Player '%s' using persistent nick '%s'", agent.getPlayer().getName(), nick));
+						log.log(Level.INFO, String.format("Player '%s' using persistent IRC nick '%s'", agent.getPlayer().getName(), nick));
 					}
 					else
 					{

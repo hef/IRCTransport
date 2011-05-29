@@ -6,12 +6,11 @@ import javax.persistence.Table;
 
 import org.bukkit.entity.Player;
 
-import com.avaje.ebean.annotation.Sql;
+import com.avaje.ebean.validation.NotEmpty;
 import com.avaje.ebean.validation.NotNull;
-// import com.avaje.ebean.annotation.SqlSelect;
 
-@Entity
-@Table(name="IRCTransport_players")
+@Entity()
+@Table(name="players")
 public class IrcPlayerPersistentState
 {
   public IrcPlayerPersistentState()
@@ -22,16 +21,23 @@ public class IrcPlayerPersistentState
   {
     setPlayerName(player.getName());
   }
-  // FIXME: Serial #?
+  
   @Id
   @NotNull
   private String playerName;
   
+  @NotEmpty
   private String ircNick = null;
 
-  void setPlayerName(String playerName)
+  // If you don't have this, the persistence stuff gets cranky
+  public void setPlayerName(String playerName)
   {
     this.playerName = playerName;
+  }
+  
+  public String getPlayerName()
+  {
+    return playerName;
   }
   
   public void setIrcNick(String ircNick)
