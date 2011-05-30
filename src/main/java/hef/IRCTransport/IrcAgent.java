@@ -73,8 +73,6 @@ public class IrcAgent extends PircBot {
 		getPlayer().sendMessage("ChatService Disconnected.");
 		if(!shuttingDown)
 		{
-			//Reconnect reconnectTask = new Reconnect(this);
-			//plugin.getServer().getScheduler().scheduleAsyncDelayedTask(this.plugin, reconnectTask);
 			new Connect(this).run();
 		}
 	}
