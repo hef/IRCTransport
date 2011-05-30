@@ -38,24 +38,23 @@ public class IRCTransport extends JavaPlugin {
 	private String nickPrefix = "";
 	private String nickSuffix = "";
 	private boolean verbose;
-	private boolean useDB;
 	private static final Logger log = Logger.getLogger("Minecraft");
-	
+
 	public String getIrcServer()
 	{
 		return this.ircServer;
 	}
-	
+
 	public String getAutoJoin()
 	{
 		return this.autoJoin;
 	}
-	
+
 	public boolean isVerbose()
 	{
 		return this.verbose;
 	}
-	
+
 	public HashMap<Player, IrcAgent> getBots()
 	{
 		return this.bots;
@@ -63,10 +62,10 @@ public class IRCTransport extends JavaPlugin {
 
 	public void onEnable() {
 		this.playerListener = new IRCTransportPlayerListener(this);
-		
+
 		PluginManager pm = getServer().getPluginManager();
 		PluginDescriptionFile pdfFile = this.getDescription();
-		
+
 		//handle plugin settings.
 		FileInputStream spf;
 		Properties sp = new Properties();
@@ -79,7 +78,7 @@ public class IRCTransport extends JavaPlugin {
 		} catch (IOException e) {
 			log.log(Level.SEVERE, e.getMessage(), e);
 		}
-				
+
 		//grab data from server.properties
 		this.ircServer = sp.getProperty("irc.server","");
 		this.ircPort = Integer.parseInt(sp.getProperty("irc.port", "6667"));
@@ -89,28 +88,26 @@ public class IRCTransport extends JavaPlugin {
 		this.nickPrefix = sp.getProperty("irc.nickprefix", "");
 		this.nickSuffix = sp.getProperty("irc.nicksuffix","");
 		this.verbose = Boolean.parseBoolean(sp.getProperty("irc.verbose", "false"));
-		this.useDB = Boolean.parseBoolean(sp.getProperty("irc.useDB", "false"));
-		
 		//validate data
 		if(this.ircServer.equals(""))
 		{
 			log.log(Level.SEVERE, pdfFile.getName() + ": set \"irc.server\" in server.properties" );		
 			return;
 		}
-	
+
 		log.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
-		
+
 		initDatabase();
-		
+
 		//Event Registration
-		
-        //establish list of players
-        Player[] players = getServer().getOnlinePlayers();
-        for(Player player: players)
-        {
-        	this.bots.put(player, new IrcAgent(this,player));
-        }
-        //register for events we care about
+
+		//establish list of players
+		Player[] players = getServer().getOnlinePlayers();
+		for(Player player: players)
+		{
+			this.bots.put(player, new IrcAgent(this,player));
+		}
+		//register for events we care about
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
 		pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
@@ -129,36 +126,33 @@ public class IRCTransport extends JavaPlugin {
 			message += args[i] + " ";
 		return message;
 	}
-	
+
 	public void initDatabase()
 	{
-      // Always do this, since it will quiet unnecessary warnings
-      File file = new File("ebean.properties");
-      if(!file.exists())
-      {
-        try
-        {
-          file.createNewFile();
-        }
-        catch (Exception e)
-        {
-          log.log(Level.WARNING, this.getDescription().getName() + " Failed to create ebean.properties file.");
-        }
-      }
+		// Always do this, since it will quiet unnecessary warnings
+		File file = new File("ebean.properties");
+		if(!file.exists())
+		{
+			try
+			{
+				file.createNewFile();
+			}
+			catch (Exception e)
+			{
+				log.log(Level.WARNING, this.getDescription().getName() + " Failed to create ebean.properties file.");
+			}
+		}
 
-      // The rest we only try if the database is actually in use
-      if (useDB)
-      {
-        try
-        {
-          getDatabase().find(IrcPlayerPersistentState.class).findRowCount();
-        }
-        catch (PersistenceException e)
-        {
-    	  log.log(Level.INFO, this.getDescription().getName() + " configuring database for the first time" );
-          installDDL();
-        }
-      }
+		// The rest we only try if the database is actually in use
+		try
+		{
+			getDatabase().find(AgentSettings.class).findRowCount();
+		}
+		catch (PersistenceException e)
+		{
+			log.log(Level.INFO, this.getDescription().getName() + " configuring database for the first time" );
+			installDDL();
+		}
 	}
 
 	public void onDisable() {
@@ -168,7 +162,7 @@ public class IRCTransport extends JavaPlugin {
 			entry.getValue().shutdown();
 		}
 		bots.clear();
-		
+
 		log.log(Level.INFO, this.getDescription().getFullName() + " is disabled" );
 	}
 
@@ -178,7 +172,7 @@ public class IRCTransport extends JavaPlugin {
 		if(this.isVerbose()){
 			log.log(Level.INFO, String.format("Command '%s' received from %s with %d arguments", commandLabel, sender, args.length));
 		}
-		
+
 		if(! (sender instanceof Player) )
 		{
 			sender.sendMessage("Irc commands are only runnable as a Player");
@@ -257,27 +251,21 @@ public class IRCTransport extends JavaPlugin {
 	{
 		if(args.length==1)
 		{
-			IrcPlayerPersistentState state = getPersistentState(bot.getPlayer());
-			state.setIrcNick(args[0]);
-			savePersistentState(state);
-			
 			bot.changeNick(args[0]);
 			if(!bot.getNick().equalsIgnoreCase(args[0]))
 				//TODO: print error message to player.
-			return true;
+				return true;
 		}
 		return false;
 	}
-	
-    @Override
-    public List<Class<?>> getDatabaseClasses()
-    {
-        List<Class<?>> list = new ArrayList<Class<?>>();
-        list.add(IrcPlayerPersistentState.class);
-        return list;
-    }
 
-
+	@Override
+	public List<Class<?>> getDatabaseClasses()
+	{
+		List<Class<?>> list = new ArrayList<Class<?>>();
+		list.add(AgentSettings.class);
+		return list;
+	}
 	public boolean names(IrcAgent bot, String[] args)
 	{
 		if(args.length < 1)
@@ -301,7 +289,7 @@ public class IRCTransport extends JavaPlugin {
 			return true;
 		}
 	}
-	
+
 	public boolean action(IrcAgent bot, String[] args)
 	{
 		if(args.length > 0)
@@ -312,30 +300,7 @@ public class IRCTransport extends JavaPlugin {
 		}
 		return false;
 	}
-	
-	protected IrcPlayerPersistentState getPersistentState(Player player)
-	{
-		IrcPlayerPersistentState state = null;
-		if (useDB)
-		{
-		  state = getDatabase().find(IrcPlayerPersistentState.class, player.getName());
-		}
-		
-		if (null == state)
-		{
-		  state = new IrcPlayerPersistentState(player);
-		}
-		return state;
-	}
 
-	protected void savePersistentState(IrcPlayerPersistentState state)
-	{
-		if (useDB)
-		{
-		  getDatabase().save(state);
-		}
-	}
-	
 	/**
 	 * @return the ircPort
 	 */

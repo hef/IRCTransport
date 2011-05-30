@@ -11,13 +11,13 @@ import com.avaje.ebean.validation.NotNull;
 
 @Entity()
 @Table(name="players")
-public class IrcPlayerPersistentState
+public class AgentSettings
 {
-  public IrcPlayerPersistentState()
+  public AgentSettings()
   {
   }
   
-  public IrcPlayerPersistentState(Player player)
+  public AgentSettings(Player player)
   {
     setPlayerName(player.getName());
   }

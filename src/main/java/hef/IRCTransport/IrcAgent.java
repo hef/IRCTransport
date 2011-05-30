@@ -23,8 +23,8 @@ public class IrcAgent extends PircBot {
 	final private IRCTransport plugin;
 	private static final Logger log = Logger.getLogger("Minecraft");
 	//flag to indicate we should not reconnect
-	private boolean shuttingDown; 
-	
+	private boolean shuttingDown;
+	private AgentSettings settings;
 	/**
 	 * 
 	 */
@@ -34,8 +34,20 @@ public class IrcAgent extends PircBot {
 		this.shuttingDown = false;
 		setLogin(String.format(player.getName()));
 		super.setAutoNickChange(true);
-		new Connect(this).run();
 		
+		//init player settings
+		setSettings(plugin.getDatabase().find(AgentSettings.class, player.getName()));
+		if (null == getSettings())
+		{
+			setSettings(new AgentSettings(player));
+			getSettings().setIrcNick(String.format("%s%s%s",plugin.getNickPrefix(), player.getName(), plugin.getNickSuffix()));
+		}
+		else
+		{
+			log.log(Level.INFO, String.format("Player '%s' using persistent IRC nick '%s'", player.getName(), getSettings().getIrcNick()));
+		}
+		setNick(getSettings().getIrcNick());
+		new Connect(this).run();
 	}
 	@Override
 	public void log(String line)
@@ -132,6 +144,8 @@ public class IrcAgent extends PircBot {
 		if(oldNick.equals(getPlayer().getDisplayName()))
 		{
 			getPlayer().setDisplayName(newNick);
+			getSettings().setIrcNick(newNick);
+			saveSettings();
 		}
 		getPlayer().sendMessage(String.format("%s is now known as %s", oldNick , newNick));
 	}
@@ -219,5 +233,21 @@ public class IrcAgent extends PircBot {
 	public boolean isShuttingDown()
 	{
 		return shuttingDown;
+	}
+	protected void saveSettings()
+	{
+			plugin.getDatabase().save(getSettings());
+	}
+	/**
+	 * @param settings the settings to set
+	 */
+	public void setSettings(AgentSettings settings) {
+		this.settings = settings;
+	}
+	/**
+	 * @return the settings
+	 */
+	public AgentSettings getSettings() {
+		return settings;
 	}
 }
