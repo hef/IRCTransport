@@ -40,7 +40,7 @@ public class IrcAgent extends PircBot {
 		if (null == getSettings())
 		{
 			setSettings(new AgentSettings(player));
-			getSettings().setIrcNick(String.format("%s%s%s",plugin.getNickPrefix(), player.getName(), plugin.getNickSuffix()));
+			getSettings().setIrcNick(String.format("%s%s%s",plugin.getNickPrefix(player), player.getName(), plugin.getNickSuffix(player)));
 		}
 		else
 		{
