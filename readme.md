@@ -8,7 +8,7 @@ Available settings:
 Put these in Minecraft's server.properties file with appropriate values.
 
     irc.server=
-    irc.port=6697
+    irc.port=6667
     irc.password=
     irc.autojoin=
     irc.autojoinkey=
