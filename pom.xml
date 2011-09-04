@@ -21,6 +21,12 @@
       <developerConnection>scm:git:git@github.com:hef/IRCTransport.git</developerConnection>
       <url>https://github.com/hef/IRCTransport.git</url>
   </scm>
+  <distributionManagement>
+      <site>
+          <id>github-project-site</id>
+          <url>gitsite:git@github.com/hef/IRCTransport.git</url>
+      </site>
+  </distributionManagement>
   <build>
       <plugins>
           <plugin>
@@ -142,10 +148,32 @@
                             <artifactId>findbugs-maven-plugin</artifactId>
                             <version>2.3.2</version>
                         </plugin>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>taglist-maven-plugin</artifactId>
+                            <version>2.4</version>
+                        </plugin>
                     </reportPlugins>
                 </configuration>
             </plugin>
       </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.scm</groupId>
+                <artifactId>maven-scm-provider-gitexe</artifactId>
+                <version>1.3</version>
+            </extension>
+            <extension>
+                <groupId>org.apache.maven.scm</groupId>
+                <artifactId>maven-scm-manager-plexus</artifactId>
+                <version>1.3</version>
+            </extension>
+            <extension>
+                <groupId>org.kathrynhuxtable.maven.wagon</groupId>
+                <artifactId>wagon-gitsite</artifactId>
+                <version>0.3.1</version>
+            </extension>
+        </extensions>
       <resources>
           <resource>
               <directory>src/main/resources</directory>
