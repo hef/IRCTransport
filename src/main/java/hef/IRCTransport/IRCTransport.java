@@ -18,9 +18,13 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.nijiko.permissions.PermissionHandler;
+import com.nijikokun.bukkit.Permissions.Permissions;
 
 /**
  * IRCTransport for Bukkit
@@ -39,6 +43,7 @@ public class IRCTransport extends JavaPlugin {
 	private String nickSuffix = "";
 	private boolean verbose;
 	private static final Logger log = Logger.getLogger("Minecraft");
+	private PermissionHandler perms = null;
 
 	public String getIrcServer()
 	{
@@ -99,7 +104,15 @@ public class IRCTransport extends JavaPlugin {
 
 		initDatabase();
 
-		//Event Registration
+		Plugin check = this.getServer().getPluginManager().getPlugin("Permissions");
+	        if (check != null) {
+	                perms = ((Permissions) check).getHandler();
+	                log.info("Permissions detected");
+	        } else {
+	                log.info("Permissions not detected.");
+	        }
+
+	        //Event Registration
 
 		//establish list of players
 		Player[] players = getServer().getOnlinePlayers();
@@ -329,8 +342,10 @@ public class IRCTransport extends JavaPlugin {
 	 * Nick prefix is only used as a default
 	 * @return the nickPrefix
 	 */
-	public String getNickPrefix() {
-		return nickPrefix;
+	public String getNickPrefix(Player player) {
+		String prefix = nickPrefix;
+		prefix = prefix.replace("%group%", getPermGroup(player));
+	        return prefix;
 	}
 
 	/**
@@ -338,7 +353,22 @@ public class IRCTransport extends JavaPlugin {
 	 * If the plugin has a suffix of "_mc" and a player with nick of "player" will become "player_mc"
 	 * @return the nickSuffix
 	 */
-	public String getNickSuffix() {
-		return nickSuffix;
+	public String getNickSuffix(Player player) {
+	        String suffix = nickSuffix;
+                suffix = suffix.replace("%group%", getPermGroup(player));
+		return suffix;
+	}
+
+	/**
+         * get the player's group
+         * @return the player's Group
+         */
+	private String getPermGroup(Player player) {
+	        if (perms == null)
+	                return "";
+                String result = perms.getGroup(player.getWorld().getName(), player.getName());
+                if (result == null)
+                        return "";
+	        return result;
 	}
 }
