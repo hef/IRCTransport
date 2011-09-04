@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<rss version="0.91">
+  <channel>
+    <title>IRCTransport - Checkstyle report</title>
+    <link>http://github.com/hef/IRCTransport</link>
+    <description>IRCTransport - Checkstyle report</description>
+    <language>en-us</language>
+    <copyright>&#169;2011</copyright>
+    <item>
+      <title>File: 6,
+             Errors: 1311,
+             Warnings: 0,
+             Infos: 0
+      </title>
+            <link>http://github.com/hef/IRCTransport/checkstyle.html</link>
+      <description>
+        <p>Click <a href="http://github.com/hef/IRCTransport/checkstyle.html">here</a> for the full Checkstyle report.</p>
+
+        <table summary="Files" boder="1">
+          <thead>
+            <tr>
+              <th>Files</th>
+              <th style="width:30px;"><abbr title="Info">I</abbr></th>
+              <th style="width:30px;"><abbr title="Warning">W</abbr></th>
+              <th style="width:30px;"><abbr title="Error">E</abbr></th>
+            </tr>
+          </thead>
+          <tbody>
+                          <tr>
+                <td>
+                  <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.ColorMap.java">hef/IRCTransport/ColorMap.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  199
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.IRCTransport.java">hef/IRCTransport/IRCTransport.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  483
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.AgentSettings.java">hef/IRCTransport/AgentSettings.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  37
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.IrcAgent.java">hef/IRCTransport/IrcAgent.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  441
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.IRCTransportPlayerListener.java">hef/IRCTransport/IRCTransportPlayerListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  28
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.Connect.java">hef/IRCTransport/Connect.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  123
+                </td>
+              </tr>
+                      </tbody>
+        </table>
+        
+      </description>
+    </item>
+  </channel>
+</rss>
+
