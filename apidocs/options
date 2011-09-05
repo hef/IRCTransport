@@ -17,7 +17,7 @@
 -doctitle
 'IRCTransport 0.11-SNAPSHOT API'
 -linkoffline
-'http://download.oracle.com/javase/1.5.0/docs/api' '/home/hef/projects/IRCTransport/target/javadoc-bundle-options'
+'http://download.oracle.com/javase/6/docs/api' '/home/hef/projects/IRCTransport/target/javadoc-bundle-options'
 -use
 -version
 -windowtitle
