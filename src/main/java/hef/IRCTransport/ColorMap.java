@@ -10,7 +10,7 @@ import org.bukkit.ChatColor;
  * @author hef
  * 
  */
-public class ColorMap {
+public final class ColorMap {
     private static Pattern ircColorPattern = Pattern
             .compile('\u0003' + "[0-9]{1,2}(?:,[0-9]{1,2})?");
     // TODO: char to char mapping

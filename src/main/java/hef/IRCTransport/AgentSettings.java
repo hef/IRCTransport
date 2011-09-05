@@ -11,7 +11,7 @@ import com.avaje.ebean.validation.NotNull;
 
 @Entity()
 @Table(name = "players")
-public class AgentSettings {
+public final class AgentSettings {
     @NotEmpty
     private String ircNick = null;
 

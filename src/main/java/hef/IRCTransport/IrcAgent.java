@@ -13,7 +13,7 @@ import org.jibble.pircbot.User;
 /**
  * @author hef
  */
-public class IrcAgent extends PircBot {
+public final class IrcAgent extends PircBot {
     private static final Logger log = Logger.getLogger("Minecraft");
     private String activeChannel;
     private Player player;

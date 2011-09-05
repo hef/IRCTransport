@@ -9,21 +9,25 @@ import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
- * Handle events for all Player related events
- * 
+ * Handle events for all Player related events.
  * @author hef
  */
-public class IRCTransportPlayerListener extends PlayerListener {
+ public final class IRCTransportPlayerListener extends PlayerListener {
+    /** Maps to retrieve associated IrcAggent from player. */
     private HashMap<Player, IrcAgent> bots;
+    /** Reference to the parent plugin. */
     private final IRCTransport plugin;
 
-    public IRCTransportPlayerListener(IRCTransport instance) {
+    /**
+     * @param instance A reference to the plugin.
+     */
+    public IRCTransportPlayerListener(final IRCTransport instance) {
         this.bots = instance.getBots();
         plugin = instance;
     }
 
     @Override
-    public void onPlayerChat(PlayerChatEvent event) {
+    public void onPlayerChat(final PlayerChatEvent event) {
         IrcAgent bot = this.bots.get(event.getPlayer());
         bot.sendMessage(event.getMessage());
         // prevent messages from being displayed twice.
@@ -31,13 +35,13 @@ public class IRCTransportPlayerListener extends PlayerListener {
     }
 
     @Override
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(final PlayerJoinEvent event) {
         this.bots.put(event.getPlayer(),
                 new IrcAgent(plugin, event.getPlayer()));
     }
 
     @Override
-    public void onPlayerQuit(PlayerQuitEvent event) {
+    public void onPlayerQuit(final PlayerQuitEvent event) {
         this.bots.get(event.getPlayer()).shutdown();
         this.bots.remove(event.getPlayer());
     }

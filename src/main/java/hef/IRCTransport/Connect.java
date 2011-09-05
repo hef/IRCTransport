@@ -11,22 +11,34 @@ import org.jibble.pircbot.NickAlreadyInUseException;
 /**
  * Connection Task This class us a Runnable class for connecting to the irc
  * server. It will reschedule a connection
- * 
  * @author hef
- * 
  */
-public class Connect implements Runnable {
-    private static final Logger log = Logger.getLogger("Minecraft");
+public final class Connect implements Runnable {
+    /**
+     * Time between connection retries after a failed connection attempt.
+     * 4oo is 20 seconds.
+     */
+    public static final int RETRY_RATE = 400;
+    /**
+     * Amount of time to wait to reconnect if a connection was already
+     * established, but was then lost.
+     * 100 is 5 seconds
+     */
+    public static final int INITIAL_RETRY_DELAY = 100;
+    /** Log object. */
+    private static final Logger LOG = Logger.getLogger("Minecraft");
+    /**
+     * Parent IRC agent. The class will perform a lot of actions on the agent.
+     */
     private IrcAgent agent;
 
     /**
-     * Create a Connection instance Pass this from IrcAgent so we have access
-     * 
-     * @param agent
+     * Create a Connection instance Pass this from IrcAgent so we have access.
+     * @param parent
      *            pass in this from the calling IrcAgent
      */
-    public Connect(IrcAgent agent) {
-        this.agent = agent;
+    public Connect(final IrcAgent parent) {
+        this.agent = parent;
     }
 
     /**
@@ -51,7 +63,7 @@ public class Connect implements Runnable {
             } catch (NickAlreadyInUseException e) {
                 // This should not happen, the agent is set to auto retry new
                 // names
-                log.log(Level.SEVERE, e.getMessage(), e);
+                LOG.log(Level.SEVERE, e.getMessage(), e);
             } catch (IOException e) {
                 if (e.getMessage().equalsIgnoreCase("Connection refused")) {
                     agent.getPlayer().sendMessage(
@@ -62,22 +74,24 @@ public class Connect implements Runnable {
                             .getServer()
                             .getScheduler()
                             .scheduleAsyncDelayedTask(agent.getPlugin(), this,
-                                    400);
-                } else if (e.getMessage().equalsIgnoreCase("Connection reset")) {
+                                    RETRY_RATE);
+                } else if
+                    (e.getMessage().equalsIgnoreCase("Connection reset")) {
                     agent.getPlayer()
                             .sendMessage(
                                     ChatColor.YELLOW
-                                            + "Connection reset while connecting to Chat Server");
+                                            + "Connection reset while "
+                                            + "connecting to Chat Server");
                     agent.getPlugin()
                             .getServer()
                             .getScheduler()
                             .scheduleAsyncDelayedTask(agent.getPlugin(), this,
-                                    100);
+                                    INITIAL_RETRY_DELAY);
                 } else {
-                    log.log(Level.SEVERE, e.getMessage(), e);
+                    LOG.log(Level.SEVERE, e.getMessage(), e);
                 }
             } catch (IrcException e) {
-                log.log(Level.SEVERE, e.getMessage(), e);
+                LOG.log(Level.SEVERE, e.getMessage(), e);
             }
 
             // The player may have not gotten then name they wanted.
