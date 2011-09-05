@@ -4,29 +4,56 @@
     <artifactId>IRCTransport</artifactId>
     <version>0.11-SNAPSHOT</version>
     <name>IRCTransport</name>
+    <description>Chat to IRC bridge plugin for the bukkit Minecraft server.</description>
     <url>http://github.com/hef/IRCTransport</url>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <inceptionYear>2011</inceptionYear>
+    <developers>
+        <developer>
+            <name>hef</name>
+            <email>http://www.google.com/recaptcha/mailhide/d?k=01r-b6XzSMReIEx-CLDfsgXA==&amp;c=xRBkUSwSRstjix5uUXLBCA==</email>
+        </developer>
+        <developer>
+            <name>Edwin Smulders</name>
+            <email>http://www.google.com/recaptcha/mailhide/d?k=01r-b6XzSMReIEx-CLDfsgXA==&amp;c=L4FjNrxuu82DuCp4yZX4IDXijuqLeK275BlGgzmdvJk=</email>
+            <url>https://github.com/Derianor/</url>
+        </developer>
+        <developer>
+            <name>Cheesy</name>
+            <email>http://www.google.com/recaptcha/mailhide/d?k=01r-b6XzSMReIEx-CLDfsgXA==&amp;c=cfn0A6DucuKSeSLOYJ-KYR46QKv0gQGUkRlBwOVrDMI=</email>
+            <url>https://github.com/cheesy/</url>
+        </developer>
+    </developers>
+    <contributors>
+        <contributor>
+            <name>Bry</name>
+            <url>https://github.com/bdenne2</url>
+        </contributor>
+        <contributor>
+            <name>Evil Joel</name>
+        </contributor>
+    </contributors>
+    <scm>
+        <connection>scm:git:git://github.com/hef/IRCTransport.git/</connection>
+        <developerConnection>scm:git:git@github.com:hef/IRCTransport.git</developerConnection>
+        <url>https://github.com/hef/IRCTransport.git</url>
+    </scm>
     <issueManagement>
         <system>github</system>
         <url>https://github.com/hef/IRCTransport/issues</url>
     </issueManagement>
     <ciManagement>
         <system>Jenkins</system>
-        <url>http://acm.cs.uic.edu:8070</url>
+        <url>http://acm.cs.uic.edu:8070/job/IRCTransport/</url>
     </ciManagement>
-    <scm>
-        <connection>scm:git:git://github.com/hef/IRCTransport.git/</connection>
-        <developerConnection>scm:git:git@github.com:hef/IRCTransport.git</developerConnection>
-        <url>https://github.com/hef/IRCTransport.git</url>
-    </scm>
     <distributionManagement>
         <site>
             <id>github-project-site</id>
             <url>gitsite:git@github.com/hef/IRCTransport.git</url>
         </site>
     </distributionManagement>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <build>
         <plugins>
             <plugin>
