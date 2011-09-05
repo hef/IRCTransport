@@ -12,34 +12,34 @@ import com.avaje.ebean.validation.NotNull;
 @Entity()
 @Table(name = "players")
 public class AgentSettings {
-	@NotEmpty
-	private String ircNick = null;
+    @NotEmpty
+    private String ircNick = null;
 
-	@Id
-	@NotNull
-	private String playerName;
+    @Id
+    @NotNull
+    private String playerName;
 
-	public AgentSettings() {
-	}
+    public AgentSettings() {
+    }
 
-	public AgentSettings(Player player) {
-		setPlayerName(player.getName());
-	}
+    public AgentSettings(Player player) {
+        setPlayerName(player.getName());
+    }
 
-	public String getIrcNick() {
-		return ircNick;
-	}
+    public String getIrcNick() {
+        return ircNick;
+    }
 
-	public String getPlayerName() {
-		return playerName;
-	}
+    public String getPlayerName() {
+        return playerName;
+    }
 
-	public void setIrcNick(String ircNick) {
-		this.ircNick = ircNick;
-	}
+    public void setIrcNick(String ircNick) {
+        this.ircNick = ircNick;
+    }
 
-	// If you don't have this, the persistence stuff gets cranky
-	public void setPlayerName(String playerName) {
-		this.playerName = playerName;
-	}
+    // If you don't have this, the persistence stuff gets cranky
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
 }

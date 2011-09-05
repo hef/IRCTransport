@@ -14,31 +14,31 @@ import org.bukkit.event.player.PlayerQuitEvent;
  * @author hef
  */
 public class IRCTransportPlayerListener extends PlayerListener {
-	private HashMap<Player, IrcAgent> bots;
-	private final IRCTransport plugin;
+    private HashMap<Player, IrcAgent> bots;
+    private final IRCTransport plugin;
 
-	public IRCTransportPlayerListener(IRCTransport instance) {
-		this.bots = instance.getBots();
-		plugin = instance;
-	}
+    public IRCTransportPlayerListener(IRCTransport instance) {
+        this.bots = instance.getBots();
+        plugin = instance;
+    }
 
-	@Override
-	public void onPlayerChat(PlayerChatEvent event) {
-		IrcAgent bot = this.bots.get(event.getPlayer());
-		bot.sendMessage(event.getMessage());
-		// prevent messages from being displayed twice.
-		event.setCancelled(true);
-	}
+    @Override
+    public void onPlayerChat(PlayerChatEvent event) {
+        IrcAgent bot = this.bots.get(event.getPlayer());
+        bot.sendMessage(event.getMessage());
+        // prevent messages from being displayed twice.
+        event.setCancelled(true);
+    }
 
-	@Override
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		this.bots.put(event.getPlayer(),
-				new IrcAgent(plugin, event.getPlayer()));
-	}
+    @Override
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        this.bots.put(event.getPlayer(),
+                new IrcAgent(plugin, event.getPlayer()));
+    }
 
-	@Override
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		this.bots.get(event.getPlayer()).shutdown();
-		this.bots.remove(event.getPlayer());
-	}
+    @Override
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        this.bots.get(event.getPlayer()).shutdown();
+        this.bots.remove(event.getPlayer());
+    }
 }
