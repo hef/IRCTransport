@@ -35,7 +35,7 @@
     <scm>
         <connection>scm:git:git://github.com/hef/IRCTransport.git/</connection>
         <developerConnection>scm:git:git@github.com:hef/IRCTransport.git</developerConnection>
-        <url>https://github.com/hef/IRCTransport.git</url>
+        <url>https://github.com/hef/IRCTransport</url>
     </scm>
     <issueManagement>
         <system>github</system>
@@ -43,7 +43,7 @@
     </issueManagement>
     <ciManagement>
         <system>Jenkins</system>
-        <url>http://acm.cs.uic.edu:8070/job/IRCTransport/</url>
+        <url>https://acm.cs.uic.edu/jenkins/job/IRCTransport/</url>
     </ciManagement>
     <distributionManagement>
         <site>
