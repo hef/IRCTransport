@@ -37,6 +37,9 @@ public final class ColorMap {
         minecraftColor.add(15, ChatColor.GRAY.toString()); // light_gray
     }
 
+    /** Making default constructor private. */
+    private ColorMap() { }
+
     /**
      * Convert a MineCraft color code to an IRC color code.
      * @param code
