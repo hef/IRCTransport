@@ -10,17 +10,15 @@
     <developers>
         <developer>
             <name>hef</name>
-            <email>http://www.google.com/recaptcha/mailhide/d?k=01r-b6XzSMReIEx-CLDfsgXA==&amp;c=xRBkUSwSRstjix5uUXLBCA==</email>
+            <url>https://github.com/hef/IRCTransport/</url>
         </developer>
         <developer>
             <name>Edwin Smulders</name>
-            <email>http://www.google.com/recaptcha/mailhide/d?k=01r-b6XzSMReIEx-CLDfsgXA==&amp;c=L4FjNrxuu82DuCp4yZX4IDXijuqLeK275BlGgzmdvJk=</email>
             <url>https://github.com/Derianor/</url>
         </developer>
         <developer>
             <name>Cheesy</name>
-            <email>http://www.google.com/recaptcha/mailhide/d?k=01r-b6XzSMReIEx-CLDfsgXA==&amp;c=cfn0A6DucuKSeSLOYJ-KYR46QKv0gQGUkRlBwOVrDMI=</email>
-            <url>https://github.com/cheesy/</url>
+            <url>https://github.com/cheesy/IRCTransport/</url>
         </developer>
     </developers>
     <contributors>
