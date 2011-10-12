@@ -22,7 +22,7 @@ public final class IrcAgent extends PircBot {
     // flag to indicate we should not reconnect
     private boolean shuttingDown;
 
-    public IrcAgent(IRCTransport instance, Player player) {
+    public IrcAgent(final IRCTransport instance, final Player player) {
         this.plugin = instance;
         this.player = player;
         this.shuttingDown = false;
@@ -70,7 +70,7 @@ public final class IrcAgent extends PircBot {
     }
 
     @Override
-    public void log(String line) {
+    public void log(final String line) {
         if (getPlugin().isVerbose()) {
             log.log(Level.INFO, line);
         }
@@ -80,13 +80,12 @@ public final class IrcAgent extends PircBot {
         names(activeChannel);
     }
 
-    protected void names(String channel) {
+    protected void names(final String channel) {
         sendRawLine("NAMES " + channel);
     }
 
     @Override
-    public void onAction(String sender, String login, String hostname,
-            String target, String action) {
+    public void onAction(final String sender, final String login, final String hostname, final String target, final String action) {
         getPlayer().sendMessage(
                 String.format("[%s] * %s %s", target, sender, action));
     }
@@ -99,77 +98,54 @@ public final class IrcAgent extends PircBot {
         }
     }
 
-    protected void onErrorMessage(String channel, String message) {
+    protected void onErrorMessage(final String channel, final String message) {
         getPlayer().sendMessage(
                 ChatColor.YELLOW + String.format("[%s] %s", channel, message));
     }
 
     @Override
-    public void onJoin(String channel, String sender, String login,
-            String hostname) {
+    public void onJoin(final String channel, final String sender, final String login, final String hostname) {
         // if I joined, change active channel.
         if (sender.equals(getNick()))
             activeChannel = channel;
-        getPlayer()
-                .sendMessage(
-                        ChatColor.YELLOW
-                                + String.format("[%s] %s has joined.", channel,
-                                        sender));
+        getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has joined.", channel, sender));
     }
 
     @Override
-    protected void onKick(String channel, String kickerNick,
-            String kickerLogin, String kickerHostname, String recipientNick,
-            String reason) {
-        player.sendMessage(ChatColor.YELLOW
-                + String.format("[%s] %s kicked by %s: %s", channel,
-                        recipientNick, kickerNick, reason));
+    protected void onKick(final String channel, final String kickerNick, final String kickerLogin, final String kickerHostname, final String recipientNick, final String reason) {
+        player.sendMessage(ChatColor.YELLOW + String.format("[%s] %s kicked by %s: %s", channel, recipientNick, kickerNick, reason));
     }
 
     @Override
-    public void onMessage(String channel, String sender, String login,
-            String hostname, String message) {
+    public void onMessage(final String channel, final String sender, final String login, final String hostname, final String message) {
         // TODO: replace channel names with numbers
-        getPlayer().sendMessage(
-                String.format("[%s] %s: %s", channel, sender,
-                        ColorMap.fromIrc(message)));
+        getPlayer().sendMessage(String.format("[%s] %s: %s", channel, sender, ColorMap.fromIrc(message)));
     }
 
     @Override
-    protected void onNickChange(String oldNick, String login, String hostname,
-            String newNick) {
+    protected void onNickChange(final String oldNick, final String login, final String hostname, final String newNick) {
         if (oldNick.equals(getPlayer().getDisplayName())) {
             getPlayer().setDisplayName(newNick);
             getSettings().setIrcNick(newNick);
             saveSettings();
         }
-        getPlayer().sendMessage(
-                String.format("%s is now known as %s", oldNick, newNick));
+        getPlayer().sendMessage(String.format("%s is now known as %s", oldNick, newNick));
     }
 
     @Override
-    public void onPart(String channel, String sender, String login,
-            String hostname) {
-        getPlayer()
-                .sendMessage(
-                        ChatColor.YELLOW
-                                + String.format("[%s] %s has parted.", channel,
-                                        sender));
+    public void onPart(final String channel, final String sender, final String login, final String hostname) {
+        getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has parted.", channel, sender));
     }
 
     @Override
-    public void onPrivateMessage(String sender, String login, String hostname,
-            String message) {
+    public void onPrivateMessage(final String sender, final String login, final String hostname, final String message) {
         // TODO: check validity of recipient or check for error response
         getPlayer().sendMessage(String.format("%s: %s", sender, message));
     }
 
     @Override
-    public void onQuit(String sourceNick, String sourceLogin,
-            String sourceHostname, String reason) {
-        getPlayer().sendMessage(
-                ChatColor.YELLOW
-                        + String.format("%s has quit: %s", sourceNick, reason));
+    public void onQuit(final String sourceNick, final  String sourceLogin, final String sourceHostname, final String reason) {
+        getPlayer().sendMessage(ChatColor.YELLOW + String.format("%s has quit: %s", sourceNick, reason));
     }
 
     /**
@@ -183,7 +159,7 @@ public final class IrcAgent extends PircBot {
      *            The message that came with the response
      */
     @Override
-    protected void onServerResponse(int code, String response) {
+    protected void onServerResponse(final int code, final String response) {
         Pattern responsePattern = Pattern.compile("(\\S*) (\\S*) :(.*)");
         Matcher responseMatcher = responsePattern.matcher(response);
         responseMatcher.find();
@@ -200,22 +176,16 @@ public final class IrcAgent extends PircBot {
     }
 
     @Override
-    protected void onTopic(String channel, String topic, String setBy,
-            long date, boolean changed) {
+    protected void onTopic(final String channel, final String topic, final String setBy, final long date, final boolean changed) {
         if (changed) {
-            getPlayer().sendMessage(
-                    ChatColor.YELLOW
-                            + String.format("[%s] Topic changed: %s", channel,
-                                    topic));
+            getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] Topic changed: %s", channel, topic));
         } else {
-            getPlayer().sendMessage(
-                    ChatColor.YELLOW
-                            + String.format("[%s] Topic: %s", channel, topic));
+            getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] Topic: %s", channel, topic));
         }
     }
 
     @Override
-    protected void onUserList(String channel, User[] users) {
+    protected void onUserList(final String channel, final User[] users) {
         String usersString = "";
         for (User user : users) {
             usersString += user.toString() + " ";
@@ -228,24 +198,23 @@ public final class IrcAgent extends PircBot {
         plugin.getDatabase().save(getSettings());
     }
 
-    public void sendAction(String action) {
+    public void sendAction(final String action) {
         sendAction(activeChannel, action);
         getPlayer().sendMessage(
                 String.format("[%s] * %s %s", activeChannel, getPlayer()
                         .getDisplayName(), action));
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(final String message) {
         // TODO: check ativeChannel for NULL, then just pick a random channel.
         sendMessage(activeChannel, message);
         if (isConnected()) {
-            String msg = String.format("[%s] %s: %s", activeChannel,
-                    getPlayer().getDisplayName(), message);
+            String msg = String.format("[%s] %s: %s", activeChannel, getPlayer().getDisplayName(), message);
             getPlayer().sendMessage(msg);
         }
     }
 
-    public void setActiveChannel(String channel) {
+    public void setActiveChannel(final String channel) {
         this.activeChannel = channel;
     }
 
@@ -258,7 +227,7 @@ public final class IrcAgent extends PircBot {
      * @param name
      *            the name to attempt to use.
      */
-    public void setNick(String name) {
+    public void setNick(final String name) {
         super.setName(name);
     }
 
@@ -266,11 +235,11 @@ public final class IrcAgent extends PircBot {
      * @param settings
      *            the settings to set
      */
-    public void setSettings(AgentSettings settings) {
+    public void setSettings(final AgentSettings settings) {
         this.settings = settings;
     }
 
-    protected void setTopic(String topic) {
+    protected void setTopic(final String topic) {
         setTopic(activeChannel, topic);
     }
 
