@@ -24,16 +24,13 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * IRCTransport for Bukkit
- * 
+ * IRCTransport for Bukkit.
  * @author hef
  */
-public class IRCTransport extends JavaPlugin {
+public final class IRCTransport extends JavaPlugin {
     private static final Logger log = Logger.getLogger("Minecraft");
 
-    /**
-     * Turns arguments into a string
-     * 
+    /** Turns arguments into a string.
      * @bug bug: multiple spaces are not detected in args strings, so they get
      *      turned into a single space.
      * @param args
@@ -42,7 +39,7 @@ public class IRCTransport extends JavaPlugin {
      *            First word of non-command text
      * @return a string representing the non-command text.
      */
-    private static String makeMessage(String[] args, int position) {
+    private static String makeMessage(final String[] args, final int position) {
         String message = new String();
         for (int i = position; i < args.length; ++i)
             message += args[i] + " ";
@@ -61,7 +58,7 @@ public class IRCTransport extends JavaPlugin {
 
     private boolean verbose;
 
-    public boolean action(IrcAgent bot, String[] args) {
+    public boolean action(final IrcAgent bot, final String[] args) {
         if (args.length > 0) {
             String message = makeMessage(args, 0);
             bot.sendAction(message);
@@ -70,7 +67,7 @@ public class IRCTransport extends JavaPlugin {
         return false;
     }
 
-    public boolean channel(IrcAgent bot, String[] args) {
+    public boolean channel(final IrcAgent bot, final String[] args) {
         if (args.length == 1) {
             bot.setActiveChannel(args[0]);
             return true;
@@ -163,7 +160,7 @@ public class IRCTransport extends JavaPlugin {
         return this.verbose;
     }
 
-    public boolean join(IrcAgent bot, String[] args) {
+    public boolean join(final IrcAgent bot, final String[] args) {
         if (args.length == 1) {
             bot.joinChannel(args[0]);
             return true;
@@ -174,7 +171,7 @@ public class IRCTransport extends JavaPlugin {
         return false;
     }
 
-    public boolean leave(IrcAgent bot, String[] args) {
+    public boolean leave(final IrcAgent bot, final String[] args) {
         if (args.length == 1) {
             bot.partChannel(args[0]);
             return true;
@@ -186,7 +183,7 @@ public class IRCTransport extends JavaPlugin {
         return false;
     }
 
-    public boolean names(IrcAgent bot, String[] args) {
+    public boolean names(final IrcAgent bot, final String[] args) {
         if (args.length < 1) {
             bot.names();
             return true;
@@ -196,7 +193,7 @@ public class IRCTransport extends JavaPlugin {
         }
     }
 
-    public boolean nick(IrcAgent bot, String[] args) {
+    public boolean nick(final IrcAgent bot, final String[] args) {
         if (args.length == 1) {
             bot.changeNick(args[0]);
             if (!bot.getNick().equalsIgnoreCase(args[0]))
@@ -207,8 +204,7 @@ public class IRCTransport extends JavaPlugin {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command,
-            String commandLabel, String[] args) {
+    public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         if (this.isVerbose()) {
             log.log(Level.INFO, String.format(
                     "Command '%s' received from %s with %d arguments",
@@ -311,7 +307,7 @@ public class IRCTransport extends JavaPlugin {
                 Priority.Normal, this);
     }
 
-    public boolean privateMessage(IrcAgent bot, String[] args) {
+    public boolean privateMessage(final IrcAgent bot, final String[] args) {
         if (args.length > 1) {
             String message = makeMessage(args, 1);
             bot.sendMessage(args[0], message);
@@ -319,7 +315,7 @@ public class IRCTransport extends JavaPlugin {
         return false;
     }
 
-    public boolean topic(IrcAgent bot, String[] args) {
+    public boolean topic(final IrcAgent bot, final String[] args) {
         if (args.length < 1) {
             bot.topic();
             return true;
