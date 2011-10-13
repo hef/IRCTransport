@@ -46,6 +46,9 @@ Features:
 
 Changelog:
 ----------
+### Verson 0.11
+  * Fixed a potential reload bug.
+
 ### Version 0.10
   * Added nickanme prefix and suffix options.
   * Fixed Automatic reconnect after plugin is disabled or server is stopped.

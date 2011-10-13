@@ -28,7 +28,8 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author hef
  */
 public final class IRCTransport extends JavaPlugin {
-    private static final Logger log = Logger.getLogger("Minecraft");
+    /** The logging obect.  Used internal to write to the console. */
+    private static final Logger LOG = Logger.getLogger("Minecraft");
 
     /** Turns arguments into a string.
      * @bug bug: multiple spaces are not detected in args strings, so they get
@@ -41,23 +42,38 @@ public final class IRCTransport extends JavaPlugin {
      */
     private static String makeMessage(final String[] args, final int position) {
         String message = new String();
-        for (int i = position; i < args.length; ++i)
+        for (int i = position; i < args.length; ++i) {
             message += args[i] + " ";
+        }
         return message;
     }
 
+    /** The default channel for agents to join on startup, from configuration.*/
     private String autoJoin = "";
+    /** The default IRC Channel's Key (channel password) from configuration. */
     private String autoJoinKey = "";
+    /** The map of Bukkit Players to our IRCAgent objects.  Used for lookups. */
     private final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
+    /** IRC Server password from configuration. */
     private String ircPassword;
+    /** IRC Server port from configuration. */
     private int ircPort;
+    /** IRC Server from configuration. */
     private String ircServer = "";
+    /** Nick prefix from configuration. */
     private String nickPrefix = "";
+    /** Nick suffix from configuration. */
     private String nickSuffix = "";
+    /** A hook into the playerListner for the plugin. */
     private IRCTransportPlayerListener playerListener;
-
+    /** Verbosity flag. */
     private boolean verbose;
 
+    /** The IRC /me handler.
+     * @param bot The IRC Agent that needs to handle the action
+     * @param args The list of words to use as the "action"
+     * @return parse success
+     */
     public boolean action(final IrcAgent bot, final String[] args) {
         if (args.length > 0) {
             String message = makeMessage(args, 0);
@@ -67,6 +83,12 @@ public final class IRCTransport extends JavaPlugin {
         return false;
     }
 
+    /** Change the active channel.
+     * The agent must already be in the channel.
+     * @param bot The IRC agent that needs to handle the action
+     * @param args a 1 element array of the channel to switch to.
+     * @return parse success
+     */
     public boolean channel(final IrcAgent bot, final String[] args) {
         if (args.length == 1) {
             bot.setActiveChannel(args[0]);
@@ -75,17 +97,23 @@ public final class IRCTransport extends JavaPlugin {
         return false;
     }
 
+    /** The autojoin channel.
+     * This is set in the config file
+     * @return The channel the plugin is configured to autojoin to.
+     */
     public String getAutoJoin() {
         return this.autoJoin;
     }
 
-    /**
+    /** If the channel to autojoin requires a key, this will return it.
      * @return the autoJoinKey
      */
     public String getAutoJoinKey() {
         return autoJoinKey;
     }
-
+    /** Gets the maping of Bukkit Players to IRCAgents.
+     * @return the map of player's to agents.
+     */
     public HashMap<Player, IrcAgent> getBots() {
         return this.bots;
     }
@@ -111,29 +139,36 @@ public final class IRCTransport extends JavaPlugin {
         return ircPort;
     }
 
+    /** The irc server to use.
+     * There is no "default", the plugin only supports 1 IRC server.
+     * This can be a name or ip address.
+     * @return the IRC server.
+     */
     public String getIrcServer() {
         return this.ircServer;
     }
 
-    /**
-     * Nick prefix is only used as a default
-     * 
+    /** Nick prefix
+     * Nick prefix is only used as a default. It is not enforiced on nick change.
      * @return the nickPrefix
      */
     public String getNickPrefix() {
         return nickPrefix;
     }
 
-    /**
+    /** Get the Nick Suffix.
      * nick suffix is only used as a default If the plugin has a suffix of "_mc"
      * and a player with nick of "player" will become "player_mc"
-     * 
      * @return the nickSuffix
      */
     public String getNickSuffix() {
         return nickSuffix;
     }
 
+    /** Create the database to store plugin settings.
+     * This method creates the ebean.properties file.
+     * It's not strictly neccessary, but it quites a bukkit error message.
+     */
     public void initDatabase() {
         // Always do this, since it will quiet unnecessary warnings
         File file = new File("ebean.properties");
@@ -141,7 +176,7 @@ public final class IRCTransport extends JavaPlugin {
             try {
                 file.createNewFile();
             } catch (Exception e) {
-                log.log(Level.WARNING, this.getDescription().getName()
+                LOG.log(Level.WARNING, this.getDescription().getName()
                         + " Failed to create ebean.properties file.");
             }
         }
@@ -150,16 +185,28 @@ public final class IRCTransport extends JavaPlugin {
         try {
             getDatabase().find(AgentSettings.class).findRowCount();
         } catch (PersistenceException e) {
-            log.log(Level.INFO, this.getDescription().getName()
+            LOG.log(Level.INFO, this.getDescription().getName()
                     + " configuring database for the first time");
             installDDL();
         }
     }
 
+    /** Returns verbosity flag.
+     * mostly used internaly to determine how much logging to print to console.
+     * @return Verbose?
+     */
     public boolean isVerbose() {
         return this.verbose;
     }
 
+    /** Join a Channel
+     * args can be 1 or 2 elements.
+     * 1st element: channel name
+     * 2nd element: channel key
+     * @param bot irc agent
+     * @param args array of channel and optionally key
+     * @return parse success
+     */
     public boolean join(final IrcAgent bot, final String[] args) {
         if (args.length == 1) {
             bot.joinChannel(args[0]);
@@ -171,6 +218,11 @@ public final class IRCTransport extends JavaPlugin {
         return false;
     }
 
+    /** part from a channel.
+     * @param bot active IRC agent
+     * @param args a channel to leave
+     * @return parse success
+     */
     public boolean leave(final IrcAgent bot, final String[] args) {
         if (args.length == 1) {
             bot.partChannel(args[0]);
@@ -183,6 +235,11 @@ public final class IRCTransport extends JavaPlugin {
         return false;
     }
 
+    /** Get a list of names from active channel.
+     * @param bot active IRC agent
+     * @param args 0 or 1 elements.  the 1st element can be a channel name to get names from.
+     * @return parse success
+     */
     public boolean names(final IrcAgent bot, final String[] args) {
         if (args.length < 1) {
             bot.names();
@@ -193,20 +250,31 @@ public final class IRCTransport extends JavaPlugin {
         }
     }
 
+    /** Change Nickname.
+     * @param bot active IRC agent.
+     * @param args 1 element array of the nick to change to
+     * @return parse success.
+     */
     public boolean nick(final IrcAgent bot, final String[] args) {
         if (args.length == 1) {
             bot.changeNick(args[0]);
-            if (!bot.getNick().equalsIgnoreCase(args[0]))
-                // TODO: print error message to player.
-                return true;
+            return true;
         }
         return false;
     }
 
+    /** The main command handler.
+     * Bukkit calls this to pass commands into the plugin.
+     * @param sender The sender, Usually a player.  It could be the console, but that is not supported by this plugin.
+     * @param command The command to execute
+     * @param commandLabel The command Alias used to execute this command
+     * @param args All the args past to the command
+     * @return Parse Success
+     */
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         if (this.isVerbose()) {
-            log.log(Level.INFO, String.format(
+            LOG.log(Level.INFO, String.format(
                     "Command '%s' received from %s with %d arguments",
                     commandLabel, sender, args.length));
         }
@@ -221,23 +289,28 @@ public final class IRCTransport extends JavaPlugin {
 
         if (commandName.equals("join")) {
             return join(bot, args);
-        } else if (commandName.equals("leave"))
+        } else if (commandName.equals("leave")) {
             return leave(bot, args);
-        else if (commandName.equals("channel"))
+        } else if (commandName.equals("channel")) {
             return channel(bot, args);
-        else if (commandName.equals("msg"))
+        } else if (commandName.equals("msg")) {
             return privateMessage(bot, args);
-        else if (commandName.equals("nick"))
+        } else if (commandName.equals("nick")) {
             return nick(bot, args);
-        else if (commandName.equals("names"))
+        } else if (commandName.equals("names")) {
             return names(bot, args);
-        else if (commandName.equals("me"))
+        } else if (commandName.equals("me")) {
             return action(bot, args);
-        else if (commandName.equals("topic"))
+        } else if (commandName.equals("topic")) {
             return topic(bot, args);
+        }
         return false;
     }
 
+    /** Turnoff and cleanup the plugin.
+     * sets shutdown flag
+     * Signs all users out of IRC
+     */
     @Override
     public void onDisable() {
         // disconnect all agents
@@ -246,10 +319,17 @@ public final class IRCTransport extends JavaPlugin {
         }
         bots.clear();
 
-        log.log(Level.INFO, this.getDescription().getFullName()
+        LOG.log(Level.INFO, this.getDescription().getFullName()
                 + " is disabled");
     }
 
+    /**
+     * Turns on the plugin.
+     * Signs all users into IRC
+     * sets shutdown flag to false.
+     * parses config file.
+     * registers events with bukkit.
+     */
     @Override
     public void onEnable() {
         this.playerListener = new IRCTransportPlayerListener(this);
@@ -265,9 +345,9 @@ public final class IRCTransport extends JavaPlugin {
             sp.load(spf);
             this.ircServer = sp.getProperty("irc.server", "");
         } catch (FileNotFoundException e) {
-            log.log(Level.SEVERE, e.getMessage(), e);
+            LOG.log(Level.SEVERE, e.getMessage(), e);
         } catch (IOException e) {
-            log.log(Level.SEVERE, e.getMessage(), e);
+            LOG.log(Level.SEVERE, e.getMessage(), e);
         }
 
         // grab data from server.properties
@@ -282,12 +362,12 @@ public final class IRCTransport extends JavaPlugin {
                 "false"));
         // validate data
         if (this.ircServer.equals("")) {
-            log.log(Level.SEVERE, pdfFile.getName()
+            LOG.log(Level.SEVERE, pdfFile.getName()
                     + ": set \"irc.server\" in server.properties");
             return;
         }
 
-        log.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
+        LOG.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
 
         initDatabase();
 
@@ -307,6 +387,11 @@ public final class IRCTransport extends JavaPlugin {
                 Priority.Normal, this);
     }
 
+    /** Send a private message in IRC.
+     * @param bot Target IRC agent.
+     * @param args element 1 is the IRC reciever.  The rest are the words to send.
+     * @return parse success
+     */
     public boolean privateMessage(final IrcAgent bot, final String[] args) {
         if (args.length > 1) {
             String message = makeMessage(args, 1);
@@ -315,6 +400,11 @@ public final class IRCTransport extends JavaPlugin {
         return false;
     }
 
+    /** Set or get an IRC topic.
+     * @param bot The target IRC Agent
+     * @param args empty to get topic, non-empty to set topic.
+     * @return parse success
+     */
     public boolean topic(final IrcAgent bot, final String[] args) {
         if (args.length < 1) {
             bot.topic();
