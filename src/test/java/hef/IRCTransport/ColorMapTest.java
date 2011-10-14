@@ -91,10 +91,8 @@ public class ColorMapTest {
      */
     @Test
     public final void testChatToIrcColor() {
-        assertTrue(ColorMap.chatToIrcColor("wrong").equals(
-                Colors.BLACK.toString()));
-        assertTrue(ColorMap.chatToIrcColor(ChatColor.WHITE.toString()).equals(
-                Colors.WHITE.toString()));
+        assertTrue(ColorMap.chatToIrcColor("wrong").equals(Colors.BLACK.toString()));
+        assertTrue(ColorMap.chatToIrcColor(ChatColor.WHITE.toString()).equals(Colors.WHITE.toString()));
     }
 
 }

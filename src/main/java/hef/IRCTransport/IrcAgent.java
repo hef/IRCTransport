@@ -275,7 +275,7 @@ public final class IrcAgent extends PircBot {
 
     /** Handles topic responses.
      * Topic responses come in:
-     * a: as a resposne to a topic request
+     * a: as a response to a topic request
      * b: on channel join
      * c: on topic change
      * @param channel The channel the topic is set for.

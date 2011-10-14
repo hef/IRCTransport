@@ -1,40 +1,57 @@
 package hef.IRCTransport;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
+import org.jibble.pircbot.Colors;
 
 /** Minecraft <-> IRC Color Mapping class
  * Converts Color codes from IRC to Minecraft and from Minecraft to IRC.
  */
 public final class ColorMap {
     /** Regex for matching irc colors. */
-    private static Pattern ircColorPattern = Pattern
-            .compile('\u0003' + "[0-9]{1,2}(?:,[0-9]{1,2})?");
+    private static Pattern ircColorPattern = Pattern.compile('\u0003' + "[0-9]{1,2}(?:,[0-9]{1,2})?");
+    /** Map IRC Colors to IRC Colors. */
+    private static HashMap<String, String> ircToMinecraftColor = new HashMap<String, String>();
     /** Maps minecraft colors to irc colors. */
-    private static ArrayList<String> minecraftColor = new ArrayList<String>(16);
+    private static HashMap<String, String> minecraftToIrcColor = new HashMap<String, String>();
     /** Regex for matching Minecraft colors. */
-    private static Pattern minecraftColorPattern = Pattern
-            .compile('\u00A7' + "[0-9a-z]");
+    private static Pattern minecraftColorPattern = Pattern.compile('\u00A7' + "[0-9a-z]");
     static {
-        minecraftColor.add(0, ChatColor.WHITE.toString()); // black
-        minecraftColor.add(1, ChatColor.BLACK.toString()); // white
-        minecraftColor.add(2, ChatColor.DARK_BLUE.toString()); // dark_blue
-        minecraftColor.add(3, ChatColor.DARK_GREEN.toString()); // dark_green
-        minecraftColor.add(4, ChatColor.RED.toString()); // red
-        minecraftColor.add(5, ChatColor.DARK_RED.toString()); // brown
-        minecraftColor.add(6, ChatColor.DARK_PURPLE.toString()); // purple
-        minecraftColor.add(7, ChatColor.GOLD.toString()); // olive
-        minecraftColor.add(8, ChatColor.YELLOW.toString()); // yellow
-        minecraftColor.add(9, ChatColor.GREEN.toString()); // green
-        minecraftColor.add(10, ChatColor.DARK_AQUA.toString()); // teal
-        minecraftColor.add(11, ChatColor.AQUA.toString()); // cyan
-        minecraftColor.add(12, ChatColor.BLUE.toString()); // blue
-        minecraftColor.add(13, ChatColor.LIGHT_PURPLE.toString()); // magenta
-        minecraftColor.add(14, ChatColor.DARK_GRAY.toString()); // dark_gray
-        minecraftColor.add(15, ChatColor.GRAY.toString()); // light_gray
+        ircToMinecraftColor.put(Colors.WHITE, ChatColor.WHITE.toString()); // black
+        ircToMinecraftColor.put(Colors.BLACK, ChatColor.BLACK.toString()); // white
+        ircToMinecraftColor.put(Colors.DARK_BLUE, ChatColor.DARK_BLUE.toString()); // dark_blue
+        ircToMinecraftColor.put(Colors.DARK_GREEN, ChatColor.DARK_GREEN.toString()); // dark_green
+        ircToMinecraftColor.put(Colors.RED, ChatColor.RED.toString()); // red
+        ircToMinecraftColor.put(Colors.BROWN, ChatColor.DARK_RED.toString()); // brown
+        ircToMinecraftColor.put(Colors.PURPLE, ChatColor.DARK_PURPLE.toString()); // purple
+        ircToMinecraftColor.put(Colors.OLIVE, ChatColor.GOLD.toString()); // olive
+        ircToMinecraftColor.put(Colors.YELLOW, ChatColor.YELLOW.toString()); // yellow
+        ircToMinecraftColor.put(Colors.GREEN, ChatColor.GREEN.toString()); // green
+        ircToMinecraftColor.put(Colors.TEAL, ChatColor.DARK_AQUA.toString()); // teal
+        ircToMinecraftColor.put(Colors.CYAN, ChatColor.AQUA.toString()); // cyan
+        ircToMinecraftColor.put(Colors.BLUE, ChatColor.BLUE.toString()); // blue
+        ircToMinecraftColor.put(Colors.MAGENTA, ChatColor.LIGHT_PURPLE.toString()); // magenta
+        ircToMinecraftColor.put(Colors.DARK_GRAY, ChatColor.DARK_GRAY.toString()); // dark_gray
+        ircToMinecraftColor.put(Colors.LIGHT_GRAY, ChatColor.GRAY.toString()); // light_gray
+        minecraftToIrcColor.put(ChatColor.WHITE.toString(), Colors.WHITE); // black
+        minecraftToIrcColor.put(ChatColor.BLACK.toString(), Colors.BLACK); // white
+        minecraftToIrcColor.put(ChatColor.DARK_BLUE.toString(), Colors.DARK_BLUE); // dark_blue
+        minecraftToIrcColor.put(ChatColor.DARK_GREEN.toString(), Colors.DARK_GREEN); // dark_green
+        minecraftToIrcColor.put(ChatColor.RED.toString(), Colors.RED); // red
+        minecraftToIrcColor.put(ChatColor.DARK_RED.toString(), Colors.BROWN); // brown
+        minecraftToIrcColor.put(ChatColor.DARK_PURPLE.toString(), Colors.PURPLE); // purple
+        minecraftToIrcColor.put(ChatColor.GOLD.toString(), Colors.OLIVE); // olive
+        minecraftToIrcColor.put(ChatColor.YELLOW.toString(), Colors.YELLOW); // yellow
+        minecraftToIrcColor.put(ChatColor.GREEN.toString(), Colors.GREEN); // green
+        minecraftToIrcColor.put(ChatColor.DARK_AQUA.toString(), Colors.TEAL); // teal
+        minecraftToIrcColor.put(ChatColor.AQUA.toString(), Colors.CYAN); // cyan
+        minecraftToIrcColor.put(ChatColor.BLUE.toString(), Colors.BLUE); // blue
+        minecraftToIrcColor.put(ChatColor.LIGHT_PURPLE.toString(), Colors.MAGENTA); // magenta
+        minecraftToIrcColor.put(ChatColor.DARK_GRAY.toString(), Colors.DARK_GRAY); // dark_gray
+        minecraftToIrcColor.put(ChatColor.GRAY.toString(), Colors.LIGHT_GRAY); // light_gray
     }
 
     /** Making default constructor private. */
@@ -47,16 +64,12 @@ public final class ColorMap {
      * @return An IRC color code, black if the string did not match any code.
      */
     public static String chatToIrcColor(final String code) {
-        for (int i = 0; i < minecraftColor.size(); i++) {
-            if (minecraftColor.get(i).equals(code)) {
-                String result = "\u0003";
-                if (i < 10) {
-                    result += "0";
-                }
-                return result + i;
-            }
+        String color = minecraftToIrcColor.get(code);
+        if (color == null) {
+            return Colors.BLACK;
+        } else {
+            return color;
         }
-        return "\u000301"; // Let's just make it black by default, good for IRC
     }
 
     /**
@@ -88,13 +101,12 @@ public final class ColorMap {
             // because the regular expression took care of that
             String color;
             if (Character.isDigit(digit2)) {
-                color = "" + digit1 + digit2;
+                color = "" + '\u0003' + digit1 + digit2;
             } else {
-                color = "" + digit1;
+                color = "" + '\u0003' + "0" + digit1;
             }
-            int code = Integer.parseInt(color);
             // Replace matched parts by the other color code
-            result += minecraftColor.get(code);
+            result += ircToMinecraftColor.get(color);
             prev = end;
         }
         // Add the remaining string
@@ -123,10 +135,9 @@ public final class ColorMap {
             int end = m.end();
             // Add the unmatched parts to the result
             result += message.substring(prev, start);
-            String code = "" + message.charAt(start)
-                    + message.charAt(start + 1);
+            String code = "" + message.charAt(start) + message.charAt(start + 1);
             // System.out.println("Found code: " + code);
-            result += chatToIrcColor(code);
+            result += minecraftToIrcColor.get(code);
             prev = end;
         }
         // Add the remaining string
