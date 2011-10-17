@@ -302,6 +302,8 @@ public final class IRCTransport extends JavaPlugin {
     	if (args.length==1)
     	{
     		bot.whois(args[0]);
+    		return true;
     	}
+    	return false;
     }
 }
