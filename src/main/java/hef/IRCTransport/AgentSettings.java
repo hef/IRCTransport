@@ -16,7 +16,7 @@ import com.avaje.ebean.validation.NotNull;
  */
 @Entity()
 @Table(name = "players")
-public final class AgentSettings {
+public class AgentSettings {
     /** The player's chosen name
      * This is the display name for the player
      * It is the value we want to retrieve.

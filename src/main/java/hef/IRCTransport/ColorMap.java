@@ -19,6 +19,7 @@ public final class ColorMap {
     private static HashMap<String, String> minecraftToIrcColor = new HashMap<String, String>();
     /** Regex for matching Minecraft colors. */
     private static Pattern minecraftColorPattern = Pattern.compile('\u00A7' + "[0-9a-z]");
+    // Setup the irc <-> minecraft color mappings.
     static {
         ircToMinecraftColor.put(Colors.WHITE, ChatColor.WHITE.toString()); // black
         ircToMinecraftColor.put(Colors.BLACK, ChatColor.BLACK.toString()); // white

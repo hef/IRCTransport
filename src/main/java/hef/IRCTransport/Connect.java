@@ -11,7 +11,6 @@ import org.jibble.pircbot.NickAlreadyInUseException;
 /**
  * Connection Task This class us a Runnable class for connecting to the irc
  * server. It will reschedule a connection
- * @author hef
  */
 public final class Connect implements Runnable {
     /**
@@ -53,9 +52,10 @@ public final class Connect implements Runnable {
             try {
                 // If we never set the server i.e. havn't connected yet
                 if (agent.getServer() == null) {
-                    agent.connect(agent.getPlugin().getIrcServer(), agent
-                            .getPlugin().getIrcPort(), agent.getPlugin()
-                            .getIrcPassword());
+                	//TODO: these settings should be moved into the agent.
+                    agent.connect(agent.getPlugin().getConfig().getString("server"),
+                    		      agent.getPlugin().getConfig().getInt("port"),
+                    		      agent.getPlugin().getConfig().getString("password"));
                 } else {
                     // reconnect should recycle settings the user already has
                     agent.reconnect();
@@ -67,26 +67,19 @@ public final class Connect implements Runnable {
             } catch (IOException e) {
                 if (e.getMessage().equalsIgnoreCase("Connection refused")) {
                     agent.getPlayer().sendMessage(
-                            ChatColor.YELLOW
-                                    + "Failed to connect to Chat Server.");
+                            ChatColor.YELLOW + "Failed to connect to Chat Server.");
                     // 400 seems to be 20 seconds
                     agent.getPlugin()
                             .getServer()
                             .getScheduler()
-                            .scheduleAsyncDelayedTask(agent.getPlugin(), this,
-                                    RETRY_RATE);
+                            .scheduleAsyncDelayedTask(agent.getPlugin(), this, RETRY_RATE);
                 } else if
                     (e.getMessage().equalsIgnoreCase("Connection reset")) {
-                    agent.getPlayer()
-                            .sendMessage(
-                                    ChatColor.YELLOW
-                                            + "Connection reset while "
-                                            + "connecting to Chat Server");
+                    agent.getPlayer().sendMessage(ChatColor.YELLOW + "Connection reset while connecting to Chat Server");
                     agent.getPlugin()
                             .getServer()
                             .getScheduler()
-                            .scheduleAsyncDelayedTask(agent.getPlugin(), this,
-                                    INITIAL_RETRY_DELAY);
+                            .scheduleAsyncDelayedTask(agent.getPlugin(), this, INITIAL_RETRY_DELAY);
                 } else {
                     LOG.log(Level.SEVERE, e.getMessage(), e);
                 }
@@ -95,19 +88,21 @@ public final class Connect implements Runnable {
             }
 
             // The player may have not gotten then name they wanted.
+            // TODO: This should also get moved into the agent
             agent.getPlayer().setDisplayName(agent.getNick());
             agent.getSettings().setIrcNick(agent.getNick());
-            if (!agent.getPlugin().getAutoJoin().equals("")) {
+            
+            String channel = agent.getPlugin().getConfig().getString("autojoin");
+            String key = agent.getPlugin().getConfig().getString("autojoinkey");
+            if (channel != null) {
                 // if no channel key is set
-                if (agent.getPlugin().getAutoJoinKey().equals("")) {
-                    agent.joinChannel(agent.getPlugin().getAutoJoin());
+                if (key == null) {
+                    agent.joinChannel(channel);
                 } else {
-                    agent.joinChannel(agent.getPlugin().getAutoJoin(), agent
-                            .getPlugin().getAutoJoinKey());
+                    agent.joinChannel(channel, key);
                 }
-                agent.setActiveChannel(agent.getPlugin().getAutoJoin());
+                agent.setActiveChannel(channel);
             }
         }
     }
-
 }

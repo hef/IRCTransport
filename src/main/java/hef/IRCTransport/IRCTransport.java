@@ -1,14 +1,10 @@
 package hef.IRCTransport;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,6 +12,7 @@ import javax.persistence.PersistenceException;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
@@ -30,6 +27,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class IRCTransport extends JavaPlugin {
     /** The logging obect.  Used internal to write to the console. */
     private static final Logger LOG = Logger.getLogger("Minecraft");
+    protected static FileConfiguration CONFIG;
+    private final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
+    private IRCTransportPlayerListener playerListener;
 
     /** Turns arguments into a string.
      * @bug bug: multiple spaces are not detected in args strings, so they get
@@ -47,27 +47,6 @@ public final class IRCTransport extends JavaPlugin {
         }
         return message;
     }
-
-    /** The default channel for agents to join on startup, from configuration.*/
-    private String autoJoin = "";
-    /** The default IRC Channel's Key (channel password) from configuration. */
-    private String autoJoinKey = "";
-    /** The map of Bukkit Players to our IRCAgent objects.  Used for lookups. */
-    private final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
-    /** IRC Server password from configuration. */
-    private String ircPassword;
-    /** IRC Server port from configuration. */
-    private int ircPort;
-    /** IRC Server from configuration. */
-    private String ircServer = "";
-    /** Nick prefix from configuration. */
-    private String nickPrefix = "";
-    /** Nick suffix from configuration. */
-    private String nickSuffix = "";
-    /** A hook into the playerListner for the plugin. */
-    private IRCTransportPlayerListener playerListener;
-    /** Verbosity flag. */
-    private boolean verbose;
 
     /** The IRC /me handler.
      * @param bot The IRC Agent that needs to handle the action
@@ -97,20 +76,6 @@ public final class IRCTransport extends JavaPlugin {
         return false;
     }
 
-    /** The autojoin channel.
-     * This is set in the config file
-     * @return The channel the plugin is configured to autojoin to.
-     */
-    public String getAutoJoin() {
-        return this.autoJoin;
-    }
-
-    /** If the channel to autojoin requires a key, this will return it.
-     * @return the autoJoinKey
-     */
-    public String getAutoJoinKey() {
-        return autoJoinKey;
-    }
     /** Gets the maping of Bukkit Players to IRCAgents.
      * @return the map of player's to agents.
      */
@@ -125,49 +90,9 @@ public final class IRCTransport extends JavaPlugin {
         return list;
     }
 
-    /**
-     * @return the ircPassword
-     */
-    public String getIrcPassword() {
-        return ircPassword;
-    }
-
-    /**
-     * @return the ircPort
-     */
-    public int getIrcPort() {
-        return ircPort;
-    }
-
-    /** The irc server to use.
-     * There is no "default", the plugin only supports 1 IRC server.
-     * This can be a name or ip address.
-     * @return the IRC server.
-     */
-    public String getIrcServer() {
-        return this.ircServer;
-    }
-
-    /** Nick prefix
-     * Nick prefix is only used as a default. It is not enforiced on nick change.
-     * @return the nickPrefix
-     */
-    public String getNickPrefix() {
-        return nickPrefix;
-    }
-
-    /** Get the Nick Suffix.
-     * nick suffix is only used as a default If the plugin has a suffix of "_mc"
-     * and a player with nick of "player" will become "player_mc"
-     * @return the nickSuffix
-     */
-    public String getNickSuffix() {
-        return nickSuffix;
-    }
-
     /** Create the database to store plugin settings.
      * This method creates the ebean.properties file.
-     * It's not strictly neccessary, but it quites a bukkit error message.
+     * It's not strictly necessary, but it silences a bukkit error message.
      */
     public void initDatabase() {
         // Always do this, since it will quiet unnecessary warnings
@@ -176,8 +101,7 @@ public final class IRCTransport extends JavaPlugin {
             try {
                 file.createNewFile();
             } catch (Exception e) {
-                LOG.log(Level.WARNING, this.getDescription().getName()
-                        + " Failed to create ebean.properties file.");
+                LOG.log(Level.WARNING, this.getDescription().getName() + " Failed to create ebean.properties file.");
             }
         }
 
@@ -185,18 +109,9 @@ public final class IRCTransport extends JavaPlugin {
         try {
             getDatabase().find(AgentSettings.class).findRowCount();
         } catch (PersistenceException e) {
-            LOG.log(Level.INFO, this.getDescription().getName()
-                    + " configuring database for the first time");
+            LOG.log(Level.INFO, this.getDescription().getName() + " configuring database for the first time");
             installDDL();
         }
-    }
-
-    /** Returns verbosity flag.
-     * mostly used internaly to determine how much logging to print to console.
-     * @return Verbose?
-     */
-    public boolean isVerbose() {
-        return this.verbose;
     }
 
     /** Join a Channel
@@ -273,7 +188,7 @@ public final class IRCTransport extends JavaPlugin {
      */
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-        if (this.isVerbose()) {
+        if (CONFIG.getBoolean("verbose")) {
             LOG.log(Level.INFO, String.format(
                     "Command '%s' received from %s with %d arguments",
                     commandLabel, sender, args.length));
@@ -319,8 +234,7 @@ public final class IRCTransport extends JavaPlugin {
         }
         bots.clear();
 
-        LOG.log(Level.INFO, this.getDescription().getFullName()
-                + " is disabled");
+        LOG.log(Level.INFO, this.getDescription().getFullName() + " is disabled");
     }
 
     /**
@@ -333,58 +247,25 @@ public final class IRCTransport extends JavaPlugin {
     @Override
     public void onEnable() {
         this.playerListener = new IRCTransportPlayerListener(this);
-
+        CONFIG = getConfig();
+        CONFIG.options().copyDefaults(true);
         PluginManager pm = getServer().getPluginManager();
         PluginDescriptionFile pdfFile = this.getDescription();
-
-        // handle plugin settings.
-        FileInputStream spf;
-        Properties sp = new Properties();
-        try {
-            spf = new FileInputStream("server.properties");
-            sp.load(spf);
-            this.ircServer = sp.getProperty("irc.server", "");
-        } catch (FileNotFoundException e) {
-            LOG.log(Level.SEVERE, e.getMessage(), e);
-        } catch (IOException e) {
-            LOG.log(Level.SEVERE, e.getMessage(), e);
-        }
-
-        // grab data from server.properties
-        this.ircServer = sp.getProperty("irc.server", "");
-        this.ircPort = Integer.parseInt(sp.getProperty("irc.port", "6667"));
-        this.ircPassword = sp.getProperty("irc.password", "");
-        this.autoJoin = sp.getProperty("irc.autojoin", "");
-        this.autoJoinKey = sp.getProperty("irc.autojoinkey", "");
-        this.nickPrefix = sp.getProperty("irc.nickprefix", "");
-        this.nickSuffix = sp.getProperty("irc.nicksuffix", "");
-        this.verbose = Boolean.parseBoolean(sp.getProperty("irc.verbose",
-                "false"));
-        // validate data
-        if (this.ircServer.equals("")) {
-            LOG.log(Level.SEVERE, pdfFile.getName()
-                    + ": set \"irc.server\" in server.properties");
+        if (CONFIG.getString("server") == null) {
+            LOG.severe(pdfFile.getName() + ": set \"irc.server\" in server.properties");
             return;
         }
-
-        LOG.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
-
         initDatabase();
-
-        // Event Registration
-
         // establish list of players
         Player[] players = getServer().getOnlinePlayers();
         for (Player player : players) {
             this.bots.put(player, new IrcAgent(this, player));
         }
         // register for events we care about
-        pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener,
-                Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener,
-                Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener,
-                Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
+        pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
+        LOG.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
     }
 
     /** Send a private message in IRC.

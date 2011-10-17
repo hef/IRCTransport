@@ -41,13 +41,12 @@ public final class IrcAgent extends PircBot {
         super.setAutoNickChange(true);
 
         // init player settings
-        setSettings(plugin.getDatabase().find(AgentSettings.class,
-                player.getName()));
+        setSettings(plugin.getDatabase().find(AgentSettings.class, player.getName()));
         if (null == getSettings()) {
             setSettings(new AgentSettings(player));
-            getSettings().setIrcNick(
-                    String.format("%s%s%s", plugin.getNickPrefix(),
-                            player.getName(), plugin.getNickSuffix()));
+            String prefix = plugin.getConfig().getString("nickprefix","");
+            String suffix = plugin.getConfig().getString("nicksuffix","");
+            getSettings().setIrcNick(String.format("%s%s%s", prefix, player.getName(), suffix));
         } else {
             LOG.log(Level.INFO, String.format(
                     "Player '%s' using persistent IRC nick '%s'",
@@ -100,7 +99,7 @@ public final class IrcAgent extends PircBot {
      */
     @Override
     public void log(final String line) {
-        if (getPlugin().isVerbose()) {
+        if (plugin.getConfig().getBoolean("verbose")) {
             LOG.log(Level.INFO, line);
         }
     }
@@ -119,7 +118,7 @@ public final class IrcAgent extends PircBot {
 
     /** Handle receiving an action.
      * sent when another agent sends a /me
-     * @param sender the person commiting the action
+     * @param sender the person committing the action
      * @param login The login name of the actioner
      * @param hostname the hostname of the actioner
      * @param target The channel the action was in
@@ -129,6 +128,21 @@ public final class IrcAgent extends PircBot {
     public void onAction(final String sender, final String login, final String hostname, final String target, final String action) {
         getPlayer().sendMessage(
                 String.format("[%s] * %s %s", target, sender, action));
+    }
+    
+    /** Send WebIRC if server.webirc_password is set. */
+    @Override
+	public void onConnect()
+    {
+    	String webirc = plugin.getConfig().getString("server.webirc_password");
+    	if(webirc != null)
+    	{
+    		this.sendRawLine(String.format("WEBIRC %s %s %s %s",
+    				webirc,
+    				player.getName(),
+    				player.getAddress().getHostName(),
+    				player.getAddress().getAddress()));
+    	}
     }
 
     /** Disconnect Handler.
