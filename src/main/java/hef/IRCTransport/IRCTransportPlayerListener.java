@@ -29,9 +29,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
     @Override
     public void onPlayerChat(final PlayerChatEvent event) {
         IrcAgent bot = this.bots.get(event.getPlayer());
-        bot.sendMessage(event.getMessage());
-        // prevent messages from being displayed twice.
-        event.setCancelled(true);
+        if(bot.isConnected())
+        {
+        	bot.sendMessage(event.getMessage());
+        	// prevent messages from being displayed twice.
+        	event.setCancelled(true);
+        }
     }
 
     @Override
