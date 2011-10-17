@@ -53,3 +53,8 @@ commands:
            /<command> [topic]
            /<command>
            /<command> Our hearts are extended to the 17 victims of the recent internet fraud
+  whois:
+    description: Gets information about a nick
+    usage: |
+           /<command> [nick]
+           /<command> Sam

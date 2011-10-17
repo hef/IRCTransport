@@ -218,6 +218,8 @@ public final class IRCTransport extends JavaPlugin {
             return action(bot, args);
         } else if (commandName.equals("topic")) {
             return topic(bot, args);
+        } else if (commandName.equals("whois")) {
+        	return whois(bot, args);
         }
         return false;
     }
@@ -294,5 +296,12 @@ public final class IRCTransport extends JavaPlugin {
             bot.setTopic(makeMessage(args, 0));
             return true;
         }
+    }
+    public boolean whois(final IrcAgent bot, final String[] args)
+    {
+    	if (args.length==1)
+    	{
+    		bot.whois(args[0]);
+    	}
     }
 }

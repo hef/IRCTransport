@@ -34,6 +34,7 @@ Available commands:
     /names -- shows users in your channel
     /me action to perform -- performs an irc action
     /topic -- get or set the channel topic
+    /whois -- gets information about a nick
 
 [Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.10.jar)  
 [Source](https://github.com/hef/IRCTransport)
@@ -50,6 +51,7 @@ Changelog:
   * Fixed a potential reload bug.
   * Changed from using server.properties to using IRCTransport/config.yml
   * Added WEBIRC support.
+  * Added /whois support.
 
 ### Version 0.10
   * Added nickanme prefix and suffix options.

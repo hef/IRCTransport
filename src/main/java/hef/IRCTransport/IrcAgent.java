@@ -394,4 +394,11 @@ public final class IrcAgent extends PircBot {
     protected void topic() {
         sendRawLine(String.format("TOPIC %s", activeChannel));
     }
+    /** Request information about a nick.
+     * @param nick a command delimited list of nicks.
+     */
+    protected void whois(String nick)
+    {
+    	sendRawLine(String.format("WHOIS", nick));
+    }
 }
