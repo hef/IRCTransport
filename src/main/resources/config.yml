@@ -1,4 +1,4 @@
-verbose: false
+verbose: true
 show:
   players: true
   topic: true

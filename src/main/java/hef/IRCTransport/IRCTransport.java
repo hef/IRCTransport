@@ -253,8 +253,8 @@ public final class IRCTransport extends JavaPlugin {
         CONFIG.options().copyDefaults(true);
         PluginManager pm = getServer().getPluginManager();
         PluginDescriptionFile pdfFile = this.getDescription();
-        if (CONFIG.getString("server") == null) {
-            LOG.severe(pdfFile.getName() + ": set \"irc.server\" in server.properties");
+        if (CONFIG.getString("server.address") == null) {
+            LOG.severe(pdfFile.getName() + ": set \"server.address\" in plugins/IRCTrasnport/config.yml");
             return;
         }
         initDatabase();

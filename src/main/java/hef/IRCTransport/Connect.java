@@ -86,23 +86,6 @@ public final class Connect implements Runnable {
             } catch (IrcException e) {
                 LOG.log(Level.SEVERE, e.getMessage(), e);
             }
-
-            // The player may have not gotten then name they wanted.
-            // TODO: This should also get moved into the agent
-            agent.getPlayer().setDisplayName(agent.getNick());
-            agent.getSettings().setIrcNick(agent.getNick());
-            
-            String channel = agent.getPlugin().getConfig().getString("autojoin");
-            String key = agent.getPlugin().getConfig().getString("autojoinkey");
-            if (channel != null) {
-                // if no channel key is set
-                if (key == null) {
-                    agent.joinChannel(channel);
-                } else {
-                    agent.joinChannel(channel, key);
-                }
-                agent.setActiveChannel(channel);
-            }
         }
     }
 }

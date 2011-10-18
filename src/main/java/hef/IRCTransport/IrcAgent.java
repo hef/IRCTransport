@@ -1,5 +1,7 @@
 package hef.IRCTransport;
 
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -48,9 +50,9 @@ public final class IrcAgent extends PircBot {
             String suffix = plugin.getConfig().getString("nicksuffix","");
             getSettings().setIrcNick(String.format("%s%s%s", prefix, player.getName(), suffix));
         } else {
-            LOG.log(Level.INFO, String.format(
-                    "Player '%s' using persistent IRC nick '%s'",
-                    player.getName(), getSettings().getIrcNick()));
+            LOG.log(Level.INFO, String.format("Player '%s' using persistent IRC nick '%s'",
+                    player.getName(),
+                    getSettings().getIrcNick()));
         }
         setNick(getSettings().getIrcNick());
         new Connect(this).run();
@@ -143,6 +145,32 @@ public final class IrcAgent extends PircBot {
     				player.getAddress().getHostName(),
     				player.getAddress().getAddress()));
     	}
+    	
+        // The player may have not gotten then name they wanted.
+        // TODO: This should also get moved into the agent
+        getPlayer().setDisplayName(getNick());
+        getSettings().setIrcNick(getNick());
+        
+        Map<String, Object> channels = plugin.getConfig().getConfigurationSection("default.channels").getValues(true);
+        
+        for(String channel: channels.keySet())
+        {
+        	log(channels.get(channel).toString());
+        }
+        
+        /*
+        String channel = agent.getPlugin().getConfig().getString("autojoin");
+        String key = agent.getPlugin().getConfig().getString("autojoinkey");
+        if (channel != null) {
+            // if no channel key is set
+            if (key == null) {
+                agent.joinChannel(channel);
+            } else {
+                agent.joinChannel(channel, key);
+            }
+            agent.setActiveChannel(channel);
+        }
+        */
     }
 
     /** Disconnect Handler.
