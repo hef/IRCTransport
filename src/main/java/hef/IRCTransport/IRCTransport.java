@@ -21,7 +21,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * IRCTransport for Bukkit.
- * @author hef
  */
 public final class IRCTransport extends JavaPlugin {
     /** The logging obect.  Used internal to write to the console. */

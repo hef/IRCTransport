@@ -14,7 +14,6 @@
  * /topic
  *
  * additionally, players can use /channel to change channels.
- * @author hef
  * @see <a href="https://github.com/hef/IRCTransport">github site</a>
  */
 package hef.IRCTransport;

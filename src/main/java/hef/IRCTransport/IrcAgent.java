@@ -13,7 +13,6 @@ import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
 /** Represent a player to an IRC server.
- * @author hef
  * Every Bukkit player should have one!
  * Every agent will have channels, a player, and an active channel.
  */
