@@ -10,7 +10,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
  * Handle events for all Player related events.
- * @author hef
  */
  public final class IRCTransportPlayerListener extends PlayerListener {
     /** Maps to retrieve associated IrcAggent from player. */
@@ -29,11 +28,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
     @Override
     public void onPlayerChat(final PlayerChatEvent event) {
         IrcAgent bot = this.bots.get(event.getPlayer());
-        if(bot.isConnected())
-        {
-        	bot.sendMessage(event.getMessage());
-        	// prevent messages from being displayed twice.
-        	event.setCancelled(true);
+        if (bot.isConnected()) {
+            bot.sendMessage(event.getMessage());
+            // prevent messages from being displayed twice.
+            event.setCancelled(true);
         }
     }
 

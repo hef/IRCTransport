@@ -12,7 +12,6 @@ import javax.persistence.PersistenceException;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
@@ -27,8 +26,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class IRCTransport extends JavaPlugin {
     /** The logging obect.  Used internal to write to the console. */
     private static final Logger LOG = Logger.getLogger("Minecraft");
-    protected static FileConfiguration CONFIG;
+    /** MC Player to IRCAgent map */
     private final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
+    /** The player action handler.*/
     private IRCTransportPlayerListener playerListener;
 
     /** Turns arguments into a string.
@@ -188,7 +188,7 @@ public final class IRCTransport extends JavaPlugin {
      */
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
-        if (CONFIG.getBoolean("verbose")) {
+        if (getConfig().getBoolean("verbose")) {
             LOG.log(Level.INFO, String.format(
                     "Command '%s' received from %s with %d arguments",
                     commandLabel, sender, args.length));
@@ -219,7 +219,7 @@ public final class IRCTransport extends JavaPlugin {
         } else if (commandName.equals("topic")) {
             return topic(bot, args);
         } else if (commandName.equals("whois")) {
-        	return whois(bot, args);
+            return whois(bot, args);
         }
         return false;
     }
@@ -249,11 +249,10 @@ public final class IRCTransport extends JavaPlugin {
     @Override
     public void onEnable() {
         this.playerListener = new IRCTransportPlayerListener(this);
-        CONFIG = getConfig();
-        CONFIG.options().copyDefaults(true);
+        getConfig().options().copyDefaults(true);
         PluginManager pm = getServer().getPluginManager();
         PluginDescriptionFile pdfFile = this.getDescription();
-        if (CONFIG.getString("server.address") == null) {
+        if (getConfig().getString("server.address") == null) {
             LOG.severe(pdfFile.getName() + ": set \"server.address\" in plugins/IRCTrasnport/config.yml");
             return;
         }
@@ -297,13 +296,17 @@ public final class IRCTransport extends JavaPlugin {
             return true;
         }
     }
-    public boolean whois(final IrcAgent bot, final String[] args)
-    {
-    	if (args.length==1)
-    	{
-    		bot.whois(args[0]);
-    		return true;
-    	}
-    	return false;
+    /**
+     * Get information about a nick
+     * @param bot The Target IRC Agent
+     * @param args a single element array of a nick
+     * @return parse success
+     */
+    public boolean whois(final IrcAgent bot, final String[] args) {
+        if (args.length == 1) {
+            bot.whois(args[0]);
+            return true;
+        }
+        return false;
     }
 }

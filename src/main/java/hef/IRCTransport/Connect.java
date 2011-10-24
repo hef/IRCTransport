@@ -52,10 +52,10 @@ public final class Connect implements Runnable {
             try {
                 // If we never set the server i.e. havn't connected yet
                 if (agent.getServer() == null) {
-                	//TODO: these settings should be moved into the agent.
+                    //TODO: these settings should be moved into the agent.
                     agent.connect(agent.getPlugin().getConfig().getString("server"),
-                    		      agent.getPlugin().getConfig().getInt("port"),
-                    		      agent.getPlugin().getConfig().getString("password"));
+                                  agent.getPlugin().getConfig().getInt("port"),
+                                  agent.getPlugin().getConfig().getString("password"));
                 } else {
                     // reconnect should recycle settings the user already has
                     agent.reconnect();
