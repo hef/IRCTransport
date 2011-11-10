@@ -1,6 +1,5 @@
 package hef.IRCTransport;
 
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +39,6 @@ public final class IrcAgent extends PircBot {
         this.shuttingDown = false;
         setLogin(String.format(player.getName()));
         super.setAutoNickChange(true);
-
         // init player settings
         setSettings(plugin.getDatabase().find(AgentSettings.class, player.getName()));
         if (null == getSettings()) {
