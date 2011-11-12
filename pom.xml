@@ -93,6 +93,24 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>downloads-maven-plugin</artifactId>
+                <version>0.3</version>
+                <configuration>
+                    <description>${project.version} release of ${project.name}</description>
+                    <override>true</override>
+                    <includeAttached>true</includeAttached>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+                <version>0.3</version>
+                <configuration>
+                    <message>Creating site for ${project.version}</message>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.0</version>
@@ -209,11 +227,6 @@
                 <groupId>org.apache.maven.scm</groupId>
                 <artifactId>maven-scm-manager-plexus</artifactId>
                 <version>1.3</version>
-            </extension>
-            <extension>
-                <groupId>org.kathrynhuxtable.maven.wagon</groupId>
-                <artifactId>wagon-gitsite</artifactId>
-                <version>0.3.1</version>
             </extension>
         </extensions>
         <resources>
