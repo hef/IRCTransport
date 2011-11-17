@@ -424,6 +424,6 @@ public final class IrcAgent extends PircBot {
      */
     protected void whois(String nick)
     {
-    	sendRawLine(String.format("WHOIS", nick));
+    	sendRawLine(String.format("WHOIS %s", nick));
     }
 }
