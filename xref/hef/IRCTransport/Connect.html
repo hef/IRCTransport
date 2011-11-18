@@ -63,9 +63,9 @@
 <a class="jxr_linenumber" name="53" href="#53">53</a>                  <em class="jxr_comment">// If we never set the server i.e. havn't connected yet</em>
 <a class="jxr_linenumber" name="54" href="#54">54</a>                  <strong class="jxr_keyword">if</strong> (agent.getServer() == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="55" href="#55">55</a>                      <em class="jxr_comment">//TODO: these settings should be moved into the agent.</em>
-<a class="jxr_linenumber" name="56" href="#56">56</a>                      agent.connect(agent.getPlugin().getConfig().getString(<span class="jxr_string">"server"</span>),
-<a class="jxr_linenumber" name="57" href="#57">57</a>                                    agent.getPlugin().getConfig().getInt(<span class="jxr_string">"port"</span>),
-<a class="jxr_linenumber" name="58" href="#58">58</a>                                    agent.getPlugin().getConfig().getString(<span class="jxr_string">"password"</span>));
+<a class="jxr_linenumber" name="56" href="#56">56</a>                      agent.connect(agent.getPlugin().getConfig().getString(<span class="jxr_string">"server.address"</span>),
+<a class="jxr_linenumber" name="57" href="#57">57</a>                                    agent.getPlugin().getConfig().getInt(<span class="jxr_string">"server.port"</span>),
+<a class="jxr_linenumber" name="58" href="#58">58</a>                                    agent.getPlugin().getConfig().getString(<span class="jxr_string">"server.password"</span>));
 <a class="jxr_linenumber" name="59" href="#59">59</a>                  } <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="60" href="#60">60</a>                      <em class="jxr_comment">// reconnect should recycle settings the user already has</em>
 <a class="jxr_linenumber" name="61" href="#61">61</a>                      agent.reconnect();

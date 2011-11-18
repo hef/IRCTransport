@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2011</copyright>
     <item>
-      <title>File: 7,
-             Errors: 24,
+      <title>File: 8,
+             Errors: 69,
              Warnings: 0,
              Infos: 0
       </title>
@@ -29,6 +29,20 @@
           <tbody>
                           <tr>
                 <td>
+                  <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.IRCTransport.java">hef/IRCTransport/IRCTransport.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  4
+                </td>
+              </tr>
+                          <tr>
+                <td>
                   <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.ColorMap.java">hef/IRCTransport/ColorMap.java</a>
                 </td>
                 <td>
@@ -39,20 +53,6 @@
                 </td>
                 <td>
                   0
-                </td>
-              </tr>
-                          <tr>
-                <td>
-                  <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.IRCTransport.java">hef/IRCTransport/IRCTransport.java</a>
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  0
-                </td>
-                <td>
-                  2
                 </td>
               </tr>
                           <tr>
@@ -94,7 +94,7 @@
                   0
                 </td>
                 <td>
-                  17
+                  30
                 </td>
               </tr>
                           <tr>
@@ -123,6 +123,20 @@
                 </td>
                 <td>
                   1
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.IRCTransportCommandExecutor.java">hef/IRCTransport/IRCTransportCommandExecutor.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  30
                 </td>
               </tr>
                       </tbody>
