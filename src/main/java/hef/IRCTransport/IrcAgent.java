@@ -164,7 +164,7 @@ public final class IrcAgent extends PircBot {
 				String.format("[%s] * %s %s", target, sender, action));
 	}
 
-	/** Send WebIRC if server.webirc_password is set. */
+	/** Join Correct Channels.  Set name and topic suppression flags. */
 	@Override
 	public void onConnect() {
 		/*
