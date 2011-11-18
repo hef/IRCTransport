@@ -46,8 +46,7 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
         }
         Player player = (Player) sender;
         IrcAgent bot = plugin.getBots().get(player);
-        String commandName = command.getName().toLowerCase();
-
+        String commandName = command.getName();
         if (commandName.equals("join")) {
             return join(bot, args);
         } else if (commandName.equals("leave")) {

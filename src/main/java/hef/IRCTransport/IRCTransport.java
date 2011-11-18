@@ -82,7 +82,6 @@ public final class IRCTransport extends JavaPlugin {
 			entry.getValue().shutdown();
 		}
 		bots.clear();
-		saveConfig();
 		LOG.log(Level.INFO, this.getDescription().getFullName()
 				+ " is disabled");
 	}
@@ -95,20 +94,24 @@ public final class IRCTransport extends JavaPlugin {
 	public void onEnable() {
 		this.playerListener = new IRCTransportPlayerListener(this);
 		getConfig().options().copyDefaults(true);
-		saveConfig();
 		PluginManager pm = getServer().getPluginManager();
 		PluginDescriptionFile pdfFile = this.getDescription();
 		if (getConfig().getString("server.address") == null) {
 			LOG.severe(pdfFile.getName()
-					+ ": set \"server.address\" in plugins/IRCTrasnport/config.yml");
+					+ ": set \"server.address\" in " + this.getDataFolder() + "/config.yml");
 			return;
 		}
+		
+		getConfig().options().header("Config File for IRCTransport\nSee the website for more information");
+		saveConfig();
 		initDatabase();
+
 		// establish list of players
 		Player[] players = getServer().getOnlinePlayers();
 		for (Player player : players) {
 			this.bots.put(player, new IrcAgent(this, player));
 		}
+
 		// register for events we care about
 		pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener,
 				Priority.Normal, this);
@@ -128,8 +131,6 @@ public final class IRCTransport extends JavaPlugin {
         getCommand("me").setExecutor(commandExecutor);
         getCommand("topic").setExecutor(commandExecutor);
         getCommand("whois").setExecutor(commandExecutor);
-
 		LOG.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
-		
 	}
 }

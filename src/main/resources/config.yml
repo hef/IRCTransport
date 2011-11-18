@@ -1,16 +1,13 @@
-verbose: true
-show:
-  players: true
-  topic: true
+verbose: false
+suppress:
+  initial_userlist: false
+  initial_topic: false
 server:
-  address: acm.cs.uic.edu
+  address: localhost
   port: 6667
   password:
-  webirc_password: webirc_password
 default:
-  prefix: MC-
-  suffix: -IRC
+  prefix:
+  suffix:
   channels:
     - channel: '#minecraft'
-      key: secret
-    - channel: '#tutoring'

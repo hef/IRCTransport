@@ -5,24 +5,35 @@ This [Bukkit](http://bukkit.org/) plugin replaces minecraft chat system with a c
 
 Available settings:
 -------------------
-Put these in Minecraft's server.properties file with appropriate values.
+Put these in IRCTransport/plugin.yml file with appropriate values.
 
-    irc.server=
-    irc.port=6667
-    irc.password=
-    irc.autojoin=
-    irc.autojoinkey=
-    irc.nickprefix=
-    irc.nicksuffix=
-    irc.verbose=false
 
-The irc.server setting is mandatory.  All other settings are optional.
+    verbose: false
+    suppress:
+      initial_userlist: false
+      initial_topic: false
+    server:
+      address: localhost
+      port: 6667
+      password: server_password
+    default:
+      prefix: MC-
+      suffix: -IRC
+      channels:
+        - channel: '#minecraft'
+          key: channel_password
+         - channel: '#help'
+
+The server address  setting is mandatory.  All other settings are optional.
 
 ### Normal Settings
-Your config will look a lot like this:
-  
-    irc.server=irc.example.com
-    irc.autojoin=#minecraft
+Your config.yml will look a lot like this:
+
+    server:
+      address: irc.example.com
+    default:
+      channels:
+        - channel: '#minecraft' 
 
 Available commands:
 -------------------
@@ -50,11 +61,10 @@ Changelog:
 ### Verson 0.11
   * Fixed a potential reload bug.
   * Changed from using server.properties to using IRCTransport/config.yml
-  * Added WEBIRC support.
   * Added /whois support.
 
 ### Version 0.10
-  * Added nickanme prefix and suffix options.
+  * Added nickname prefix and suffix options.
   * Fixed Automatic reconnect after plugin is disabled or server is stopped.
   * Added Error message for nick name already in use.
   * Fixed a null exception when the console tries to use irc commands.
