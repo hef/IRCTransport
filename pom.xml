@@ -114,7 +114,7 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>deploy</goal>
+                            <goal>site</goal>
                         </goals>
                         <phase>site</phase>
                     </execution>
