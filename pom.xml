@@ -45,7 +45,8 @@
     </ciManagement>
     <distributionManagement>
         <repository>
-            <url>${project.build.directory}</url>
+            <id>file</id>
+            <url>file://${project.build.directory}/repo</url>
         </repository>
     </distributionManagement>
     <properties>
