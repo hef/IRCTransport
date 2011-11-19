@@ -57,8 +57,8 @@ public final class IrcAgent extends PircBot {
 				player.getName()));
 		if (null == getSettings()) {
 			setSettings(new AgentSettings(player));
-			String prefix = plugin.getConfig().getString("default.prefix");
-			String suffix = plugin.getConfig().getString("default.suffix");
+			String prefix = plugin.getConfig().getString("default.prefix","");
+			String suffix = plugin.getConfig().getString("default.suffix","");
 			getSettings().setIrcNick(
 					String.format("%s%s%s", prefix, player.getName(), suffix));
 		} else {
