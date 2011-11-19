@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>hef.IRCTransport</groupId>
     <artifactId>IRCTransport</artifactId>
-    <version>0.11-SNAPSHOT</version>
+    <version>0.11</version>
     <name>IRCTransport</name>
     <description>Chat to IRC bridge plugin for the bukkit Minecraft server.</description>
     <url>http://github.com/hef/IRCTransport</url>
