@@ -47,7 +47,7 @@ Available commands:
     /topic -- get or set the channel topic
     /whois -- gets information about a nick
 
-[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.10.jar)  
+[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.11.jar)  
 [Source](https://github.com/hef/IRCTransport)
 
 Features:
