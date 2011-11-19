@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
 
-<coverage line-rate="0.19480519480519481" branch-rate="0.10344827586206896" lines-covered="75" lines-valid="385" branches-covered="12" branches-valid="116" complexity="2.3181818181818183" version="1.9.4.1" timestamp="1321732022559">
+<coverage line-rate="0.19480519480519481" branch-rate="0.10344827586206896" lines-covered="75" lines-valid="385" branches-covered="12" branches-valid="116" complexity="2.3181818181818183" version="1.9.4.1" timestamp="1321732836144">
 	<sources>
 		<source>/home/hef/projects/IRCTransport/src/main/java</source>
 		<source>--source</source>
