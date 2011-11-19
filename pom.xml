@@ -43,6 +43,10 @@
         <system>Jenkins</system>
         <url>https://acm.cs.uic.edu/jenkins/job/IRCTransport/</url>
     </ciManagement>
+    <distributionManagement>
+        <repository>
+        </repository>
+    </distributionManagement>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
