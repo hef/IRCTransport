@@ -1,4 +1,4 @@
-[CHAT] IRCTransport 0.11 - Minecraft Chat/IRC Integration
+[CHAT] IRCTransport 0.11.1 - Minecraft Chat/IRC Integration
 =============================================================
 
 This [Bukkit](http://bukkit.org/) plugin replaces minecraft chat system with a connection to an IRC Server.  All IRC Connections happen Bukkit server side, so either run your own IRC server, or make sure that you are allowed to use mutiple connections on the IRC server of your choice.
@@ -58,10 +58,14 @@ Features:
 
 Changelog:
 ----------
+## Version 0.11.1
+  * fixed nullUSERNAMEnull bug
+
 ### Version 0.11
   * Fixed a potential reload bug.
   * Changed from using server.properties to using IRCTransport/config.yml
   * Added /whois support.
+  * added nick persistance support
 
 ### Version 0.10
   * Added nickname prefix and suffix options.
