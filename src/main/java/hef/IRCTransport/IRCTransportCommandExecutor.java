@@ -128,6 +128,7 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
         if (args.length > 1) {
             String message = makeMessage(args, 1);
             bot.sendMessage(args[0], message);
+            return true;
         }
         return false;
     }
