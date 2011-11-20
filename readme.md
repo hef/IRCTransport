@@ -59,7 +59,7 @@ Features:
 Changelog:
 ----------
 ## Version 0.11.1
-  * fixed nullUSERNAMEnull bug
+  * Fixed nullUSERNAMEnull bug.
 
 ### Version 0.11
   * Fixed a potential reload bug.
