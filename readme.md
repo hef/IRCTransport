@@ -65,7 +65,7 @@ Changelog:
   * Fixed a potential reload bug.
   * Changed from using server.properties to using IRCTransport/config.yml
   * Added /whois support.
-  * added nick persistance support
+  * Added nick persistance.
 
 ### Version 0.10
   * Added nickname prefix and suffix options.
