@@ -58,7 +58,8 @@ Features:
 
 Changelog:
 ----------
-## Version 0.11.1
+
+### Version 0.11.1
   * Fixed nullUSERNAMEnull bug.
 
 ### Version 0.11
