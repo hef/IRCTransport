@@ -60,6 +60,7 @@ Changelog:
 ----------
 ### Version 0.12
   * fixed default nick bug when no prefix/suffix are set.
+
 ### Version 0.11
   * Fixed a potential reload bug.
   * Changed from using server.properties to using IRCTransport/config.yml
