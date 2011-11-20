@@ -44,10 +44,10 @@
         <url>https://acm.cs.uic.edu/jenkins/job/IRCTransport/</url>
     </ciManagement>
     <distributionManagement>
-        <site>
-            <id>github-project-site</id>
-            <url>gitsite:git@github.com/hef/IRCTransport.git</url>
-        </site>
+        <repository>
+            <id>file</id>
+            <url>file://${project.build.directory}/repo</url>
+        </repository>
     </distributionManagement>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -68,6 +68,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.2.1</version>
                 <configuration>
+                    <preparationGoals>site ghSite:site</preparationGoals>
                 </configuration>
             </plugin>
             <plugin>
@@ -99,8 +100,15 @@
                 <configuration>
                     <description>${project.version} release of ${project.name}</description>
                     <override>true</override>
-                    <includeAttached>true</includeAttached>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>upload</goal>
+                        </goals>
+                        <phase>install</phase>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>com.github.github</groupId>
@@ -248,11 +256,13 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.10</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>pircbot</groupId>
             <artifactId>pircbot</artifactId>
             <version>1.5.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

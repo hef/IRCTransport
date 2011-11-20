@@ -70,7 +70,7 @@
 
     <module name="TreeWalker">
         <!--HEFSTYLE-->
-        <property name="cacheFile" value="checkstyle-cache"/>
+        <property name="cacheFile" value="target/checkstyle-cache"/>
         <!--HEFSTYLE-->
 
         <!-- Checks for Javadoc comments.                     -->
