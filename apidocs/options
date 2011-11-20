@@ -15,10 +15,10 @@
 -docencoding
 'UTF-8'
 -doctitle
-'IRCTransport 0.11 API'
+'IRCTransport 0.11.1 API'
 -linkoffline
 'http://download.oracle.com/javase/6/docs/api' '/home/hef/projects/IRCTransport/target/javadoc-bundle-options'
 -use
 -version
 -windowtitle
-'IRCTransport 0.11 API'
+'IRCTransport 0.11.1 API'

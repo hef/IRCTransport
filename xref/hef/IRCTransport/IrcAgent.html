@@ -67,8 +67,8 @@
 <a class="jxr_linenumber" name="57" href="#57">57</a>  				player.getName()));
 <a class="jxr_linenumber" name="58" href="#58">58</a>  		<strong class="jxr_keyword">if</strong> (<strong class="jxr_keyword">null</strong> == getSettings()) {
 <a class="jxr_linenumber" name="59" href="#59">59</a>  			setSettings(<strong class="jxr_keyword">new</strong> <a href="../../hef/IRCTransport/AgentSettings.html">AgentSettings</a>(player));
-<a class="jxr_linenumber" name="60" href="#60">60</a>  			String prefix = plugin.getConfig().getString(<span class="jxr_string">"default.prefix"</span>);
-<a class="jxr_linenumber" name="61" href="#61">61</a>  			String suffix = plugin.getConfig().getString(<span class="jxr_string">"default.suffix"</span>);
+<a class="jxr_linenumber" name="60" href="#60">60</a>  			String prefix = plugin.getConfig().getString(<span class="jxr_string">"default.prefix"</span>,<span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="61" href="#61">61</a>  			String suffix = plugin.getConfig().getString(<span class="jxr_string">"default.suffix"</span>,<span class="jxr_string">""</span>);
 <a class="jxr_linenumber" name="62" href="#62">62</a>  			getSettings().setIrcNick(
 <a class="jxr_linenumber" name="63" href="#63">63</a>  					String.format(<span class="jxr_string">"%s%s%s"</span>, prefix, player.getName(), suffix));
 <a class="jxr_linenumber" name="64" href="#64">64</a>  		} <strong class="jxr_keyword">else</strong> {
