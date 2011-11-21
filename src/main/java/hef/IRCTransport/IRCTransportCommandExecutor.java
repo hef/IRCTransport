@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @author hef
  *
  */
-public class IRCTransportCommandExecutor implements CommandExecutor {
+public final class IRCTransportCommandExecutor implements CommandExecutor {
 
     IRCTransport plugin;
     Logger log;
