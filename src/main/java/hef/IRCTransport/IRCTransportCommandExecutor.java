@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package hef.IRCTransport;
 
@@ -15,14 +15,19 @@ import org.bukkit.entity.Player;
  * @author hef
  *
  */
-public class IRCTransportCommandExecutor implements CommandExecutor {
-	IRCTransport plugin;
-	Logger log;
-	IRCTransportCommandExecutor(IRCTransport plugin)
-	{
-		this.plugin = plugin;
-		log = plugin.getServer().getLogger();
-	}
+public final class IRCTransportCommandExecutor implements CommandExecutor {
+    /** Plugin reference. */
+    private IRCTransport plugin;
+    /** Log handle. */
+    private Logger log;
+
+    /** Constructor.
+     * @param owner  reference to parent plugin.
+     */
+    IRCTransportCommandExecutor(final IRCTransport owner) {
+        plugin = owner;
+        log = plugin.getServer().getLogger();
+    }
 
     /** The main command handler.
      * Bukkit calls this to pass commands into the plugin.
@@ -32,8 +37,8 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
      * @param args All the args past to the command
      * @return Parse Success
      */
-	@Override
-	public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         if (plugin.getConfig().getBoolean("verbose")) {
             log.log(Level.INFO, String.format(
                     "Command '%s' received from %s with %d arguments",
@@ -68,7 +73,7 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
         }
         return false;
     }
-	
+
     /** Join a Channel
      * args can be 1 or 2 elements.
      * 1st element: channel name
@@ -104,7 +109,7 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
         }
         return false;
     }
-    
+
     /** Change the active channel.
      * The agent must already be in the channel.
      * @param bot The IRC agent that needs to handle the action
@@ -118,7 +123,7 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
         }
         return false;
     }
-    
+
     /** Send a private message in IRC.
      * @param bot Target IRC agent.
      * @param args element 1 is the IRC reciever.  The rest are the words to send.
@@ -128,10 +133,11 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
         if (args.length > 1) {
             String message = makeMessage(args, 1);
             bot.sendMessage(args[0], message);
+            return true;
         }
         return false;
     }
-    
+
     /** Change Nickname.
      * @param bot active IRC agent.
      * @param args 1 element array of the nick to change to
@@ -144,7 +150,7 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
         }
         return false;
     }
-    
+
     /** Get a list of names from active channel.
      * @param bot active IRC agent
      * @param args 0 or 1 elements.  the 1st element can be a channel name to get names from.
@@ -159,7 +165,7 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
             return true;
         }
     }
-    
+
     /** The IRC /me handler.
      * @param bot The IRC Agent that needs to handle the action
      * @param args The list of words to use as the "action"
@@ -173,7 +179,7 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
         }
         return false;
     }
-    
+
     /** Set or get an IRC topic.
      * @param bot The target IRC Agent
      * @param args empty to get topic, non-empty to set topic.
@@ -188,9 +194,8 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
             return true;
         }
     }
-    
-    /**
-     * Get information about a nick
+
+    /** Get information about a nick.
      * @param bot The Target IRC Agent
      * @param args a single element array of a nick
      * @return parse success
@@ -202,7 +207,7 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
         }
         return false;
     }
-    
+
     /** Turns arguments into a string.
      * @bug bug: multiple spaces are not detected in args strings, so they get
      *      turned into a single space.
@@ -213,10 +218,11 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
      * @return a string representing the non-command text.
      */
     private static String makeMessage(final String[] args, final int position) {
-        String message = new String();
+        StringBuilder message = new StringBuilder();
         for (int i = position; i < args.length; ++i) {
-            message += args[i] + " ";
+            message.append(args[i]);
+            message.append(" ");
         }
-        return message;
+        return message.toString();
     }
 }

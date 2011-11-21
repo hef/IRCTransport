@@ -85,14 +85,14 @@ public final class ColorMap {
     public static String fromIrc(final String message) {
         // define IRC color pattern
         Matcher m = ircColorPattern.matcher(message);
-        String result = "";
+        StringBuilder result = new StringBuilder();
         int prev = 0;
         // Find all matches
         while (m.find()) {
             int start = m.start();
             int end = m.end();
             // Add the unmatched parts to the result
-            result += message.substring(prev, start);
+            result.append(message.substring(prev, start));
             char digit1 = message.charAt(start + 1);
             char digit2 = 'a';
             if (start + 2 < message.length()) {
@@ -107,15 +107,15 @@ public final class ColorMap {
                 color = "" + '\u0003' + "0" + digit1;
             }
             // Replace matched parts by the other color code
-            result += ircToMinecraftColor.get(color);
+            result.append(ircToMinecraftColor.get(color));
             prev = end;
         }
         // Add the remaining string
         if (prev < message.length()) {
-            result += message.substring(prev, message.length());
+            result.append(message.substring(prev, message.length()));
         }
 
-        return result;
+        return result.toString();
     }
 
     /**
@@ -128,24 +128,24 @@ public final class ColorMap {
      */
     public static String toIrc(final String message) {
         Matcher m = minecraftColorPattern.matcher(message);
-        String result = "";
+        StringBuilder result = new StringBuilder();
         int prev = 0;
 
         while (m.find()) {
             int start = m.start();
             int end = m.end();
             // Add the unmatched parts to the result
-            result += message.substring(prev, start);
+            result.append(message.substring(prev, start));
             String code = "" + message.charAt(start) + message.charAt(start + 1);
             // System.out.println("Found code: " + code);
-            result += minecraftToIrcColor.get(code);
+            result.append(minecraftToIrcColor.get(code));
             prev = end;
         }
         // Add the remaining string
         if (prev < message.length()) {
-            result += message.substring(prev, message.length());
+            result.append(message.substring(prev, message.length()));
         }
 
-        return result;
+        return result.toString();
     }
 }
