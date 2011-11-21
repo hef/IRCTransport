@@ -22,7 +22,7 @@ public final class IRCTransportCommandExecutor implements CommandExecutor {
     private Logger log;
 
     /** Constructor.
-     * @param plugin  reference to parent plugin.
+     * @param owner  reference to parent plugin.
      */
     IRCTransportCommandExecutor(final IRCTransport owner) {
         plugin = owner;
