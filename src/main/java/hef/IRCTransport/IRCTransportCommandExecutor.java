@@ -16,12 +16,16 @@ import org.bukkit.entity.Player;
  *
  */
 public final class IRCTransportCommandExecutor implements CommandExecutor {
+    /** plugin reference */
+    private IRCTransport plugin;
+    /** log handle */
+    private Logger log;
 
-    IRCTransport plugin;
-    Logger log;
-
-    IRCTransportCommandExecutor(IRCTransport plugin) {
-        this.plugin = plugin;
+    /** Constructor
+     * @param plugin  reference to parent plugin.
+     */
+    IRCTransportCommandExecutor(final IRCTransport owner) {
+        plugin = owner;
         log = plugin.getServer().getLogger();
     }
 
@@ -191,8 +195,7 @@ public final class IRCTransportCommandExecutor implements CommandExecutor {
         }
     }
 
-    /**
-     * Get information about a nick
+    /** Get information about a nick.
      * @param bot The Target IRC Agent
      * @param args a single element array of a nick
      * @return parse success
@@ -215,10 +218,11 @@ public final class IRCTransportCommandExecutor implements CommandExecutor {
      * @return a string representing the non-command text.
      */
     private static String makeMessage(final String[] args, final int position) {
-        String message = new String();
+        StringBuilder message = new StringBuilder();
         for (int i = position; i < args.length; ++i) {
-            message += args[i] + " ";
+            message.append(args[i]);
+            message.append(" ");
         }
-        return message;
+        return message.toString();
     }
 }
