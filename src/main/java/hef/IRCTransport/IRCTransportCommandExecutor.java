@@ -16,12 +16,12 @@ import org.bukkit.entity.Player;
  *
  */
 public final class IRCTransportCommandExecutor implements CommandExecutor {
-    /** plugin reference */
+    /** Plugin reference. */
     private IRCTransport plugin;
-    /** log handle */
+    /** Log handle. */
     private Logger log;
 
-    /** Constructor
+    /** Constructor.
      * @param plugin  reference to parent plugin.
      */
     IRCTransportCommandExecutor(final IRCTransport owner) {

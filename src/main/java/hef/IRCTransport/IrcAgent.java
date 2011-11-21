@@ -31,7 +31,9 @@ public final class IrcAgent extends PircBot {
     private AgentSettings settings;
     /** Flag to indicate we should not reconnect. */
     private boolean shuttingDown;
+    /** A set of channels to suppress onUserList.  This is used to hide initial join messages. */
     private HashSet<String> suppressNames;
+    /** A set of channels to suppress Topic message.  This is used to hid initial join messages. */
     private HashSet<String> suppressTopic;
 
     /**
@@ -185,9 +187,9 @@ public final class IrcAgent extends PircBot {
 
         for (Object i : channelData) {
             if (i instanceof LinkedHashMap) {
-                LinkedHashMap<?, ?> lhm_i = (LinkedHashMap<?, ?>) i;
+                LinkedHashMap<?, ?> linkedHashMapI = (LinkedHashMap<?, ?>) i;
 
-                String channel = (String) lhm_i.get("channel");
+                String channel = (String) linkedHashMapI.get("channel");
                 if (channel != null) {
                     if (bSuppressNames) {
                         suppressNames.add(channel);
@@ -195,7 +197,7 @@ public final class IrcAgent extends PircBot {
                     if (bSuppressTopic) {
                         suppressTopic.add(channel);
                     }
-                    String key = (String) lhm_i.get("key");
+                    String key = (String) linkedHashMapI.get("key");
                     if (key != null) {
                         joinChannel(channel, key);
                     } else {
@@ -469,12 +471,13 @@ public final class IrcAgent extends PircBot {
         if (suppressNames.contains(channel)) {
             suppressNames.remove(channel);
         } else {
-            String usersString = "";
+            StringBuilder usersString = new StringBuilder();
             for (User user : users) {
-                usersString += user.toString() + " ";
+                usersString.append(user.toString());
+                usersString.append(" ");
             }
             getPlayer().sendMessage(
-                    String.format("%s members: %s", channel, usersString));
+                    String.format("%s members: %s", channel, usersString.toString()));
         }
     }
 
@@ -571,7 +574,7 @@ public final class IrcAgent extends PircBot {
      * @param nick
      *            a command delimited list of nicks.
      */
-    protected void whois(String nick) {
+    protected void whois(final String nick) {
         sendRawLine(String.format("WHOIS %s", nick));
     }
 }
