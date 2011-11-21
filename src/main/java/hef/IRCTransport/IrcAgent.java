@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.jibble.pircbot.IrcException;
-import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
