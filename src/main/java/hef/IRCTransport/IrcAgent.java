@@ -46,7 +46,7 @@ public final class IrcAgent extends PircBot {
 		this.plugin = instance;
 		this.player = bukkitPlayer;
 		this.shuttingDown = false;
-		setLogin(String.format(player.getName()));
+		setLogin(String.format("%s", player.getEntityId()));
 		super.setAutoNickChange(true);
 		
 		suppressNames = new HashSet<String>();

@@ -1,10 +1,11 @@
 package hef.IRCTransport;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+import gnu.trove.procedure.TIntObjectProcedure;
+
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +25,7 @@ public final class IRCTransport extends JavaPlugin {
 	/** The logging obect. Used internal to write to the console. */
 	private static final Logger LOG = Logger.getLogger("Minecraft");
 	/** MC Player to IRCAgent map */
-	private final HashMap<Player, IrcAgent> bots = new HashMap<Player, IrcAgent>();
+	private final TIntObjectHashMap<IrcAgent> bots = new TIntObjectHashMap<IrcAgent>();
 	/** The player action handler. */
 	private IRCTransportPlayerListener playerListener;
 
@@ -33,7 +34,7 @@ public final class IRCTransport extends JavaPlugin {
 	 * 
 	 * @return the map of player's to agents.
 	 */
-	public HashMap<Player, IrcAgent> getBots() {
+	public TIntObjectHashMap<IrcAgent> getBots() {
 		return this.bots;
 	}
 
@@ -78,9 +79,8 @@ public final class IRCTransport extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		// disconnect all agents
-		for (Entry<Player, IrcAgent> entry : bots.entrySet()) {
-			entry.getValue().shutdown();
-		}
+		TIntObjectProcedure<IrcAgent> shutdown = new shutdownProcedure();
+		bots.forEachEntry(shutdown);
 		bots.clear();
 		LOG.log(Level.INFO, this.getDescription().getFullName()
 				+ " is disabled");
@@ -109,7 +109,7 @@ public final class IRCTransport extends JavaPlugin {
 		// establish list of players
 		Player[] players = getServer().getOnlinePlayers();
 		for (Player player : players) {
-			this.bots.put(player, new IrcAgent(this, player));
+			this.bots.put(player.getEntityId(), new IrcAgent(this, player));
 		}
 
 		// register for events we care about
@@ -132,5 +132,15 @@ public final class IRCTransport extends JavaPlugin {
         getCommand("topic").setExecutor(commandExecutor);
         getCommand("whois").setExecutor(commandExecutor);
 		LOG.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
+	}
+	private class shutdownProcedure implements TIntObjectProcedure<IrcAgent>
+	{
+
+		@Override
+		public boolean execute(int a, IrcAgent b) {
+			b.shutdown();
+			return false;
+		}
+		
 	}
 }
