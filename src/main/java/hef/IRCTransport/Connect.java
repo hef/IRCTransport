@@ -12,7 +12,7 @@ import org.jibble.pircbot.NickAlreadyInUseException;
  * Connection Task This class us a Runnable class for connecting to the irc
  * server. It will reschedule a connection
  */
-public final class Connect implements Runnable {
+public class Connect implements Runnable {
     /**
      * Time between connection retries after a failed connection attempt.
      * 4oo is 20 seconds.

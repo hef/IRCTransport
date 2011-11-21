@@ -19,7 +19,7 @@ import org.jibble.pircbot.User;
  * Represent a player to an IRC server. Every Bukkit player should have one!
  * Every agent will have channels, a player, and an active channel.
  */
-public final class IrcAgent extends PircBot {
+public class IrcAgent extends PircBot {
 
     /** Used to send message to the console. */
     private static final Logger LOG = Logger.getLogger("Minecraft");

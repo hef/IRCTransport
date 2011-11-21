@@ -21,7 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 /**
  * IRCTransport for Bukkit.
  */
-public final class IRCTransport extends JavaPlugin {
+public class IRCTransport extends JavaPlugin {
 
     /** The logging obect. Used internal to write to the console. */
     private static final Logger LOG = Logger.getLogger("Minecraft");

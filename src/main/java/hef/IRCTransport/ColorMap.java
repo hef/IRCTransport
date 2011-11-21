@@ -10,7 +10,7 @@ import org.jibble.pircbot.Colors;
 /** Minecraft <-> IRC Color Mapping class
  * Converts Color codes from IRC to Minecraft and from Minecraft to IRC.
  */
-public final class ColorMap {
+public class ColorMap {
     /** Regex for matching irc colors. */
     private static Pattern ircColorPattern = Pattern.compile('\u0003' + "[0-9]{1,2}(?:,[0-9]{1,2})?");
     /** Map IRC Colors to IRC Colors. */

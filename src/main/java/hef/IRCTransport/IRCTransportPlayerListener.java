@@ -10,7 +10,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 /**
  * Handle events for all Player related events.
  */
- public final class IRCTransportPlayerListener extends PlayerListener {
+ public class IRCTransportPlayerListener extends PlayerListener {
     /** Maps to retrieve associated IrcAggent from player. */
     private TIntObjectHashMap<IrcAgent> bots;
     /** Reference to the parent plugin. */
