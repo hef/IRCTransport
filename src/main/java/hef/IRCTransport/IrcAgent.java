@@ -79,9 +79,8 @@ public final class IrcAgent extends PircBot {
      * Don't call this directly, call `new Connect(this).run()` instead.
      * @throws IOException If it was not possible to connect to the server.
      * @throws IrcException If the server would not let us join it.
-     * @throws NickAlreadyInUseException If our nick is already in use on the server.
      */
-    public void connect() throws IOException, IrcException, NickAlreadyInUseException {
+    public void connect() throws IOException, IrcException {
         if (getServer() == null) {
             connect(getPlugin().getConfig().getString("server.address"),
                     getPlugin().getConfig().getInt("server.port"),
