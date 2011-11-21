@@ -1,5 +1,6 @@
 package hef.IRCTransport;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.jibble.pircbot.IrcException;
+import org.jibble.pircbot.NickAlreadyInUseException;
 import org.jibble.pircbot.PircBot;
 import org.jibble.pircbot.User;
 
@@ -70,6 +73,22 @@ public final class IrcAgent extends PircBot {
         }
         setNick(getSettings().getIrcNick());
         new Connect(this).run();
+    }
+
+    /** Connect the agent.
+     * Don't call this directly, call `new Connect(this).run()` instead.
+     * @throws IOException
+     * @throws IrcException
+     * @throws NickAlreadyInUseException
+     */
+    public void connect() throws IOException, IrcException, NickAlreadyInUseException {
+        if (getServer() == null) {
+            connect(getPlugin().getConfig().getString("server.address"),
+                    getPlugin().getConfig().getInt("server.port"),
+                    getPlugin().getConfig().getString("server.password"));
+        } else {
+            reconnect();
+        }
     }
 
     /**

@@ -50,16 +50,7 @@ public final class Connect implements Runnable {
         // continually keep the agent alive.
         if (!agent.isShuttingDown()) {
             try {
-                // If we never set the server i.e. havn't connected yet
-                if (agent.getServer() == null) {
-                    //TODO: these settings should be moved into the agent.
-                    agent.connect(agent.getPlugin().getConfig().getString("server.address"),
-                                  agent.getPlugin().getConfig().getInt("server.port"),
-                                  agent.getPlugin().getConfig().getString("server.password"));
-                } else {
-                    // reconnect should recycle settings the user already has
-                    agent.reconnect();
-                }
+                agent.connect();
             } catch (NickAlreadyInUseException e) {
                 // This should not happen, the agent is set to auto retry new
                 // names
