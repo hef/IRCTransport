@@ -137,7 +137,7 @@ public class IRCTransport extends JavaPlugin {
     }
 
     /** ShutdownProcedure for shutting down agents. */
-    private class ShutdownProcedure implements TIntObjectProcedure<IrcAgent> {
+    private static class ShutdownProcedure implements TIntObjectProcedure<IrcAgent> {
         /** Shutdown an agent.
          * @param a The key
          * @param b The Agent to shutdown
