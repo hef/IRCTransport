@@ -25,7 +25,7 @@ public class IRCTransport extends JavaPlugin {
 
     /** The logging obect. Used internal to write to the console. */
     private static final Logger LOG = Logger.getLogger("Minecraft");
-    /** MC Player to IRCAgent map */
+    /** MC Player to IRCAgent map. */
     private final TIntObjectHashMap<IrcAgent> bots = new TIntObjectHashMap<IrcAgent>();
     /** The player action handler. */
     private IRCTransportPlayerListener playerListener;
@@ -141,6 +141,7 @@ public class IRCTransport extends JavaPlugin {
         /** Shutdown an agent.
          * @param a The key
          * @param b The Agent to shutdown
+         * @return false.  Don't shutdown an already shutdown agent.
          */
         @Override
         public boolean execute(final int a, final IrcAgent b) {
