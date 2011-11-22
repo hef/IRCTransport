@@ -33,57 +33,55 @@ public class IrcAgent extends PircBot {
     private AgentSettings settings;
     /** Flag to indicate we should not reconnect. */
     private boolean shuttingDown;
-    /** A set of channels to suppress onUserList.  This is used to hide initial join messages. */
+    /**
+     * A set of channels to suppress onUserList. This is used to hide initial
+     * join messages.
+     */
     private HashSet<String> suppressNames;
-    /** A set of channels to suppress Topic message.  This is used to hid initial join messages. */
+    /**
+     * A set of channels to suppress Topic message. This is used to hid initial
+     * join messages.
+     */
     private HashSet<String> suppressTopic;
 
     /**
      * Agent Constructor.
-     *
-     * @param instance
-     *            Reference to plugin instance.
-     * @param bukkitPlayer
-     *            Reference to Bukkit Player
+     * @param instance Reference to plugin instance.
+     * @param bukkitPlayer Reference to Bukkit Player
      */
     public IrcAgent(final IRCTransport instance, final Player bukkitPlayer) {
         this.plugin = instance;
         this.player = bukkitPlayer;
         this.shuttingDown = false;
-		setLogin(String.format("%s", player.getEntityId()));
+        setLogin(String.format("%s", player.getEntityId()));
         super.setAutoNickChange(true);
 
         suppressNames = new HashSet<String>();
         suppressTopic = new HashSet<String>();
 
         // init player settings
-        setSettings(plugin.getDatabase().find(AgentSettings.class,
-                player.getName()));
+        setSettings(plugin.getDatabase().find(AgentSettings.class, player.getName()));
         if (null == getSettings()) {
             setSettings(new AgentSettings(player));
             String prefix = plugin.getConfig().getString("default.prefix", "");
             String suffix = plugin.getConfig().getString("default.suffix", "");
-            getSettings().setIrcNick(
-                    String.format("%s%s%s", prefix, player.getName(), suffix));
+            getSettings().setIrcNick(String.format("%s%s%s", prefix, player.getName(), suffix));
         } else {
-            LOG.log(Level.INFO, String.format(
-                    "Player '%s' using persistent IRC nick '%s'",
-                    player.getName(), getSettings().getIrcNick()));
+            LOG.log(Level.INFO, String.format("Player '%s' using persistent IRC nick '%s'", player.getName(), getSettings().getIrcNick()));
         }
         setNick(getSettings().getIrcNick());
         new Connect(this).run();
     }
 
-    /** Connect the agent.
-     * Don't call this directly, call `new Connect(this).run()` instead.
+    /**
+     * Connect the agent. Don't call this directly, call `new
+     * Connect(this).run()` instead.
      * @throws IOException If it was not possible to connect to the server.
      * @throws IrcException If the server would not let us join it.
      */
     public void connect() throws IOException, IrcException {
         if (getServer() == null) {
-            connect(getPlugin().getConfig().getString("server.address"),
-                    getPlugin().getConfig().getInt("server.port"),
-                    getPlugin().getConfig().getString("server.password"));
+            connect(getPlugin().getConfig().getString("server.address"), getPlugin().getConfig().getInt("server.port"), getPlugin().getConfig().getString("server.password"));
         } else {
             reconnect();
         }
@@ -92,7 +90,6 @@ public class IrcAgent extends PircBot {
     /**
      * Fetch the active channel. The active channel is the channel that a player
      * will talk in if they don't specify a channel.
-     *
      * @return a string with the active channel name.
      */
     public String getActiveChannel() {
@@ -101,7 +98,6 @@ public class IrcAgent extends PircBot {
 
     /**
      * Get the Player.
-     *
      * @return Reference to Bukkit Player
      */
     public Player getPlayer() {
@@ -110,7 +106,6 @@ public class IrcAgent extends PircBot {
 
     /**
      * The IRCTransport plugin instance.
-     *
      * @return a reference to the IRC plugin.
      */
     public IRCTransport getPlugin() {
@@ -126,7 +121,6 @@ public class IrcAgent extends PircBot {
 
     /**
      * Shutting Down Flag Useful for preventing reconnection measures.
-     *
      * @return Is the agent shutting down?
      */
     public boolean isShuttingDown() {
@@ -135,9 +129,7 @@ public class IrcAgent extends PircBot {
 
     /**
      * Log stuff. This method only logs to INFO if the Verbose flags is set.
-     *
-     * @param line
-     *            The line you want logged to console.
+     * @param line The line you want logged to console.
      */
     @Override
     public void log(final String line) {
@@ -152,10 +144,9 @@ public class IrcAgent extends PircBot {
     }
 
     /**
-     * Get a list of playernames from a channel.
-     *  removes muteNames flag for channel.
-     * @param channel
-     *            The channel to list names from.
+     * Get a list of playernames from a channel. removes muteNames flag for
+     * channel.
+     * @param channel The channel to list names from.
      */
     protected void names(final String channel) {
         suppressNames.remove(channel);
@@ -164,26 +155,18 @@ public class IrcAgent extends PircBot {
 
     /**
      * Handle receiving an action. sent when another agent sends a /me
-     *
-     * @param sender
-     *            the person committing the action
-     * @param login
-     *            The login name of the actioner
-     * @param hostname
-     *            the hostname of the actioner
-     * @param target
-     *            The channel the action was in
-     * @param action
-     *            The content of the aciton
+     * @param sender the person committing the action
+     * @param login The login name of the actioner
+     * @param hostname the hostname of the actioner
+     * @param target The channel the action was in
+     * @param action The content of the aciton
      */
     @Override
-    public void onAction(final String sender, final String login,
-            final String hostname, final String target, final String action) {
-        getPlayer().sendMessage(
-                String.format("[%s] * %s %s", target, sender, action));
+    public void onAction(final String sender, final String login, final String hostname, final String target, final String action) {
+        getPlayer().sendMessage(String.format("[%s] * %s %s", target, sender, action));
     }
 
-    /** Join Correct Channels.  Set name and topic suppression flags. */
+    /** Join Correct Channels. Set name and topic suppression flags. */
     @Override
     public void onConnect() {
         /*
@@ -222,8 +205,7 @@ public class IrcAgent extends PircBot {
                     }
                 }
             } else {
-                log("Object: " + i.toString() + " is a "
-                        + i.getClass().toString());
+                log("Object: " + i.toString() + " is a " + i.getClass().toString());
             }
         }
     }
@@ -241,184 +223,118 @@ public class IrcAgent extends PircBot {
 
     /**
      * Error message handler.
-     *
-     * @param channel
-     *            The channel the error message was sent from.
-     * @param message
-     *            The error message body.
+     * @param channel The channel the error message was sent from.
+     * @param message The error message body.
      */
     protected void onErrorMessage(final String channel, final String message) {
-        getPlayer().sendMessage(
-                ChatColor.YELLOW + String.format("[%s] %s", channel, message));
+        getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s", channel, message));
     }
 
     /**
      * Join message handler.
-     *
-     * @param channel
-     *            the channel the player joined
-     * @param sender
-     *            the nick of the joiner
-     * @param login
-     *            the login of the joiner
-     * @param hostname
-     *            the hostname of the joiner
+     * @param channel the channel the player joined
+     * @param sender the nick of the joiner
+     * @param login the login of the joiner
+     * @param hostname the hostname of the joiner
      */
     @Override
-    public void onJoin(final String channel, final String sender,
-            final String login, final String hostname) {
+    public void onJoin(final String channel, final String sender, final String login, final String hostname) {
         // if I joined, change active channel.
         if (sender.equals(getNick())) {
             activeChannel = channel;
         }
-        getPlayer().sendMessage(
-                ChatColor.YELLOW
-                + String.format("[%s] %s has joined.", channel,
-                sender));
+        getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has joined.", channel, sender));
     }
 
     /**
      * Kick message handler.
-     *
-     * @param channel
-     *            the channel the nick was kicked form
-     * @param kickerNick
-     *            the Nick of the Kicker
-     * @param kickerLogin
-     *            The login of the Kicker
-     * @param kickerHostname
-     *            the hostname of the kicker.
-     * @param recipientNick
-     *            The nick of the kickee.
-     * @param reason
-     *            The stated reason that the Kicker kicked the kickee.
+     * @param channel the channel the nick was kicked form
+     * @param kickerNick the Nick of the Kicker
+     * @param kickerLogin The login of the Kicker
+     * @param kickerHostname the hostname of the kicker.
+     * @param recipientNick The nick of the kickee.
+     * @param reason The stated reason that the Kicker kicked the kickee.
      */
     @Override
-    protected void onKick(final String channel, final String kickerNick,
-            final String kickerLogin, final String kickerHostname,
-            final String recipientNick, final String reason) {
-        player.sendMessage(ChatColor.YELLOW
-                + String.format("[%s] %s kicked by %s: %s", channel,
-                recipientNick, kickerNick, reason));
+    protected void onKick(final String channel, final String kickerNick, final String kickerLogin, final String kickerHostname, final String recipientNick, final String reason) {
+        player.sendMessage(ChatColor.YELLOW + String.format("[%s] %s kicked by %s: %s", channel, recipientNick, kickerNick, reason));
     }
 
     /**
      * Message received handler.
-     *
-     * @param channel
-     *            The channel of the message
-     * @param sender
-     *            The nick of the sender of the Message
-     * @param login
-     *            The login of the sender of the Message
-     * @param hostname
-     *            The hostname of the sender of the message
-     * @param message
-     *            The body of the message.
+     * @param channel The channel of the message
+     * @param sender The nick of the sender of the Message
+     * @param login The login of the sender of the Message
+     * @param hostname The hostname of the sender of the message
+     * @param message The body of the message.
      */
     @Override
-    public void onMessage(final String channel, final String sender,
-            final String login, final String hostname, final String message) {
-        getPlayer().sendMessage(
-                String.format("[%s] %s: %s", channel, sender,
-                ColorMap.fromIrc(message)));
+    public void onMessage(final String channel, final String sender, final String login, final String hostname, final String message) {
+        getPlayer().sendMessage(String.format("[%s] %s: %s", channel, sender, ColorMap.fromIrc(message)));
     }
 
     /**
      * Nickchange notification handler. This is called when: a: Another agent
      * changes their nick b: when this agent change it's nick. Both these
      * situations are handled.
-     *
-     * @param oldNick
-     *            the old nick of the changer.
-     * @param login
-     *            the login of the changer (doesn't change)
-     * @param hostname
-     *            the hostname of the changer (doesn't change)
-     * @param newNick
-     *            the new nick of the changer.
+     * @param oldNick the old nick of the changer.
+     * @param login the login of the changer (doesn't change)
+     * @param hostname the hostname of the changer (doesn't change)
+     * @param newNick the new nick of the changer.
      */
     @Override
-    protected void onNickChange(final String oldNick, final String login,
-            final String hostname, final String newNick) {
+    protected void onNickChange(final String oldNick, final String login, final String hostname, final String newNick) {
         if (oldNick.equals(getPlayer().getDisplayName())) {
             getPlayer().setDisplayName(newNick);
             getSettings().setIrcNick(newNick);
             saveSettings();
         }
-        getPlayer().sendMessage(
-                String.format("%s is now known as %s", oldNick, newNick));
+        getPlayer().sendMessage(String.format("%s is now known as %s", oldNick, newNick));
     }
 
     /**
      * The channel leave message handler.
-     *
-     * @param channel
-     *            The channel that is being left
-     * @param sender
-     *            The nick of the leaver
-     * @param login
-     *            The login of the leaver
-     * @param hostname
-     *            The hostname of the leaver.
+     * @param channel The channel that is being left
+     * @param sender The nick of the leaver
+     * @param login The login of the leaver
+     * @param hostname The hostname of the leaver.
      */
     @Override
-    public void onPart(final String channel, final String sender,
-            final String login, final String hostname) {
-        getPlayer().sendMessage(
-                ChatColor.YELLOW
-                + String.format("[%s] %s has parted.", channel,
-                sender));
+    public void onPart(final String channel, final String sender, final String login, final String hostname) {
+        getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has parted.", channel, sender));
     }
 
     /**
      * Private message handler (/msg).
-     *
-     * @param sender
-     *            nick of the private message sender
-     * @param login
-     *            login of the private message sender
-     * @param hostname
-     *            hostname of the private message sender
-     * @param message
-     *            the body of the private message
+     * @param sender nick of the private message sender
+     * @param login login of the private message sender
+     * @param hostname hostname of the private message sender
+     * @param message the body of the private message
      */
     @Override
-    public void onPrivateMessage(final String sender, final String login,
-            final String hostname, final String message) {
+    public void onPrivateMessage(final String sender, final String login, final String hostname, final String message) {
         getPlayer().sendMessage(String.format("%s: %s", sender, message));
     }
 
     /**
      * Quit message handler. This is a quit message, it doesn't mean that we are
      * quitting.
-     *
-     * @param sourceNick
-     *            Nick of the quitter.
-     * @param sourceLogin
-     *            Login of the quitter.
-     * @param sourceHostname
-     *            Hostname of the quitter.
-     * @param reason
-     *            The reason the quitter gave for quitting.
+     * @param sourceNick Nick of the quitter.
+     * @param sourceLogin Login of the quitter.
+     * @param sourceHostname Hostname of the quitter.
+     * @param reason The reason the quitter gave for quitting.
      */
     @Override
-    public void onQuit(final String sourceNick, final String sourceLogin,
-            final String sourceHostname, final String reason) {
-        getPlayer().sendMessage(
-                ChatColor.YELLOW
-                + String.format("%s has quit: %s", sourceNick, reason));
+    public void onQuit(final String sourceNick, final String sourceLogin, final String sourceHostname, final String reason) {
+        getPlayer().sendMessage(ChatColor.YELLOW + String.format("%s has quit: %s", sourceNick, reason));
     }
 
     /**
      * Handles response codes not handled by pircbot This methods handles irc
      * response codes, slices up the response, and then calls the appropriate
      * method.
-     *
-     * @param code
-     *            the irc response code.
-     * @param response
-     *            The message that came with the response
+     * @param code the irc response code.
+     * @param response The message that came with the response
      */
     @Override
     protected void onServerResponse(final int code, final String response) {
@@ -426,48 +342,36 @@ public class IrcAgent extends PircBot {
         Matcher responseMatcher = responsePattern.matcher(response);
         responseMatcher.find();
         switch (code) {
-            case ERR_NOSUCHNICK: // TODO this needs a clearer error message
-            case ERR_NOSUCHCHANNEL:
-            case ERR_NICKNAMEINUSE:
-            case ERR_INVITEONLYCHAN:
-            case ERR_BADCHANNELKEY:
-                onErrorMessage(responseMatcher.group(1), responseMatcher.group(2));
-                break;
-            default:
-                break;
+        case ERR_NOSUCHNICK: // TODO this needs a clearer error message
+        case ERR_NOSUCHCHANNEL:
+        case ERR_NICKNAMEINUSE:
+        case ERR_INVITEONLYCHAN:
+        case ERR_BADCHANNELKEY:
+            onErrorMessage(responseMatcher.group(1), responseMatcher.group(2));
+            break;
+        default:
+            break;
 
         }
     }
 
     /**
      * Handles topic responses. Topic responses come in: a: as a response to a
-     * topic request b: on channel join c: on topic change
-     * Honors muteTopic flag for channel, will clear it as well.
-     * @param channel
-     *            The channel the topic is set for.
-     * @param topic
-     *            The body of the topic.
-     * @param setBy
-     *            The nick of the topic setter.
-     * @param date
-     *            The date the topic was set.
-     * @param changed
-     *            Is this a new topic?
+     * topic request b: on channel join c: on topic change Honors muteTopic flag
+     * for channel, will clear it as well.
+     * @param channel The channel the topic is set for.
+     * @param topic The body of the topic.
+     * @param setBy The nick of the topic setter.
+     * @param date The date the topic was set.
+     * @param changed Is this a new topic?
      */
     @Override
-    protected void onTopic(final String channel, final String topic,
-            final String setBy, final long date, final boolean changed) {
+    protected void onTopic(final String channel, final String topic, final String setBy, final long date, final boolean changed) {
         if (changed) {
-            getPlayer().sendMessage(
-                    ChatColor.YELLOW
-                    + String.format("[%s] Topic changed: %s", channel,
-                    topic));
+            getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] Topic changed: %s", channel, topic));
         } else {
             if (!suppressTopic.contains(channel)) {
-                getPlayer().sendMessage(
-                        ChatColor.YELLOW
-                        + String.format("[%s] Topic: %s", channel,
-                        topic));
+                getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] Topic: %s", channel, topic));
             } else {
                 // Only silence the initial topic response.
                 suppressTopic.remove(channel);
@@ -476,12 +380,10 @@ public class IrcAgent extends PircBot {
     }
 
     /**
-     * UserList Response handler. usually a response to /names.
-     * Also occurs on channel join.  This will check the muteNames set, and clear it.
-     * @param channel
-     *            The channel that the response is for
-     * @param users
-     *            The users in the channel.
+     * UserList Response handler. usually a response to /names. Also occurs on
+     * channel join. This will check the muteNames set, and clear it.
+     * @param channel The channel that the response is for
+     * @param users The users in the channel.
      */
     @Override
     protected void onUserList(final String channel, final User[] users) {
@@ -493,8 +395,7 @@ public class IrcAgent extends PircBot {
                 usersString.append(user.toString());
                 usersString.append(" ");
             }
-            getPlayer().sendMessage(
-                    String.format("%s members: %s", channel, usersString.toString()));
+            getPlayer().sendMessage(String.format("%s members: %s", channel, usersString.toString()));
         }
     }
 
@@ -505,36 +406,28 @@ public class IrcAgent extends PircBot {
 
     /**
      * Action sender. triggers when player sends a /me
-     *
-     * @param action
-     *            The content of the action.
+     * @param action The content of the action.
      */
     public void sendAction(final String action) {
         sendAction(activeChannel, action);
-        getPlayer().sendMessage(
-                String.format("[%s] * %s %s", activeChannel, getPlayer().getDisplayName(), action));
+        getPlayer().sendMessage(String.format("[%s] * %s %s", activeChannel, getPlayer().getDisplayName(), action));
     }
 
     /**
      * Sends a message to the active channel.
-     *
-     * @param message
-     *            The message to send
+     * @param message The message to send
      */
     public void sendMessage(final String message) {
         sendMessage(activeChannel, message);
         if (isConnected()) {
-            String msg = String.format("[%s] %s: %s", activeChannel,
-                    getPlayer().getDisplayName(), message);
+            String msg = String.format("[%s] %s: %s", activeChannel, getPlayer().getDisplayName(), message);
             getPlayer().sendMessage(msg);
         }
     }
 
     /**
      * Change active channel.
-     *
-     * @param channel
-     *            The channel to make the active one.
+     * @param channel The channel to make the active one.
      */
     public void setActiveChannel(final String channel) {
         this.activeChannel = channel;
@@ -543,9 +436,7 @@ public class IrcAgent extends PircBot {
     /**
      * Set name to attempt to use at login This function is not the same as
      * changeNick(String name) you probably don't want this function.
-     *
-     * @param name
-     *            the name to attempt to use.
+     * @param name the name to attempt to use.
      */
     public void setNick(final String name) {
         super.setName(name);
@@ -553,9 +444,7 @@ public class IrcAgent extends PircBot {
 
     /**
      * Set the settings object.
-     *
-     * @param agentSettings
-     *            the settings to set
+     * @param agentSettings the settings to set
      */
     public void setSettings(final AgentSettings agentSettings) {
         this.settings = agentSettings;
@@ -563,9 +452,7 @@ public class IrcAgent extends PircBot {
 
     /**
      * Attempt to set the channel topic. Sends to active channel.
-     *
-     * @param topic
-     *            The body of the topic to set.
+     * @param topic The body of the topic to set.
      */
     protected void setTopic(final String topic) {
         setTopic(activeChannel, topic);
@@ -587,9 +474,7 @@ public class IrcAgent extends PircBot {
 
     /**
      * Request information about a nick.
-     *
-     * @param nick
-     *            a command delimited list of nicks.
+     * @param nick a command delimited list of nicks.
      */
     protected void whois(final String nick) {
         sendRawLine(String.format("WHOIS %s", nick));

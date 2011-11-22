@@ -25,17 +25,16 @@ public class IRCTransport extends JavaPlugin {
 
     /** The logging obect. Used internal to write to the console. */
     private static final Logger LOG = Logger.getLogger("Minecraft");
-	/** MC Player to IRCAgent map */
-	private final TIntObjectHashMap<IrcAgent> bots = new TIntObjectHashMap<IrcAgent>();
+    /** MC Player to IRCAgent map */
+    private final TIntObjectHashMap<IrcAgent> bots = new TIntObjectHashMap<IrcAgent>();
     /** The player action handler. */
     private IRCTransportPlayerListener playerListener;
 
     /**
      * Gets the maping of Bukkit Players to IRCAgents.
-     *
      * @return the map of player's to agents.
      */
-	public TIntObjectHashMap<IrcAgent> getBots() {
+    public TIntObjectHashMap<IrcAgent> getBots() {
         return this.bots;
     }
 
@@ -80,8 +79,8 @@ public class IRCTransport extends JavaPlugin {
     @Override
     public void onDisable() {
         // disconnect all agents
-		TIntObjectProcedure<IrcAgent> shutdown = new shutdownProcedure();
-		bots.forEachEntry(shutdown);
+        TIntObjectProcedure<IrcAgent> shutdown = new ShutdownProcedure();
+        bots.forEachEntry(shutdown);
         bots.clear();
         LOG.log(Level.INFO, this.getDescription().getFullName()
                 + " is disabled");
@@ -98,19 +97,21 @@ public class IRCTransport extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         PluginDescriptionFile pdfFile = this.getDescription();
         if (getConfig().getString("server.address") == null) {
-            LOG.severe(pdfFile.getName()
-                    + ": set \"server.address\" in " + this.getDataFolder() + "/config.yml");
+            LOG.severe(pdfFile.getName() + ": set \"server.address\" in "
+                    + this.getDataFolder() + "/config.yml");
             return;
         }
 
-        getConfig().options().header("Config File for IRCTransport\nSee the website for more information");
+        getConfig()
+                .options()
+                .header("Config File for IRCTransport\nSee the website for more information");
         saveConfig();
         initDatabase();
 
         // establish list of players
         Player[] players = getServer().getOnlinePlayers();
         for (Player player : players) {
-			this.bots.put(player.getEntityId(), new IrcAgent(this, player));
+            this.bots.put(player.getEntityId(), new IrcAgent(this, player));
         }
 
         // register for events we care about
@@ -134,11 +135,17 @@ public class IRCTransport extends JavaPlugin {
         getCommand("whois").setExecutor(commandExecutor);
         LOG.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
     }
-	private class shutdownProcedure implements TIntObjectProcedure<IrcAgent> {
-		@Override
-		public boolean execute(int a, IrcAgent b) {
-		b.shutdown();
-			return false;
-		}
-	}
+
+    /** ShutdownProcedure for shutting down agents. */
+    private class ShutdownProcedure implements TIntObjectProcedure<IrcAgent> {
+        /** Shutdown an agent.
+         * @param a The key
+         * @param b The Agent to shutdown
+         */
+        @Override
+        public boolean execute(final int a, final IrcAgent b) {
+            b.shutdown();
+            return false;
+        }
+    }
 }
