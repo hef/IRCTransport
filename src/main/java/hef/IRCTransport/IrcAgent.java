@@ -80,10 +80,13 @@ public class IrcAgent extends PircBot {
      * @throws IrcException If the server would not let us join it.
      */
     public void connect() throws IOException, IrcException {
-        if (getServer() == null) {
-            connect(getPlugin().getConfig().getString("server.address"), getPlugin().getConfig().getInt("server.port"), getPlugin().getConfig().getString("server.password"));
-        } else {
-            reconnect();
+        if(!isConnected())
+        {
+            if (getServer() == null) {
+                connect(getPlugin().getConfig().getString("server.address"), getPlugin().getConfig().getInt("server.port"), getPlugin().getConfig().getString("server.password"));
+            } else {
+                reconnect();
+            }
         }
     }
 
