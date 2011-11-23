@@ -80,8 +80,7 @@ public class IrcAgent extends PircBot {
      * @throws IrcException If the server would not let us join it.
      */
     public void connect() throws IOException, IrcException {
-        if(!isConnected())
-        {
+        if (!isConnected()) {
             if (getServer() == null) {
                 connect(getPlugin().getConfig().getString("server.address"), getPlugin().getConfig().getInt("server.port"), getPlugin().getConfig().getString("server.password"));
             } else {
@@ -345,15 +344,15 @@ public class IrcAgent extends PircBot {
         Matcher responseMatcher = responsePattern.matcher(response);
         responseMatcher.find();
         switch (code) {
-        case ERR_NOSUCHNICK: // TODO this needs a clearer error message
-        case ERR_NOSUCHCHANNEL:
-        case ERR_NICKNAMEINUSE:
-        case ERR_INVITEONLYCHAN:
-        case ERR_BADCHANNELKEY:
-            onErrorMessage(responseMatcher.group(1), responseMatcher.group(2));
-            break;
-        default:
-            break;
+            case ERR_NOSUCHNICK: // TODO this needs a clearer error message
+            case ERR_NOSUCHCHANNEL:
+            case ERR_NICKNAMEINUSE:
+            case ERR_INVITEONLYCHAN:
+            case ERR_BADCHANNELKEY:
+                onErrorMessage(responseMatcher.group(1), responseMatcher.group(2));
+                break;
+            default:
+                break;
 
         }
     }
