@@ -3,8 +3,7 @@
  */
 package hef.IRCTransport;
 
-import static org.junit.Assert.*;
-import org.jibble.pircbot.Colors;
+import static org.junit.Assert.assertTrue;
 
 import org.bukkit.ChatColor;
 import org.junit.After;
@@ -12,6 +11,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.pircbotx.Colors;
 
 /**
  * @author hef
@@ -91,8 +91,10 @@ public class ColorMapTest {
      */
     @Test
     public final void testChatToIrcColor() {
-        assertTrue(ColorMap.chatToIrcColor("wrong").equals(Colors.BLACK.toString()));
-        assertTrue(ColorMap.chatToIrcColor(ChatColor.WHITE.toString()).equals(Colors.WHITE.toString()));
+        assertTrue(ColorMap.chatToIrcColor("wrong").equals(
+                Colors.BLACK.toString()));
+        assertTrue(ColorMap.chatToIrcColor(ChatColor.WHITE.toString()).equals(
+                Colors.WHITE.toString()));
     }
 
 }
