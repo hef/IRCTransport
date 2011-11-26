@@ -100,11 +100,11 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
      */
     public boolean leave(final IrcAgent bot, final String[] args) {
         if (args.length == 1) {
-            bot.partChannel(args[0]);
+            bot.partChannel(bot.getChannel(args[0]));
             return true;
         } else if (args.length > 1) {
             String message = makeMessage(args, 1);
-            bot.partChannel(args[0], message);
+            bot.partChannel(bot.getChannel(args[0]), message);
             return true;
         }
         return false;
@@ -118,7 +118,7 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
      */
     public boolean channel(final IrcAgent bot, final String[] args) {
         if (args.length == 1) {
-            bot.setActiveChannel(args[0]);
+            bot.setActiveChannel(bot.getChannel(args[0]));
             return true;
         }
         return false;
@@ -161,7 +161,7 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
             bot.names();
             return true;
         } else {
-            bot.names(args[0]);
+            bot.names(bot.getChannel(args[0]));
             return true;
         }
     }

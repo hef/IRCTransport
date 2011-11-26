@@ -5,8 +5,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
-import org.jibble.pircbot.IrcException;
-import org.jibble.pircbot.NickAlreadyInUseException;
+import org.pircbotx.exception.IrcException;
+import org.pircbotx.exception.NickAlreadyInUseException;
 
 /**
  * Connection Task This class us a Runnable class for connecting to the irc
