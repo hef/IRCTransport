@@ -1,7 +1,10 @@
 package hef.IRCTransport;
 
+import java.util.logging.Logger;
+
 import gnu.trove.map.hash.TIntObjectHashMap;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
@@ -15,6 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
     private TIntObjectHashMap<IrcAgent> bots;
     /** Reference to the parent plugin. */
     private final IRCTransport plugin;
+    private Logger log;
 
     /**
      * @param instance A reference to the plugin.
@@ -22,6 +26,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
     public IRCTransportPlayerListener(final IRCTransport instance) {
         this.bots = instance.getBots();
         plugin = instance;
+        log = instance.getServer().getLogger();
     }
 
     @Override
@@ -36,13 +41,21 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
     @Override
     public void onPlayerJoin(final PlayerJoinEvent event) {
-        this.bots.put(event.getPlayer().getEntityId(),
-                new IrcAgent(plugin, event.getPlayer()));
+        Player player = event.getPlayer();
+        int playerID = player.getEntityId();
+        IrcAgent agent = new IrcAgent(plugin, player);
+        agent.getListenerManager().addListener(plugin.getListener());
+        this.bots.put(playerID, agent);
+        log.info(String.format("Created agent for Player ID: %d name: %s", playerID, player.getName()));
+        
     }
 
     @Override
     public void onPlayerQuit(final PlayerQuitEvent event) {
-        this.bots.get(event.getPlayer().getEntityId()).shutdown();
-        this.bots.remove(event.getPlayer().getEntityId());
+        Player player = event.getPlayer();
+        int playerID = player.getEntityId();
+        this.bots.get(playerID).shutdown();
+        this.bots.remove(playerID);
+        log.info(String.format("Removed agent for Player ID: %d name: %s", playerID, player.getName()));
     }
 }
