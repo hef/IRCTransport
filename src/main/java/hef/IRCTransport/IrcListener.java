@@ -6,11 +6,12 @@ package hef.IRCTransport;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
-import org.pircbotx.Channel;
+import org.bukkit.entity.Player;
 import org.pircbotx.ReplyConstants;
 import org.pircbotx.User;
 import org.pircbotx.hooks.Event;
@@ -35,9 +36,11 @@ import org.pircbotx.hooks.events.UserListEvent;
  */
 public class IrcListener extends ListenerAdapter<IrcAgent>{
     IRCTransport plugin;
+    Logger log;
     
     public IrcListener(IRCTransport plugin)
     {
+        log = plugin.getServer().getLogger();
         this.plugin = plugin;
     }
     
@@ -52,7 +55,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
     @Override
     public void onAction(ActionEvent<IrcAgent> event)//final String sender, final String login, final String hostname, final String target, final String action) {
     {
-        event.getBot().getPlayer().sendMessage(String.format("[%s] * %s %s", event.getChannel(), event.getUser(), event.getAction()));
+        event.getBot().getPlayer().sendMessage(String.format("[%s] * %s %s", event.getChannel().getName(), event.getUser(), event.getAction()));
     }
 
     /** Join Correct Channels. Set name and topic suppression flags. */
@@ -94,7 +97,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
                     }
                 }
             } else {
-                //log("Object: " + i.toString() + " is a " + i.getClass().toString());
+                log.warning("Object: " + i.toString() + " is a " + i.getClass().toString());
             }
         }
     }
@@ -125,7 +128,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
         {
             event.getBot().setActiveChannel(event.getChannel());
         }
-        event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has joined.", event.getChannel(), event.getUser()));
+        event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has joined.", event.getChannel().getName(), event.getUser()));
     }
 
     /**
@@ -140,7 +143,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
     @Override
     public void onKick(KickEvent<IrcAgent> event)
     {
-        event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s kicked by %s: %s", event.getChannel(), event.getRecipient(), event.getSource(), event.getReason()));
+        event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s kicked by %s: %s", event.getChannel().getName(), event.getRecipient(), event.getSource(), event.getReason()));
     }
 
     /**
@@ -154,7 +157,13 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
     @Override
     public void onMessage(MessageEvent<IrcAgent> event)
     {
-        event.getBot().getPlayer().sendMessage(String.format("[%s] %s: %s", event.getChannel(), event.getUser(), ColorMap.fromIrc(event.getMessage())));
+        String format = "[%s] %s: %s";
+        String channel = event.getChannel().getName();
+        String sender = event.getUser().getNick();
+        String message = ColorMap.fromIrc(event.getMessage());
+        String formattedMessage = String.format(format, channel, sender, message);
+        event.getBot().getPlayer().sendMessage(formattedMessage);
+        log.info(formattedMessage);
     }
 
     /**
@@ -175,7 +184,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
             event.getBot().getSettings().setIrcNick(event.getNewNick());
             event.getBot().saveSettings();
         }
-        event.getBot().getPlayer().sendMessage(String.format("%s is now known as %s", event.getOldNick(),event.getNewNick()));
+        event.getBot().getPlayer().sendMessage(String.format("%s is now known as %s", event.getOldNick(), event.getNewNick()));
     }
 
     /**
@@ -188,7 +197,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
     @Override
     public void onPart(PartEvent<IrcAgent> event)
     {
-        event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has parted.", event.getChannel(), event.getUser()));
+        event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has parted.", event.getChannel().getName(), event.getUser()));
     }
 
     /**
@@ -267,15 +276,26 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
     @Override
     public void onTopic(TopicEvent<IrcAgent> event)
     {
-        if (event.isChanged()) {
-            event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] Topic changed: %s", event.getChannel(), event.getTopic()));
-        } else {
-            if (!event.getBot().getSuppressTopic().contains(event.getChannel())) {
-                event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] Topic: %s", event.getChannel(), event.getTopic()));
-            } else {
-                // Only silence the initial topic response.
-                event.getBot().getSuppressTopic().remove(event.getChannel());
-            }
+        String format;
+        String channel = event.getChannel().getName();
+        String topic = event.getChannel().getTopic();
+        Player player = event.getBot().getPlayer();
+        
+        if(event.getBot().getSuppressTopic().contains(event.getChannel()))
+        {
+            event.getBot().getSuppressTopic().remove(event.getChannel());
+        }
+        else if (event.isChanged())
+        {
+            format = ChatColor.YELLOW + "[%s] Topic changed: %s";
+            String formattedMessage = String.format(format, channel, topic);
+            player.sendMessage(formattedMessage);
+        }
+        else
+        {
+            format = ChatColor.YELLOW + String.format("[%s] Topic: %s");
+            String formattedMessage = String.format(format, channel, topic);
+            player.sendMessage(formattedMessage);
         }
     }
 
@@ -295,7 +315,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
                 usersString.append(user.toString());
                 usersString.append(" ");
             }
-            event.getBot().getPlayer().sendMessage(String.format("%s members: %s", event.getChannel(), usersString.toString()));
+            event.getBot().getPlayer().sendMessage(String.format("%s members: %s", event.getChannel().getName(), usersString.toString()));
         }
     }
 }

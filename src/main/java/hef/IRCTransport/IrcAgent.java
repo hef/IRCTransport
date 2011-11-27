@@ -2,14 +2,9 @@ package hef.IRCTransport;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
@@ -67,7 +62,10 @@ public class IrcAgent extends PircBotX {
             String suffix = plugin.getConfig().getString("default.suffix", "");
             getSettings().setIrcNick(String.format("%s%s%s", prefix, player.getName(), suffix));
         } else {
-            LOG.log(Level.INFO, String.format("Player '%s' using persistent IRC nick '%s'", player.getName(), getSettings().getIrcNick()));
+            String format = "Player '%s' using persistent IRC nick '%s'";
+            String name = player.getName();
+            String nick = getSettings().getIrcNick();
+            LOG.log(Level.INFO, String.format(format, name, nick));
         }
         setNick(getSettings().getIrcNick());
         new Connect(this).run();
@@ -80,9 +78,13 @@ public class IrcAgent extends PircBotX {
      * @throws IrcException If the server would not let us join it.
      */
     public void connect() throws IOException, IrcException {
+        String address = getPlugin().getConfig().getString("server.address");
+        int port = getPlugin().getConfig().getInt("server.port");
+        String password = getPlugin().getConfig().getString("server.password");
+        
         if (!isConnected()) {
             if (getServer() == null) {
-                connect(getPlugin().getConfig().getString("server.address"), getPlugin().getConfig().getInt("server.port"), getPlugin().getConfig().getString("server.password"));
+                connect(address, port, password);
             } else {
                 reconnect();
             }
@@ -166,7 +168,7 @@ public class IrcAgent extends PircBotX {
      */
     public void sendAction(final String action) {
         sendAction(activeChannel, action);
-        getPlayer().sendMessage(String.format("[%s] * %s %s", activeChannel, getPlayer().getDisplayName(), action));
+        getPlayer().sendMessage(String.format("[%s] * %s %s", activeChannel.getName(), getPlayer().getDisplayName(), action));
     }
 
     /**
@@ -176,7 +178,7 @@ public class IrcAgent extends PircBotX {
     public void sendMessage(final String message) {
         sendMessage(activeChannel, message);
         if (isConnected()) {
-            String msg = String.format("[%s] %s: %s", activeChannel, getPlayer().getDisplayName(), message);
+            String msg = String.format("[%s] %s: %s", activeChannel.getName(), getPlayer().getDisplayName(), message);
             getPlayer().sendMessage(msg);
         }
     }
@@ -194,6 +196,7 @@ public class IrcAgent extends PircBotX {
      * changeNick(String name) you probably don't want this function.
      * @param name the name to attempt to use.
      */
+    @Override
     public void setNick(final String name) {
         super.setName(name);
     }
