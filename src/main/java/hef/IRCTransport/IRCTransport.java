@@ -123,8 +123,10 @@ public class IRCTransport extends JavaPlugin {
                 Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener,
                 Priority.Normal, this);
+        
+        // Using Highest to allow other plugins to manipulate this before we propagate it
         pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener,
-                Priority.Monitor, this);
+                Priority.Highest, this);
         
         // set command executors
         IRCTransportCommandExecutor commandExecutor = new IRCTransportCommandExecutor(this);

@@ -38,7 +38,6 @@ import org.bukkit.entity.Player;
           if (bot.isConnected() && deathMessage != null && deathMessage != "")
           {
         	String playerName = ((Player)event.getEntity()).getName();
-        	System.out.println("PN=>" + playerName + "<");
 
         	// deathMessage seems to be 'playerName died for some reason'
         	if (deathMessage.startsWith(playerName))
@@ -54,6 +53,10 @@ import org.bukkit.entity.Player;
         	}
         	        	
             bot.sendAction(deathMessage.trim());
+            
+            // This winds up being sent to the player via IRC,
+            // so suppress the default message
+            deathEvent.setDeathMessage(null);
           }
     	}
     }
