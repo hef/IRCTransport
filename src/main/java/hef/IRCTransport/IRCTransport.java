@@ -29,7 +29,8 @@ public class IRCTransport extends JavaPlugin {
     private final TIntObjectHashMap<IrcAgent> bots = new TIntObjectHashMap<IrcAgent>();
     /** The player action handler. */
     private IRCTransportPlayerListener playerListener;
-
+    private IRCTransportEntityListener entityListener;
+    
     /**
      * Gets the maping of Bukkit Players to IRCAgents.
      * @return the map of player's to agents.
@@ -93,6 +94,7 @@ public class IRCTransport extends JavaPlugin {
     @Override
     public void onEnable() {
         this.playerListener = new IRCTransportPlayerListener(this);
+        this.entityListener = new IRCTransportEntityListener(this);
         getConfig().options().copyDefaults(true);
         PluginManager pm = getServer().getPluginManager();
         PluginDescriptionFile pdfFile = this.getDescription();
@@ -121,7 +123,9 @@ public class IRCTransport extends JavaPlugin {
                 Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener,
                 Priority.Normal, this);
-
+        pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener,
+                Priority.Monitor, this);
+        
         // set command executors
         IRCTransportCommandExecutor commandExecutor = new IRCTransportCommandExecutor(this);
         getCommand("join").setExecutor(commandExecutor);
