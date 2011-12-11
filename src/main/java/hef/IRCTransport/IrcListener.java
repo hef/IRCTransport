@@ -46,11 +46,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
     
     /**
      * Handle receiving an action. sent when another agent sends a /me
-     * @param sender the person committing the action
-     * @param login The login name of the actioner
-     * @param hostname the hostname of the actioner
-     * @param target The channel the action was in
-     * @param action The content of the aciton
+     * @param event Information derived from the event.
      */
     @Override
     public void onAction(ActionEvent<IrcAgent> event)//final String sender, final String login, final String hostname, final String target, final String action) {
@@ -115,10 +111,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
 
     /**
      * Join message handler.
-     * @param channel the channel the player joined
-     * @param sender the nick of the joiner
-     * @param login the login of the joiner
-     * @param hostname the hostname of the joiner
+     * @param event Information derived from the event.
      */
     @Override
     public void onJoin(JoinEvent<IrcAgent> event)
@@ -133,12 +126,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
 
     /**
      * Kick message handler.
-     * @param channel the channel the nick was kicked form
-     * @param kickerNick the Nick of the Kicker
-     * @param kickerLogin The login of the Kicker
-     * @param kickerHostname the hostname of the kicker.
-     * @param recipientNick The nick of the kickee.
-     * @param reason The stated reason that the Kicker kicked the kickee.
+     * @param event Information derived from the event.
      */
     @Override
     public void onKick(KickEvent<IrcAgent> event)
@@ -148,11 +136,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
 
     /**
      * Message received handler.
-     * @param channel The channel of the message
-     * @param sender The nick of the sender of the Message
-     * @param login The login of the sender of the Message
-     * @param hostname The hostname of the sender of the message
-     * @param message The body of the message.
+     * @param event Information derived from the event.
      */
     @Override
     public void onMessage(MessageEvent<IrcAgent> event)
@@ -170,10 +154,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * Nickchange notification handler. This is called when: a: Another agent
      * changes their nick b: when this agent change it's nick. Both these
      * situations are handled.
-     * @param oldNick the old nick of the changer.
-     * @param login the login of the changer (doesn't change)
-     * @param hostname the hostname of the changer (doesn't change)
-     * @param newNick the new nick of the changer.
+     * @param event Information derived from the event.
      */
     @Override
     public void onNickChange(NickChangeEvent<IrcAgent> event)
@@ -189,10 +170,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
 
     /**
      * The channel leave message handler.
-     * @param channel The channel that is being left
-     * @param sender The nick of the leaver
-     * @param login The login of the leaver
-     * @param hostname The hostname of the leaver.
+     * @param event Information derived from the event.
      */
     @Override
     public void onPart(PartEvent<IrcAgent> event)
@@ -202,10 +180,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
 
     /**
      * Private message handler (/msg).
-     * @param sender nick of the private message sender
-     * @param login login of the private message sender
-     * @param hostname hostname of the private message sender
-     * @param message the body of the private message
+     * @param event Information derived from the event.
      */
     @Override
     public void onPrivateMessage(PrivateMessageEvent<IrcAgent> event)
@@ -216,10 +191,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
     /**
      * Quit message handler. This is a quit message, it doesn't mean that we are
      * quitting.
-     * @param sourceNick Nick of the quitter.
-     * @param sourceLogin Login of the quitter.
-     * @param sourceHostname Hostname of the quitter.
-     * @param reason The reason the quitter gave for quitting.
+     * @param event Information derived from the event.
      */
     @Override
     public void onQuit(QuitEvent<IrcAgent> event)
@@ -231,8 +203,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * Handles response codes not handled by pircbot This methods handles irc
      * response codes, slices up the response, and then calls the appropriate
      * method.
-     * @param code the irc response code.
-     * @param response The message that came with the response
+     * @param event Information derived from the event.
      */
     @Override
     public void onUnknown(UnknownEvent<IrcAgent> event) {
@@ -256,8 +227,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
     
     /**
     * Error message handler.
-    * @param channel The channel the error message was sent from.
-    * @param message The error message body.
+    * @param event Information derived from the event.
     */
     protected void onErrorMessage(Event<IrcAgent> event, final String channel, final String message) {
         event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s", channel, message));
@@ -267,11 +237,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * Handles topic responses. Topic responses come in: a: as a response to a
      * topic request b: on channel join c: on topic change Honors muteTopic flag
      * for channel, will clear it as well.
-     * @param channel The channel the topic is set for.
-     * @param topic The body of the topic.
-     * @param setBy The nick of the topic setter.
-     * @param date The date the topic was set.
-     * @param changed Is this a new topic?
+    * @param event Information derived from the event.
      */
     @Override
     public void onTopic(TopicEvent<IrcAgent> event)
@@ -302,8 +268,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
     /**
      * UserList Response handler. usually a response to /names. Also occurs on
      * channel join. This will check the muteNames set, and clear it.
-     * @param channel The channel that the response is for
-     * @param users The users in the channel.
+     * @param event Information derived from the event.
      */
     @Override
     public void onUserList(UserListEvent<IrcAgent> event) {
