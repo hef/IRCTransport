@@ -32,12 +32,12 @@ public class IrcAgent extends PircBotX {
      * A set of channels to suppress onUserList. This is used to hide initial
      * join messages.
      */
-    private HashSet<Channel> suppressNames;
+    private HashSet<Channel> suppressNames = new HashSet<Channel>();;
     /**
      * A set of channels to suppress Topic message. This is used to hid initial
      * join messages.
      */
-    private HashSet<Channel> suppressTopic;
+    private HashSet<Channel> suppressTopic = new HashSet<Channel>();
 
     /**
      * Agent Constructor.
@@ -50,9 +50,6 @@ public class IrcAgent extends PircBotX {
         this.shuttingDown = false;
         setLogin(String.format("%s", player.getEntityId()));
         super.setAutoNickChange(true);
-
-        setSuppressNames(new HashSet<Channel>());
-        setSuppressTopic(new HashSet<Channel>());
 
         // init player settings
         setSettings(plugin.getDatabase().find(AgentSettings.class, player.getName()));
@@ -81,7 +78,7 @@ public class IrcAgent extends PircBotX {
         String address = getPlugin().getConfig().getString("server.address");
         int port = getPlugin().getConfig().getInt("server.port");
         String password = getPlugin().getConfig().getString("server.password");
-        
+
         if (!isConnected()) {
             if (getServer() == null) {
                 connect(address, port, password);
@@ -239,19 +236,17 @@ public class IrcAgent extends PircBotX {
         sendRawLine(String.format("WHOIS %s", nick));
     }
 
+    /**
+     * @return The hash set of channels to suppress user list in.
+     */
     public HashSet<Channel> getSuppressNames() {
         return suppressNames;
     }
 
-    public void setSuppressNames(HashSet<Channel> hashSet) {
-        this.suppressNames = hashSet;
-    }
-
+    /**
+     * @return  the Hash set of channels to suppress topic messages in.
+     */
     public HashSet<Channel> getSuppressTopic() {
         return suppressTopic;
-    }
-
-    public void setSuppressTopic(HashSet<Channel> suppressTopic) {
-        this.suppressTopic = suppressTopic;
     }
 }

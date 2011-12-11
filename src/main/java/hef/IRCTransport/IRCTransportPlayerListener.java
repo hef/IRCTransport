@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
     private TIntObjectHashMap<IrcAgent> bots;
     /** Reference to the parent plugin. */
     private final IRCTransport plugin;
+    /** Logger object. */
     private Logger log;
 
     /**
@@ -47,7 +48,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
         agent.getListenerManager().addListener(plugin.getListener());
         this.bots.put(playerID, agent);
         log.info(String.format("Created agent for Player ID: %d name: %s", playerID, player.getName()));
-        
     }
 
     @Override

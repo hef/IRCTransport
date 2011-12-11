@@ -34,29 +34,38 @@ import org.pircbotx.hooks.events.UserListEvent;
  *
  * @author hef
  */
-public class IrcListener extends ListenerAdapter<IrcAgent>{
-    IRCTransport plugin;
-    Logger log;
-    
-    public IrcListener(IRCTransport plugin)
-    {
+public class IrcListener extends ListenerAdapter<IrcAgent> {
+
+    /** The owning plugin. */
+    private IRCTransport plugin;
+    /** The log object. */
+    private Logger log;
+
+    /**
+     * Sets up object.
+     * @param parentPlugin owning plugin.
+     */
+    public IrcListener(final IRCTransport parentPlugin) {
+        this.plugin = parentPlugin;
         log = plugin.getServer().getLogger();
-        this.plugin = plugin;
+        
     }
-    
+
     /**
      * Handle receiving an action. sent when another agent sends a /me
      * @param event Information derived from the event.
      */
     @Override
-    public void onAction(ActionEvent<IrcAgent> event)//final String sender, final String login, final String hostname, final String target, final String action) {
+    public void onAction(final ActionEvent<IrcAgent> event)//final String sender, final String login, final String hostname, final String target, final String action) {
     {
         event.getBot().getPlayer().sendMessage(String.format("[%s] * %s %s", event.getChannel().getName(), event.getUser(), event.getAction()));
     }
 
-    /** Join Correct Channels. Set name and topic suppression flags. */
+    /** Join Correct Channels. Set name and topic suppression flags.
+    * @param event Information derived from the event.
+    */
     @Override
-    public void onConnect(ConnectEvent<IrcAgent> event) {
+    public void onConnect(final ConnectEvent<IrcAgent> event) {
         /*
          * String webirc =
          * plugin.getConfig().getString("server.webirc_password"); if(webirc !=
@@ -100,9 +109,10 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
 
     /**
      * Disconnect Handler. Will schedule a reconnect if not shutting down.
+     * @param event Information derived from the event.
      */
     @Override
-    public void onDisconnect(DisconnectEvent<IrcAgent> event) {
+    public void onDisconnect(final DisconnectEvent<IrcAgent> event) {
         event.getBot().getPlayer().sendMessage("ChatService Disconnected.");
         if (!event.getBot().isShuttingDown()) {
             new Connect(event.getBot()).run();
@@ -114,11 +124,9 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * @param event Information derived from the event.
      */
     @Override
-    public void onJoin(JoinEvent<IrcAgent> event)
-    {
+    public void onJoin(final JoinEvent<IrcAgent> event) {
         // if I joined, change active channel.
-        if( event.getUser().equals( event.getBot().getUserBot() ) )
-        {
+        if (event.getUser().equals(event.getBot().getUserBot())) {
             event.getBot().setActiveChannel(event.getChannel());
         }
         event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has joined.", event.getChannel().getName(), event.getUser()));
@@ -129,8 +137,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * @param event Information derived from the event.
      */
     @Override
-    public void onKick(KickEvent<IrcAgent> event)
-    {
+    public void onKick(final KickEvent<IrcAgent> event) {
         event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s kicked by %s: %s", event.getChannel().getName(), event.getRecipient(), event.getSource(), event.getReason()));
     }
 
@@ -139,8 +146,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * @param event Information derived from the event.
      */
     @Override
-    public void onMessage(MessageEvent<IrcAgent> event)
-    {
+    public void onMessage(final MessageEvent<IrcAgent> event) {
         String format = "[%s] %s: %s";
         String channel = event.getChannel().getName();
         String sender = event.getUser().getNick();
@@ -157,10 +163,8 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * @param event Information derived from the event.
      */
     @Override
-    public void onNickChange(NickChangeEvent<IrcAgent> event)
-    {
-        if(event.getUser().equals(event.getBot().getUserBot()))
-        {
+    public void onNickChange(final NickChangeEvent<IrcAgent> event) {
+        if (event.getUser().equals(event.getBot().getUserBot())) {
             event.getBot().getPlayer().setDisplayName(event.getNewNick());
             event.getBot().getSettings().setIrcNick(event.getNewNick());
             event.getBot().saveSettings();
@@ -173,8 +177,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * @param event Information derived from the event.
      */
     @Override
-    public void onPart(PartEvent<IrcAgent> event)
-    {
+    public void onPart(final PartEvent<IrcAgent> event) {
         event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s has parted.", event.getChannel().getName(), event.getUser()));
     }
 
@@ -183,8 +186,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * @param event Information derived from the event.
      */
     @Override
-    public void onPrivateMessage(PrivateMessageEvent<IrcAgent> event)
-    {
+    public void onPrivateMessage(final PrivateMessageEvent<IrcAgent> event) {
         event.getBot().getPlayer().sendMessage(String.format("%s: %s", event.getUser(), event.getMessage()));
     }
 
@@ -194,8 +196,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * @param event Information derived from the event.
      */
     @Override
-    public void onQuit(QuitEvent<IrcAgent> event)
-    {
+    public void onQuit(final QuitEvent<IrcAgent> event) {
         event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("%s has quit: %s", event.getUser(), event.getReason()));
     }
 
@@ -206,7 +207,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * @param event Information derived from the event.
      */
     @Override
-    public void onUnknown(UnknownEvent<IrcAgent> event) {
+    public void onUnknown(final UnknownEvent<IrcAgent> event) {
         Pattern responsePattern = Pattern.compile("(\\S*) (\\S*) :(.*)");
         Matcher responseMatcher = responsePattern.matcher(event.getLine());
         responseMatcher.find();
@@ -217,19 +218,21 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
             case ReplyConstants.ERR_NICKNAMEINUSE:
             case ReplyConstants.ERR_INVITEONLYCHAN:
             case ReplyConstants.ERR_BADCHANNELKEY:
-                onErrorMessage(event, responseMatcher.group(2), responseMatcher.group(3));
+                onErrorMessage(event, responseMatcher.group(2), responseMatcher.group(3));  //NOPMD
                 break;
             default:
                 break;
 
         }
     }
-    
+
     /**
-    * Error message handler.
-    * @param event Information derived from the event.
-    */
-    protected void onErrorMessage(Event<IrcAgent> event, final String channel, final String message) {
+     * Error message handler.
+     * @param event Information derived from the event.
+     * @param channel The channel that originated the message.
+     * @param message The error message.
+     */
+    protected void onErrorMessage(final Event<IrcAgent> event, final String channel, final String message) {
         event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + String.format("[%s] %s", channel, message));
     }
 
@@ -237,28 +240,22 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * Handles topic responses. Topic responses come in: a: as a response to a
      * topic request b: on channel join c: on topic change Honors muteTopic flag
      * for channel, will clear it as well.
-    * @param event Information derived from the event.
+     * @param event Information derived from the event.
      */
     @Override
-    public void onTopic(TopicEvent<IrcAgent> event)
-    {
+    public void onTopic(final TopicEvent<IrcAgent> event) {
         String format;
         String channel = event.getChannel().getName();
         String topic = event.getChannel().getTopic();
         Player player = event.getBot().getPlayer();
-        
-        if(event.getBot().getSuppressTopic().contains(event.getChannel()))
-        {
+
+        if (event.getBot().getSuppressTopic().contains(event.getChannel())) {
             event.getBot().getSuppressTopic().remove(event.getChannel());
-        }
-        else if (event.isChanged())
-        {
+        } else if (event.isChanged()) {
             format = ChatColor.YELLOW + "[%s] Topic changed: %s";
             String formattedMessage = String.format(format, channel, topic);
             player.sendMessage(formattedMessage);
-        }
-        else
-        {
+        } else {
             format = ChatColor.YELLOW + String.format("[%s] Topic: %s");
             String formattedMessage = String.format(format, channel, topic);
             player.sendMessage(formattedMessage);
@@ -271,7 +268,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent>{
      * @param event Information derived from the event.
      */
     @Override
-    public void onUserList(UserListEvent<IrcAgent> event) {
+    public void onUserList(final UserListEvent<IrcAgent> event) {
         if (event.getBot().getSuppressNames().contains(event.getChannel())) {
             event.getBot().getSuppressNames().remove(event.getChannel());
         } else {
