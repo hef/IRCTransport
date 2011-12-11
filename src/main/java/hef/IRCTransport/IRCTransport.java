@@ -29,6 +29,7 @@ public class IRCTransport extends JavaPlugin {
     private final TIntObjectHashMap<IrcAgent> bots = new TIntObjectHashMap<IrcAgent>();
     /** The player action handler. */
     private IRCTransportPlayerListener playerListener;
+    /** IRC event handler. */
     private IrcListener listener;
 
     /**
@@ -116,7 +117,6 @@ public class IRCTransport extends JavaPlugin {
             IrcAgent agent = new IrcAgent(this, player);
             agent.getListenerManager().addListener(getListener());
             this.bots.put(player.getEntityId(), agent);
-            
         }
 
         // register for events we care about
