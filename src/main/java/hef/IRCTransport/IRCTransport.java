@@ -31,7 +31,8 @@ public class IRCTransport extends JavaPlugin {
     private IRCTransportPlayerListener playerListener;
     /** IRC event handler. */
     private IrcListener listener;
-
+    private IRCTransportEntityListener entityListener;
+    
     /**
      * Gets the maping of Bukkit Players to IRCAgents.
      * @return the map of player's to agents.
@@ -96,6 +97,7 @@ public class IRCTransport extends JavaPlugin {
     public void onEnable() {
         this.playerListener = new IRCTransportPlayerListener(this);
         listener = new IrcListener(this);
+        this.entityListener = new IRCTransportEntityListener(this);
         getConfig().options().copyDefaults(true);
         PluginManager pm = getServer().getPluginManager();
         PluginDescriptionFile pdfFile = this.getDescription();
@@ -126,7 +128,11 @@ public class IRCTransport extends JavaPlugin {
                 Priority.Normal, this);
         pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener,
                 Priority.Normal, this);
-
+        
+        // Using Highest to allow other plugins to manipulate this before we propagate it
+        pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener,
+                Priority.Highest, this);
+        
         // set command executors
         IRCTransportCommandExecutor commandExecutor = new IRCTransportCommandExecutor(this);
         getCommand("join").setExecutor(commandExecutor);
