@@ -5,9 +5,11 @@ import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.net.SocketFactory;
 import org.bukkit.entity.Player;
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
+import org.pircbotx.UtilSSLSocketFactory;
 import org.pircbotx.exception.IrcException;
 
 /**
@@ -32,7 +34,8 @@ public class IrcAgent extends PircBotX {
      * A set of channels to suppress onUserList. This is used to hide initial
      * join messages.
      */
-    private HashSet<Channel> suppressNames = new HashSet<Channel>();;
+    private HashSet<Channel> suppressNames = new HashSet<Channel>();
+    ;
     /**
      * A set of channels to suppress Topic message. This is used to hid initial
      * join messages.
@@ -79,9 +82,22 @@ public class IrcAgent extends PircBotX {
         int port = getPlugin().getConfig().getInt("server.port");
         String password = getPlugin().getConfig().getString("server.password");
 
+        SocketFactory socketFactory = null;
+        if (getPlugin().getConfig().getBoolean("server.ssl", false)) {
+            socketFactory = new UtilSSLSocketFactory();
+        }
+
+        //setup WEBIRC
+        setWebIrcAddress(this.getPlayer().getAddress().getAddress());
+        setWebIrcHostname(player.getAddress().getHostName());
+        String webIrcPassword = getPlugin().getConfig().getString("server.webirc_password");
+        if (webIrcPassword != null) {
+            this.setWebIrcPassword(webIrcPassword);
+        }
+
         if (!isConnected()) {
             if (getServer() == null) {
-                connect(address, port, password);
+                connect(address, port, password, socketFactory);
             } else {
                 reconnect();
             }
