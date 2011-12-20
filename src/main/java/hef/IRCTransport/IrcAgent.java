@@ -1,4 +1,7 @@
 package hef.IRCTransport;
+import com.nijiko.permissions.PermissionHandler;
+import com.nijikokun.bukkit.Permissions.Permissions;
+import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -88,12 +91,12 @@ public class IrcAgent extends PircBotX {
         }
 
         //setup WEBIRC
-        setWebIrcAddress(this.getPlayer().getAddress().getAddress());
-        setWebIrcHostname(player.getAddress().getHostName());
-        String webIrcPassword = getPlugin().getConfig().getString("server.webirc_password");
-        if (webIrcPassword != null) {
-            this.setWebIrcPassword(webIrcPassword);
-        }
+        //setWebIrcAddress(this.getPlayer().getAddress().getAddress());
+        //setWebIrcHostname(player.getAddress().getHostName());
+        //String webIrcPassword = getPlugin().getConfig().getString("server.webirc_password");
+        //if (webIrcPassword != null) {
+        //    this.setWebIrcPassword(webIrcPassword);
+        //}
 
         if (!isConnected()) {
             if (getServer() == null) {
@@ -102,6 +105,7 @@ public class IrcAgent extends PircBotX {
                 reconnect();
             }
         }
+        this.joinChannel(plugin.getConfig().getString("autojoin"));
     }
 
     /**
@@ -181,7 +185,7 @@ public class IrcAgent extends PircBotX {
      */
     public void sendAction(final String action) {
         sendAction(activeChannel, action);
-        getPlayer().sendMessage(String.format("[%s] * %s %s", activeChannel.getName(), getPlayer().getDisplayName(), action));
+        getPlayer().sendMessage(String.format("* %s %s", activeChannel.getName(), getPlayer().getDisplayName(), action));
     }
 
     /**
@@ -191,8 +195,16 @@ public class IrcAgent extends PircBotX {
     public void sendMessage(final String message) {
         sendMessage(activeChannel, message);
         if (isConnected()) {
-            String msg = String.format("[%s] %s: %s", activeChannel.getName(), getPlayer().getDisplayName(), message);
-            getPlayer().sendMessage(msg);
+        	String formattedMessage = plugin.getConfig().getString("messages.chat-ingame");
+        	String group = IRCTransport.permissionHandler.getGroup(player.getWorld().getName(), player.getName());
+        	String prefix = IRCTransport.permissionHandler.getGroupRawPrefix(player.getWorld().getName(), group);
+        	String suffix = IRCTransport.permissionHandler.getGroupRawSuffix(player.getWorld().getName(), group);
+        	formattedMessage = formattedMessage.replace("${GROUP}", group);
+        	formattedMessage = formattedMessage.replace("${PREFIX}", prefix);
+        	formattedMessage = formattedMessage.replace("${SUFFIX}", suffix);
+        	formattedMessage = formattedMessage.replace("${NICK}", getPlayer().getDisplayName());
+            formattedMessage = formattedMessage.replace("${MESSAGE}", message);
+            getPlayer().sendMessage(formattedMessage.replace("&", "\u00A7"));
         }
     }
 

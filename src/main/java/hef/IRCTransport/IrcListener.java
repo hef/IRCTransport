@@ -58,11 +58,11 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
      */
     @Override
     public void onAction(final ActionEvent<IrcAgent> event) {
-        String format = "[%s] * %s %s";
+        String format = plugin.getConfig().getString("messages.action");
         String channel = event.getChannel().getName();
         String user = event.getUser().getNick();
         String action = event.getAction();
-        String message = String.format(format, channel, user, action);
+        String message = format.replace("${CHANNEL}", channel).replace("${NICK}", user).replace("${ACTION}", action);
         event.getBot().getPlayer().sendMessage(message);
     }
 
@@ -134,11 +134,11 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         if (event.getUser().equals(event.getBot().getUserBot())) {
             event.getBot().setActiveChannel(event.getChannel());
         }
-        String format = "[%s] %s has joined.";
+        String format = plugin.getConfig().getString("messages.join");
         String channel = event.getChannel().getName();
         String user = event.getUser().getNick();
-        String message = String.format(format, channel, user);
-        event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + message);
+        String message = format.replace("${CHANNEL}", channel).replace("${NICK}", user);
+        event.getBot().getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
     /**
@@ -147,13 +147,13 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
      */
     @Override
     public void onKick(final KickEvent<IrcAgent> event) {
-        String format = "[%s] %s kicked by %s: %s";
+        String format = plugin.getConfig().getString("messages.kick");
         String channel = event.getChannel().getName();
         String recipient = event.getRecipient().getNick();
         String source = event.getSource().getNick();
         String reason = event.getReason();
-        String message = String.format(format, channel, recipient, source, reason);
-        event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + message);
+        String message = format.replace("${NICK}", recipient).replace("${SOURCE}", source).replace("${REASON}", reason).replace("${CHANNEL}", channel);
+        event.getBot().getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
     /**
@@ -162,12 +162,33 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
      */
     @Override
     public void onMessage(final MessageEvent<IrcAgent> event) {
-        String format = "[%s] %s: %s";
+    	String formattedMessage = plugin.getConfig().getString("messages.chat-irc");
+    	
+        int len = plugin.getServer().getOnlinePlayers().length;
         String channel = event.getChannel().getName();
         String sender = event.getUser().getNick();
+        
+        //Player player = null;
+        for (int p = 0; p < len; p++)
+        {
+        	Player player = plugin.getServer().getOnlinePlayers()[p];
+        	if (player.getName().equals(sender))
+        	{
+        		formattedMessage = plugin.getConfig().getString("messages.chat-ingame");
+        		String group = plugin.permissionHandler.getGroup(player.getWorld().getName(), player.getDisplayName());
+        		formattedMessage = formattedMessage.replace("${GROUP}", group);
+            	String prefix = IRCTransport.permissionHandler.getGroupRawPrefix(player.getWorld().getName(), group);
+            	formattedMessage = formattedMessage.replace("${PREFIX}", prefix);
+            	String suffix = IRCTransport.permissionHandler.getGroupRawSuffix(player.getWorld().getName(), group);
+            	formattedMessage = formattedMessage.replace("${SUFFIX}", suffix);
+        	}
+        }
+        
         String message = ColorMap.fromIrc(event.getMessage());
-        String formattedMessage = String.format(format, channel, sender, message);
-        event.getBot().getPlayer().sendMessage(formattedMessage);
+        formattedMessage = formattedMessage.replace("${CHANNEL}", channel);
+        formattedMessage = formattedMessage.replace("${NICK}", sender);
+        formattedMessage = formattedMessage.replace("${MESSAGE}", message);
+        event.getBot().getPlayer().sendMessage(formattedMessage.replace("&", "\u00A7"));
         log.info(formattedMessage);
     }
 
@@ -184,11 +205,11 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
             event.getBot().getSettings().setIrcNick(event.getNewNick());
             event.getBot().saveSettings();
         }
-        String format = "%s is now known as %s";
+        String format = plugin.getConfig().getString("messages.rename");
         String oldNick = event.getOldNick();
         String newNick = event.getNewNick();
-        String message = String.format(format, oldNick, newNick);
-        event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + message);
+        String message = format.replace("${NICK}", oldNick).replace("${NEWNICK}", newNick);
+        event.getBot().getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
     /**
@@ -197,11 +218,11 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
      */
     @Override
     public void onPart(final PartEvent<IrcAgent> event) {
-        String format = "[%s] %s has parted.";
+        String format = plugin.getConfig().getString("messages.part");
         String channel = event.getChannel().getName();
         String user = event.getUser().getNick();
-        String message = String.format(format, channel, user);
-        event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + message);
+        String message = format.replace("${USER}", user).replace("${CHAN}", channel);
+        event.getBot().getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
     /**
@@ -210,11 +231,11 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
      */
     @Override
     public void onPrivateMessage(final PrivateMessageEvent<IrcAgent> event) {
-        String format = "%s: %s";
+        String format = plugin.getConfig().getString("messages.private");
         String user = event.getUser().getNick();
         String text = event.getMessage();
-        String message = String.format(format, user, text);
-        event.getBot().getPlayer().sendMessage(ChatColor.LIGHT_PURPLE + message);
+        String message = format.replace("${NICK}", user).replace("${MESSAGE}", text);
+        event.getBot().getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
     /**
@@ -224,11 +245,11 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
      */
     @Override
     public void onQuit(final QuitEvent<IrcAgent> event) {
-        String format = "%s has quit: %s";
+        String format = plugin.getConfig().getString("messages.quit");
         String user = event.getUser().getNick();
         String reason = event.getReason();
-        String message = String.format(format, user, reason);
-        event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + message);
+        String message = format.replace("${NICK}", user).replace("${REASON}", reason);
+        event.getBot().getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
     /**
@@ -266,7 +287,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
     protected void onErrorMessage(final Event<IrcAgent> event, final String channel, final String errorMessage) {
         String format = "[%s] %s";
         String message = String.format(format, channel, errorMessage);
-        event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + message);
+        event.getBot().getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
     /**
@@ -284,13 +305,9 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
 
         if (event.getBot().getSuppressTopic().contains(event.getChannel())) {
             event.getBot().getSuppressTopic().remove(event.getChannel());
-        } else if (event.isChanged()) {
-            format = ChatColor.YELLOW + "[%s] Topic changed: %s";
-            String formattedMessage = String.format(format, channel, topic);
-            player.sendMessage(formattedMessage);
         } else {
-            format = ChatColor.YELLOW + String.format("[%s] Topic: %s");
-            String formattedMessage = String.format(format, channel, topic);
+            format = plugin.getConfig().getString("messages.topic");
+            String formattedMessage = format.replace("${CHANNEL}", channel).replace("${TOPIC}", topic);
             player.sendMessage(formattedMessage);
         }
     }
@@ -307,13 +324,13 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         } else {
             StringBuilder usersString = new StringBuilder();
             for (User user : event.getUsers()) {
-                usersString.append(user.toString());
+                usersString.append(user.getNick());
                 usersString.append(" ");
             }
-            String format = "%s members: %s";
+            String format = plugin.getConfig().getString("messages.list");
             String channel = event.getChannel().getName();
-            String message = String.format(format, channel, usersString.toString());
-            event.getBot().getPlayer().sendMessage(ChatColor.YELLOW + message);
+            String message = format.replace("${LIST}", usersString.toString()).replace("${CHANNEL}", channel);
+            event.getBot().getPlayer().sendMessage(message.replace("&", "\u00A7"));
         }
     }
 }
