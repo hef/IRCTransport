@@ -13,17 +13,16 @@ default:
   suffix:
   channels:
     - channel: '#minecraft'
-	
 autojoin: '#minecraft'
 messages:
   chat-ingame: '[${PREFIX}${GROUP}${SUFFIX}&f] ${NICK}: ${MESSAGE}'
   chat-irc: '[${CHANNEL}] ${NICK}: ${MESSAGE}'
-  quit: ${NICK} a quitté
+  quit: '${NICK} left'
   private: '${NICK}: ${MESSAGE}'
-  part: ${NICK} est parti.
-  rename: ${OLDNICK} est maintenant ${NEWNICK}
-  kick: '${NICK} a été kické par ${OP}: ${REASON}'
-  join: ${NICK} a rejoint IRC
-  list: 'Sur IRC: ${LIST}'
-  topic: '[${CHANNEL}] Topic modifié: ${TOPIC}'
+  part: '${NICK} left'
+  rename: ${OLDNICK} is now ${NEWNICK}
+  kick: '${NICK} kicked by ${OP}: ${REASON}'
+  join: '${NICK} joined'
+  list: 'On IRC: ${LIST}'
+  topic: '[${CHANNEL}] Topic: ${TOPIC}'
   action: '* ${NICK} ${ACTION}'

@@ -86,7 +86,6 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         boolean bSuppressNames = plugin.getConfig().getBoolean("suppress.initial_userlist", false);
         boolean bSuppressTopic = plugin.getConfig().getBoolean("suppress.initial_topic", false);
         List<?> channelData = plugin.getConfig().getList("default.channels");
-
         for (Object i : channelData) {
             if (i instanceof LinkedHashMap) {
                 LinkedHashMap<?, ?> linkedHashMapI = (LinkedHashMap<?, ?>) i;
@@ -167,6 +166,13 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         int len = plugin.getServer().getOnlinePlayers().length;
         String channel = event.getChannel().getName();
         String sender = event.getUser().getNick();
+        
+        for (int p = 0; p < len; p++)
+        {
+        	Player player = plugin.getServer().getOnlinePlayers()[p];
+        	if (event.getUser().getLogin().equals(String.format("~%s", player.getEntityId())))
+        		sender = player.getDisplayName();
+        }
         
         //Player player = null;
         for (int p = 0; p < len; p++)
