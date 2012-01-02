@@ -63,7 +63,12 @@ public class IrcAgent extends PircBotX {
             setSettings(new AgentSettings(player));
             String prefix = plugin.getConfig().getString("default.prefix", "");
             String suffix = plugin.getConfig().getString("default.suffix", "");
-            getSettings().setIrcNick(String.format("%s%s%s", prefix, player.getName(), suffix));
+        	int ircnicksize = plugin.getConfig().getInt("server.nicksize", 15);
+        	String nick = String.format("%s%s%s", prefix, player.getName(), suffix);
+        	if (nick.length() > ircnicksize)
+        		nick = nick.substring(0, ircnicksize);
+            getSettings().setIrcNick(nick);
+            
         } else {
             String format = "Player '%s' using persistent IRC nick '%s'";
             String name = player.getName();
@@ -184,8 +189,13 @@ public class IrcAgent extends PircBotX {
      * @param action The content of the action.
      */
     public void sendAction(final String action) {
-        sendAction(activeChannel, action);
-        getPlayer().sendMessage(String.format("* %s %s", activeChannel.getName(), getPlayer().getDisplayName(), action));
+    	String actiontr = action;
+    	String trans = plugin.getConfig().getString("translations." + action, "");
+    	if (! trans.equals("")) {
+    		actiontr = trans;
+    	}
+        sendAction(activeChannel, actiontr);
+        getPlayer().sendMessage(String.format("* %s %s", /*activeChannel.getName(),*/ getPlayer().getDisplayName(), actiontr));
     }
 
     /**
@@ -246,8 +256,11 @@ public class IrcAgent extends PircBotX {
      * Initiate agent shutdown Disconnects the agent, sets shutting down flag.
      */
     public void shutdown() {
-        shuttingDown = true;
-        disconnect();
+        if (isConnected() && shuttingDown == false)
+        {
+            shuttingDown = true;
+        	disconnect();
+        }
     }
 
     /** Request active topic. */

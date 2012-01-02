@@ -8,6 +8,7 @@ server:
   password:
   ssl: false
   webirc_password:
+  nicksize: 16
 default:
   prefix:
   suffix:
@@ -26,3 +27,5 @@ messages:
   list: 'On IRC: ${LIST}'
   topic: '[${CHANNEL}] Topic: ${TOPIC}'
   action: '* ${NICK} ${ACTION}'
+translations:
+  hit the ground too hard: hit the ground

@@ -70,6 +70,9 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
             return topic(bot, args);
         } else if (commandName.equals("whois")) {
             return whois(bot, args);
+        } else if (commandName.equals("irc_listbots")) {
+        	log.info(plugin.getBots().toString());
+            return true;
         }
         return false;
     }

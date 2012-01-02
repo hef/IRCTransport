@@ -58,3 +58,7 @@ commands:
     usage: |
            /<command> [nick]
            /<command> Sam
+  irc_listbots:
+    description: List bots
+    usage: |
+           /<command>

@@ -175,6 +175,7 @@ public class IRCTransport extends JavaPlugin {
         getCommand("me").setExecutor(commandExecutor);
         getCommand("topic").setExecutor(commandExecutor);
         getCommand("whois").setExecutor(commandExecutor);
+        getCommand("irc_listbots").setExecutor(commandExecutor);
         LOG.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
     }
 
