@@ -84,15 +84,11 @@ public class IrcAgent extends PircBotX {
 
         SocketFactory socketFactory = null;
         if (getPlugin().getConfig().getBoolean("server.ssl", false)) {
-            socketFactory = new UtilSSLSocketFactory();
-        }
-
-        //setup WEBIRC
-        setWebIrcAddress(this.getPlayer().getAddress().getAddress());
-        setWebIrcHostname(player.getAddress().getHostName());
-        String webIrcPassword = getPlugin().getConfig().getString("server.webirc_password");
-        if (webIrcPassword != null) {
-            this.setWebIrcPassword(webIrcPassword);
+        	if (getPlugin().getConfig().getBoolean("server.trust-all", false)) {
+        		socketFactory = new UtilSSLSocketFactory().trustAllCertificates();
+        	} else {
+        		socketFactory = new UtilSSLSocketFactory();
+        	}
         }
 
         if (!isConnected()) {
