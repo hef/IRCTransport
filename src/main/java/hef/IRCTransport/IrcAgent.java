@@ -84,7 +84,7 @@ public class IrcAgent extends PircBotX {
 
         SocketFactory socketFactory = null;
         if (getPlugin().getConfig().getBoolean("server.ssl", false)) {
-        	if (getPlugin().getConfig().getBoolean("server.trust-all", false)) {
+        	if (getPlugin().getConfig().getBoolean("server.trust", false)) {
         		socketFactory = new UtilSSLSocketFactory().trustAllCertificates();
         	} else {
         		socketFactory = new UtilSSLSocketFactory();
