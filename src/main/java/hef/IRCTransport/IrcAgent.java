@@ -89,8 +89,8 @@ public class IrcAgent extends PircBotX {
         String password = getPlugin().getConfig().getString("server.password");
 
         SocketFactory socketFactory = null;
-        if (getPlugin().getConfig().getBoolean("server.ssl", false)) {
-        	if (getPlugin().getConfig().getBoolean("server.trust", false)) {
+        if (getPlugin().getConfig().getBoolean("server.ssl.enabled", false)) {
+        	if (getPlugin().getConfig().getBoolean("server.ssl.trust", false)) {
         		socketFactory = new UtilSSLSocketFactory().trustAllCertificates();
         	} else {
         		socketFactory = new UtilSSLSocketFactory();

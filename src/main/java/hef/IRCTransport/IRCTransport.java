@@ -110,7 +110,6 @@ public class IRCTransport extends JavaPlugin {
         getConfig()
                 .options()
                 .header("Config File for IRCTransport\nSee the website for more information");
-        saveConfig();
         initDatabase();
 
         // establish list of players
