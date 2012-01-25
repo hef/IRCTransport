@@ -30,6 +30,8 @@ public class Connect implements Runnable {
      * Parent IRC agent. The class will perform a lot of actions on the agent.
      */
     private IrcAgent agent;
+    /** Exception was caught */
+    public boolean exception;
 
     /**
      * Create a Connection instance Pass this from IrcAgent so we have access.
@@ -48,6 +50,7 @@ public class Connect implements Runnable {
     public void run() {
         // If a task where scheduled, and the user disconnected, this would
         // continually keep the agent alive.
+    	exception = false;
         if (!agent.isShuttingDown()) {
             try {
                 agent.connect();
@@ -76,7 +79,9 @@ public class Connect implements Runnable {
                 }
             } catch (IrcException e) {
                 LOG.log(Level.SEVERE, e.getMessage(), e);
-            }
+            } catch (Exception e) {
+				exception = true;
+			}
         }
     }
 }

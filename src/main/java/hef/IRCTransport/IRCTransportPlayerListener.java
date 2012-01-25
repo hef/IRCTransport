@@ -47,7 +47,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
     public void onPlayerJoin(final PlayerJoinEvent event) {
         Player player = event.getPlayer();
         int playerID = player.getEntityId();
-        IrcAgent agent = new IrcAgent(plugin, player);
+        IrcAgent agent;
+        
+        try {
+        	agent = new IrcAgent(plugin, player);
+        } catch (Exception e) {
+        	return;
+        }
+        
         agent.getListenerManager().addListener(plugin.getListener());
         this.bots.put(playerID, agent);
         

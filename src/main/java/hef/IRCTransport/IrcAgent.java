@@ -46,8 +46,9 @@ public class IrcAgent extends PircBotX {
      * Agent Constructor.
      * @param instance Reference to plugin instance.
      * @param bukkitPlayer Reference to Bukkit Player
+     * @throws Exception SSL failure
      */
-    public IrcAgent(final IRCTransport instance, final Player bukkitPlayer) {
+    public IrcAgent(final IRCTransport instance, final Player bukkitPlayer) throws Exception {
         this.plugin = instance;
         this.player = bukkitPlayer;
         this.shuttingDown = false;
@@ -68,7 +69,11 @@ public class IrcAgent extends PircBotX {
             LOG.log(Level.INFO, String.format(format, name, nick));
         }
         setNick(getSettings().getIrcNick());
-        new Connect(this).run();
+        Connect connection; 
+        connection = new Connect(this);
+        connection.run();
+        if(connection.exception)
+        	throw new Exception("Failed to connect");
     }
 
     /**
@@ -76,8 +81,9 @@ public class IrcAgent extends PircBotX {
      * Connect(this).run()` instead.
      * @throws IOException If it was not possible to connect to the server.
      * @throws IrcException If the server would not let us join it.
+     * @throws Exception SSL failure
      */
-    public void connect() throws IOException, IrcException {
+    public void connect() throws IOException, IrcException, Exception {
         String address = getPlugin().getConfig().getString("server.address");
         int port = getPlugin().getConfig().getInt("server.port");
         String password = getPlugin().getConfig().getString("server.password");
@@ -93,7 +99,13 @@ public class IrcAgent extends PircBotX {
 
         if (!isConnected()) {
             if (getServer() == null) {
-                connect(address, port, password, socketFactory);
+            	try {
+            		connect(address, port, password, socketFactory);
+            	} catch (Exception e) {
+            		LOG.log(Level.SEVERE, "[IRCTransport] Unable to connect. Disabling plugin.");
+            		plugin.getPluginLoader().disablePlugin(plugin);
+            		throw new Exception("Connect Error");
+            	}
             } else {
                 reconnect();
             }

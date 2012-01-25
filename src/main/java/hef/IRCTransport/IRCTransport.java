@@ -116,7 +116,12 @@ public class IRCTransport extends JavaPlugin {
         // establish list of players
         Player[] players = getServer().getOnlinePlayers();
         for (Player player : players) {
-            IrcAgent agent = new IrcAgent(this, player);
+            IrcAgent agent;
+			try {
+				agent = new IrcAgent(this, player);
+			} catch (Exception e) {
+				return;
+			}
             agent.getListenerManager().addListener(getListener());
             this.bots.put(player.getEntityId(), agent);
         }
