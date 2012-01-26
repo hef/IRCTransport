@@ -166,7 +166,7 @@ public class IrcAgent extends PircBotX {
      */
     protected void names(final Channel activeChannel2) {
         getSuppressNames().remove(activeChannel2);
-        sendRawLine("NAMES " + activeChannel2);
+        sendRawLine("NAMES " + activeChannel2.getName());
     }
 
     /** Save agent settings to persistent data store. */
@@ -240,7 +240,7 @@ public class IrcAgent extends PircBotX {
     /** Request active topic. */
     protected void topic() {
         getSuppressTopic().remove(activeChannel);
-        sendRawLine(String.format("TOPIC %s", activeChannel));
+        sendRawLine(String.format("TOPIC %s", activeChannel.getName()));
     }
 
     /**
