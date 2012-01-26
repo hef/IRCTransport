@@ -289,7 +289,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
             String formattedMessage = String.format(format, channel, topic);
             player.sendMessage(formattedMessage);
         } else {
-            format = ChatColor.YELLOW + String.format("[%s] Topic: %s");
+            format = ChatColor.YELLOW + "[%s] Topic: %s";
             String formattedMessage = String.format(format, channel, topic);
             player.sendMessage(formattedMessage);
         }
