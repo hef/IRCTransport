@@ -1,8 +1,5 @@
 package hef.IRCTransport;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
@@ -55,44 +52,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
         	return;
         }
         
-        agent.getListenerManager().addListener(plugin.getListener());
         this.bots.put(playerID, agent);
         
-        /* Added until pircbotx onConnect() works */
-        if(agent.getChannelsNames().isEmpty())
-        {
-        	log.warning("[IRCTransport] Failed to call onConnect(). Joining default channel...");
-        	agent.getPlayer().setDisplayName(agent.getNick());
-        	agent.getSettings().setIrcNick(agent.getNick());
-
-            boolean bSuppressNames = plugin.getConfig().getBoolean("suppress.initial_userlist", false);
-            boolean bSuppressTopic = plugin.getConfig().getBoolean("suppress.initial_topic", false);
-            List<?> channelData = plugin.getConfig().getList("default.channels");
-
-            for (Object i : channelData) {
-                if (i instanceof LinkedHashMap) {
-                    LinkedHashMap<?, ?> linkedHashMapI = (LinkedHashMap<?, ?>) i;
-
-                    String channelName = (String) linkedHashMapI.get("channel");
-                    if (channelName != null) {
-                        if (bSuppressNames) {
-                        	agent.getSuppressNames().add(agent.getChannel(channelName));
-                        }
-                        if (bSuppressTopic) {
-                        	agent.getSuppressTopic().add(agent.getChannel(channelName));
-                        }
-                        String key = (String) linkedHashMapI.get("key");
-                        if (key != null) {
-                        	agent.joinChannel(channelName, key);
-                        } else {
-                        	agent.joinChannel(channelName);
-                        }
-                    }
-                } else {
-                    log.log(Level.WARNING, "Object: {0} is a {1}", new Object[]{i.toString(), i.getClass().toString()});
-                }
-            }
-        }
         log.info(String.format("Created agent for Player ID: %d name: %s", playerID, player.getName()));
     }
 
