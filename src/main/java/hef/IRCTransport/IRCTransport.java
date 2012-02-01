@@ -12,10 +12,7 @@ import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -28,10 +25,9 @@ public class IRCTransport extends JavaPlugin {
     /** MC Player to IRCAgent map. */
     private final TIntObjectHashMap<IrcAgent> bots = new TIntObjectHashMap<IrcAgent>();
     /** The player action handler. */
-    private IRCTransportPlayerListener playerListener;
+    private IRCTransportListener playerListener;
     /** IRC event handler. */
     private IrcListener listener;
-    private IRCTransportEntityListener entityListener;
     
     /**
      * Gets the maping of Bukkit Players to IRCAgents.
@@ -95,11 +91,9 @@ public class IRCTransport extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        this.playerListener = new IRCTransportPlayerListener(this);
+        this.playerListener = new IRCTransportListener(this);
         listener = new IrcListener(this);
-        this.entityListener = new IRCTransportEntityListener(this);
         getConfig().options().copyDefaults(true);
-        PluginManager pm = getServer().getPluginManager();
         PluginDescriptionFile pdfFile = this.getDescription();
         if (getConfig().getString("server.address") == null) {
             LOG.severe(pdfFile.getName() + ": set \"server.address\" in "
@@ -126,16 +120,7 @@ public class IRCTransport extends JavaPlugin {
         }
 
         // register for events we care about
-        pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener,
-                Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener,
-                Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener,
-                Priority.Normal, this);
-        
-        // Using Highest to allow other plugins to manipulate this before we propagate it
-        pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener,
-                Priority.Highest, this);
+        getServer().getPluginManager().registerEvents(this.playerListener, this);
         
         // set command executors
         IRCTransportCommandExecutor commandExecutor = new IRCTransportCommandExecutor(this);
