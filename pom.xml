@@ -238,7 +238,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.0.1-R2-SNAPSHOT</version>
+            <version>1.1.0-R3</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -258,13 +258,6 @@
             <artifactId>trove4j</artifactId>
             <version>3.0.1</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-        	<groupId>com.nijiko.permissions</groupId>
-        	<artifactId>permissions</artifactId>
-        	<scope>system</scope>
-        	<version>3.1.6</version>
-        	<systemPath>${project.basedir}\external\Permissions-3.1.6.jar</systemPath>
         </dependency>
     </dependencies>
 </project>

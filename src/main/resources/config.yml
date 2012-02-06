@@ -16,7 +16,7 @@ default:
     - channel: '#minecraft'
 autojoin: '#minecraft'
 messages:
-  chat-ingame: '[${PREFIX}${GROUP}${SUFFIX}&f] ${NICK}: ${MESSAGE}'
+  chat-ingame: '${NICK}: ${MESSAGE}'
   chat-irc: '[${CHANNEL}] ${NICK}: ${MESSAGE}'
   quit: '${NICK} left'
   private: '${NICK}: ${MESSAGE}'

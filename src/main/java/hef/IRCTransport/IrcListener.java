@@ -173,22 +173,6 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         		sender = player.getDisplayName();
         }
         
-        //Player player = null;
-        for (int p = 0; p < len; p++)
-        {
-        	Player player = plugin.getServer().getOnlinePlayers()[p];
-        	if (player.getName().equals(sender))
-        	{
-        		formattedMessage = plugin.getConfig().getString("messages.chat-ingame");
-        		String group = IRCTransport.permissionHandler.getGroupProperName(player.getWorld().getName(), player.getDisplayName());
-        		formattedMessage = formattedMessage.replace("${GROUP}", group);
-            	String prefix = IRCTransport.permissionHandler.getGroupRawPrefix(player.getWorld().getName(), group);
-            	formattedMessage = formattedMessage.replace("${PREFIX}", prefix);
-            	String suffix = IRCTransport.permissionHandler.getGroupRawSuffix(player.getWorld().getName(), group);
-            	formattedMessage = formattedMessage.replace("${SUFFIX}", suffix);
-        	}
-        }
-        
         String message = ColorMap.fromIrc(event.getMessage());
         formattedMessage = formattedMessage.replace("${CHANNEL}", channel);
         formattedMessage = formattedMessage.replace("${NICK}", sender);

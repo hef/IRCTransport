@@ -1,9 +1,5 @@
 package hef.IRCTransport;
 
-import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
-
-import org.bukkit.plugin.Plugin;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.procedure.TIntObjectProcedure;
 
@@ -23,23 +19,6 @@ import org.bukkit.plugin.java.JavaPlugin;
  * IRCTransport for Bukkit.
  */
 public class IRCTransport extends JavaPlugin {
-
-	public static PermissionHandler permissionHandler;
-	private void setupPermissions() {
-	    if (permissionHandler != null) {
-	        return;
-	    }
-	    
-	    Plugin permissionsPlugin = this.getServer().getPluginManager().getPlugin("Permissions");
-	    
-	    if (permissionsPlugin == null) {
-	        LOG.log(Level.INFO, "Permission system not detected, defaulting to OP");
-	        return;
-	    }
-	    
-	    permissionHandler = ((Permissions) permissionsPlugin).getHandler();
-	    LOG.log(Level.INFO, "Found and will use plugin "+((Permissions)permissionsPlugin).getDescription().getFullName());
-	}
 	
     /** The logging obect. Used internal to write to the console. */
     private static final Logger LOG = Logger.getLogger("Minecraft");
@@ -114,7 +93,6 @@ public class IRCTransport extends JavaPlugin {
     @Override
     public void onEnable() {
         this.playerListener = new IRCTransportListener(this);
-    	setupPermissions();
         listener = new IrcListener(this);
         getConfig().options().copyDefaults(true);
         PluginDescriptionFile pdfFile = this.getDescription();
