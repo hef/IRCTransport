@@ -212,7 +212,7 @@ public class IrcAgent extends PircBotX {
         sendMessage(activeChannel, message);
         if (isConnected()) {
         	String formattedMessage = plugin.getConfig().getString("messages.chat-ingame");
-        	String group = IRCTransport.permissionHandler.getGroup(player.getWorld().getName(), player.getName());
+        	String group = IRCTransport.permissionHandler.getGroupProperName(player.getWorld().getName(), player.getName());
         	String prefix = IRCTransport.permissionHandler.getGroupRawPrefix(player.getWorld().getName(), group);
         	String suffix = IRCTransport.permissionHandler.getGroupRawSuffix(player.getWorld().getName(), group);
         	formattedMessage = formattedMessage.replace("${GROUP}", group);

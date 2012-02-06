@@ -180,7 +180,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         	if (player.getName().equals(sender))
         	{
         		formattedMessage = plugin.getConfig().getString("messages.chat-ingame");
-        		String group = plugin.permissionHandler.getGroup(player.getWorld().getName(), player.getDisplayName());
+        		String group = IRCTransport.permissionHandler.getGroupProperName(player.getWorld().getName(), player.getDisplayName());
         		formattedMessage = formattedMessage.replace("${GROUP}", group);
             	String prefix = IRCTransport.permissionHandler.getGroupRawPrefix(player.getWorld().getName(), group);
             	formattedMessage = formattedMessage.replace("${PREFIX}", prefix);
