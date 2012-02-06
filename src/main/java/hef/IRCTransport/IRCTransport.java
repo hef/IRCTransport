@@ -1,10 +1,17 @@
 package hef.IRCTransport;
 
+import com.nijiko.permissions.PermissionHandler;
+import com.nijikokun.bukkit.Permissions.Permissions;
+
+import org.bukkit.Server;
+import org.bukkit.plugin.Plugin;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.procedure.TIntObjectProcedure;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,14 +19,37 @@ import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.Event.Priority;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.pircbotx.PircBotX;
+
+import com.nijiko.permissions.PermissionHandler;
 
 /**
  * IRCTransport for Bukkit.
  */
 public class IRCTransport extends JavaPlugin {
 
+	public static PermissionHandler permissionHandler;
+	private void setupPermissions() {
+	    if (permissionHandler != null) {
+	        return;
+	    }
+	    
+	    Plugin permissionsPlugin = this.getServer().getPluginManager().getPlugin("Permissions");
+	    
+	    if (permissionsPlugin == null) {
+	        LOG.log(Level.INFO, "Permission system not detected, defaulting to OP");
+	        return;
+	    }
+	    
+	    permissionHandler = ((Permissions) permissionsPlugin).getHandler();
+	    LOG.log(Level.INFO, "Found and will use plugin "+((Permissions)permissionsPlugin).getDescription().getFullName());
+	}
+	
     /** The logging obect. Used internal to write to the console. */
     private static final Logger LOG = Logger.getLogger("Minecraft");
     /** MC Player to IRCAgent map. */
@@ -81,6 +111,7 @@ public class IRCTransport extends JavaPlugin {
         TIntObjectProcedure<IrcAgent> shutdown = new ShutdownProcedure();
         bots.forEachEntry(shutdown);
         bots.clear();
+        
         LOG.log(Level.INFO, this.getDescription().getFullName()
                 + " is disabled");
     }
@@ -92,6 +123,7 @@ public class IRCTransport extends JavaPlugin {
     @Override
     public void onEnable() {
         this.playerListener = new IRCTransportListener(this);
+    	setupPermissions();
         listener = new IrcListener(this);
         getConfig().options().copyDefaults(true);
         PluginDescriptionFile pdfFile = this.getDescription();
@@ -133,6 +165,7 @@ public class IRCTransport extends JavaPlugin {
         getCommand("me").setExecutor(commandExecutor);
         getCommand("topic").setExecutor(commandExecutor);
         getCommand("whois").setExecutor(commandExecutor);
+        getCommand("irc_listbots").setExecutor(commandExecutor);
         LOG.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
     }
 
