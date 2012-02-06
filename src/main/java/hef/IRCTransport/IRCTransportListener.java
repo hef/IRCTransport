@@ -1,8 +1,7 @@
 package hef.IRCTransport;
 
+import java.util.HashMap;
 import java.util.logging.Logger;
-
-import gnu.trove.map.hash.TIntObjectHashMap;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,7 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
  */
  public class IRCTransportListener implements Listener {
     /** Maps to retrieve associated IrcAggent from player. */
-    private TIntObjectHashMap<IrcAgent> bots;
+    private HashMap<Integer,IrcAgent> bots;
     /** Reference to the parent plugin. */
     private final IRCTransport plugin;
     /** Logger object. */
