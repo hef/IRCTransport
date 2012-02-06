@@ -1,8 +1,4 @@
 package hef.IRCTransport;
-import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
-import org.bukkit.plugin.Plugin;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.logging.Level;
