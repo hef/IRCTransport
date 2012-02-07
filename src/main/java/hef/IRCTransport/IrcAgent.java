@@ -8,6 +8,7 @@ import javax.net.SocketFactory;
 import org.bukkit.entity.Player;
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
+import org.pircbotx.User;
 import org.pircbotx.UtilSSLSocketFactory;
 import org.pircbotx.exception.IrcException;
 
@@ -181,8 +182,15 @@ public class IrcAgent extends PircBotX {
      * @param activeChannel2 The channel to list names from.
      */
     protected void names(final Channel activeChannel2) {
-        getSuppressNames().remove(activeChannel2);
-        sendRawLine("NAMES " + activeChannel2.getName());
+        StringBuilder usersString = new StringBuilder();
+        for (User user : getUsers(activeChannel2)) {
+            usersString.append(user.getNick());
+            usersString.append(" ");
+        }
+        String format = plugin.getConfig().getString("messages.list");
+        String channel = activeChannel2.getName();
+        String message = format.replace("${LIST}", usersString.toString()).replace("${CHANNEL}", channel);
+        getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
     /** Save agent settings to persistent data store. */

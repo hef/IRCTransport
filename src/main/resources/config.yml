@@ -24,7 +24,7 @@ messages:
   rename: ${OLDNICK} is now ${NEWNICK}
   kick: '${NICK} kicked by ${OP}: ${REASON}'
   join: '${NICK} joined'
-  list: 'On IRC: ${LIST}'
+  list: 'On [${CHANNEL}]: ${LIST}'
   topic: '[${CHANNEL}] Topic: ${TOPIC}'
   action: '* ${NICK} ${ACTION}'
 translations:
