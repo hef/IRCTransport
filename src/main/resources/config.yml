@@ -6,7 +6,9 @@ server:
   address: localhost
   port: 6667
   password:
-  ssl: false
+  ssl:
+    enabled: false
+    trust: false
   webirc_password:
   nicksize: 16
 default:
@@ -16,16 +18,15 @@ default:
     - channel: '#minecraft'
 autojoin: '#minecraft'
 messages:
-  chat-ingame: '${NICK}: ${MESSAGE}'
-  chat-irc: '[${CHANNEL}] ${NICK}: ${MESSAGE}'
-  quit: '${NICK} left'
-  private: '${NICK}: ${MESSAGE}'
-  part: '${NICK} left'
-  rename: ${OLDNICK} is now ${NEWNICK}
-  kick: '${NICK} kicked by ${OP}: ${REASON}'
-  join: '${NICK} joined'
-  list: 'On [${CHANNEL}]: ${LIST}'
-  topic: '[${CHANNEL}] Topic: ${TOPIC}'
-  action: '* ${NICK} ${ACTION}'
+  chat-irc: '[&e${CHANNEL}&f] &d${NICK}: &f${MESSAGE}'
+  quit: '&d${NICK} &fleft'
+  private: '&d${NICK}: &f${MESSAGE}'
+  part: '&d${NICK} &fleft'
+  rename: '&d${OLDNICK} &fis now &d${NEWNICK}'
+  kick: '&d${NICK} &ckicked by &d${OP}: &${REASON}'
+  join: '&d${NICK} &fjoined &e${CHANNEL}'
+  list: 'On [&e${CHANNEL}&f]: &d${LIST}'
+  topic: '[&e${CHANNEL}&f] &dTopic: &${TOPIC}'
+  action: '* &d${NICK} &a${ACTION}'
 translations:
   hit the ground too hard: hit the ground

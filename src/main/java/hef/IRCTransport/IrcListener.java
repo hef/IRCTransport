@@ -62,7 +62,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         String user = event.getUser().getNick();
         String action = event.getAction();
         String message = format.replace("${CHANNEL}", channel).replace("${NICK}", user).replace("${ACTION}", action);
-        event.getBot().getPlayer().sendMessage(message);
+        event.getBot().getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
     /** Join Correct Channels. Set name and topic suppression flags.
@@ -173,7 +173,8 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         		sender = player.getDisplayName();
         }
         
-        String message = ColorMap.fromIrc(event.getMessage());
+        String message = event.getMessage();
+        message.replace("&", "\u00A7");
         formattedMessage = formattedMessage.replace("${CHANNEL}", channel);
         formattedMessage = formattedMessage.replace("${NICK}", sender);
         formattedMessage = formattedMessage.replace("${MESSAGE}", message);

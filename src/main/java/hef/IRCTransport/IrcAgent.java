@@ -205,11 +205,19 @@ public class IrcAgent extends PircBotX {
     public void sendAction(final String action) {
     	String actiontr = action;
     	String trans = plugin.getConfig().getString("translations." + action, "");
+    	String format = plugin.getConfig().getString("messages.action");
+    	
     	if (! trans.equals("")) {
     		actiontr = trans;
     	}
+    	
         sendAction(activeChannel, actiontr);
-        getPlayer().sendMessage(String.format("* %s %s", /*activeChannel.getName(),*/ getPlayer().getDisplayName(), actiontr));
+        
+    	String message = format.replace("${CHANNEL}", activeChannel.getName());
+    	message = message.replace("${NICK}", getPlayer().getDisplayName());
+    	message = message.replace("${ACTION}", actiontr);
+    	
+        getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
     /**
@@ -219,9 +227,10 @@ public class IrcAgent extends PircBotX {
     public void sendMessage(final String message) {
         sendMessage(activeChannel, message);
         if (isConnected()) {
-        	String formattedMessage = plugin.getConfig().getString("messages.chat-ingame");
+        	String formattedMessage = plugin.getConfig().getString("messages.chat-irc");
         	formattedMessage = formattedMessage.replace("${NICK}", getPlayer().getDisplayName());
             formattedMessage = formattedMessage.replace("${MESSAGE}", message);
+            formattedMessage = formattedMessage.replace("${CHANNEL}", activeChannel.getName());
             getPlayer().sendMessage(formattedMessage.replace("&", "\u00A7"));
         }
     }
