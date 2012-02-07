@@ -16,6 +16,8 @@ default:
   suffix:
   channels:
     - channel: '#minecraft'
+  prefix: MC-
+  suffix: -IRC  
 autojoin: '#minecraft'
 messages:
   chat-irc: '[&e${CHANNEL}&f] &d${NICK}: &f${MESSAGE}'
