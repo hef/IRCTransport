@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.pircbotx.Channel;
 
 /**
  * @author hef
@@ -104,13 +105,16 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
     public boolean leave(final IrcAgent bot, final String[] args) {
         if (args.length == 1) {
             bot.partChannel(bot.getChannel(args[0]));
-            return true;
         } else if (args.length > 1) {
             String message = makeMessage(args, 1);
             bot.partChannel(bot.getChannel(args[0]), message);
-            return true;
         }
-        return false;
+        
+        Object[] chanList = bot.getChannels().toArray();
+        Object prevChan = chanList[chanList.length-1];
+        String newActive = ((Channel)prevChan).getName();
+    	channel(bot, newActive);
+    	return true;
     }
 
     /** Change the active channel.
@@ -125,6 +129,15 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
             return true;
         }
         return false;
+    }
+    
+    /** Change the active channel.
+     * The agent must already be in the channel.
+     * @param bot The IRC agent that needs to handle the action
+     * @param args the channel to switch to.
+     */
+    public void channel(final IrcAgent bot, final String args) {
+    	bot.setActiveChannel(bot.getChannel(args));
     }
 
     /** Send a private message in IRC.
