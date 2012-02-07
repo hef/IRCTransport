@@ -20,13 +20,13 @@ autojoin: '#minecraft'
 messages:
   chat-irc: '[&e${CHANNEL}&f] &d${NICK}: &f${MESSAGE}'
   quit: '&d${NICK} &fleft'
-  private: '&d${NICK}: &f${MESSAGE}'
+  private: '&d${NICK}&f to &d${TO}: &f${MESSAGE}'
   part: '&d${NICK} &fleft'
   rename: '&d${OLDNICK} &fis now &d${NEWNICK}'
   kick: '&d${NICK} &ckicked by &d${OP}: &${REASON}'
   join: '&d${NICK} &fjoined &e${CHANNEL}'
   list: 'On [&e${CHANNEL}&f]: &d${LIST}'
   topic: '[&e${CHANNEL}&f] &dTopic: &${TOPIC}'
-  action: '* &d${NICK} &a${ACTION}'
+  action: '* &d${NICK} &b${ACTION}'
 translations:
   hit the ground too hard: hit the ground

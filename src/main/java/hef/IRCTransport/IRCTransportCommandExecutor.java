@@ -149,6 +149,10 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
         if (args.length > 1) {
             String message = makeMessage(args, 1);
             bot.sendMessage(args[0], message);
+            String format = plugin.getConfig().getString("messages.private");
+            String user = bot.getNick();
+            message = format.replace("${NICK}", user).replace("${MESSAGE}", message).replace("${TO}", args[0]);
+            bot.getPlayer().sendMessage(message.replace("&", "\u00A7"));
             return true;
         }
         return false;
