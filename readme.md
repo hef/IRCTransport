@@ -1,33 +1,45 @@
-[CHAT] IRCTransport 0.11.3 - Minecraft Chat/IRC Integration
+[CHAT] IRCTransport 0.11.4 - Minecraft Chat/IRC Integration
 =============================================================
 
 This [Bukkit](http://bukkit.org/) plugin replaces minecraft chat system with a connection to an IRC Server.  All IRC Connections happen Bukkit server side, so either run your own IRC server, or make sure that you are allowed to use mutiple connections on the IRC server of your choice.
 
 Available settings:
 -------------------
-Put these in IRCTransport/plugin.yml file with appropriate values.
+Put these in IRCTransport/config.yml file with appropriate values.
 
 
-    verbose: false
-    suppress:
-      initial_userlist: false
-      initial_topic: false
-    server:
-      address: localhost
-      port: 6667
-      password: server_password
-      ssl:
-        enabled: true
-        trust: true
-    default:
-      prefix: MC-
-      suffix: -IRC
-      channels:
-        - channel: '#minecraft'
-          key: channel_password
-         - channel: '#help'
+		verbose: false
+		suppress:
+		  initial_userlist: false
+		  initial_topic: false
+		server:
+		  address: localhost
+		  port: 6667
+		  ssl:
+			enabled: false
+			trust: false
+		  nicksize: 16
+		default:
+		  prefix: '[MC]'
+		  suffix: 
+		  channels:
+			- channel: '#minecraft'
+		autojoin: '#minecraft'
+		messages:
+		  chat-irc: '[&e${CHANNEL}&f] &d${NICK}: &f${MESSAGE}'
+		  quit: '&d${NICK} &fleft'
+		  private: '&d${NICK}&f to &d${TO}: &f${MESSAGE}'
+		  part: '&d${NICK} &fleft'
+		  rename: '&d${OLDNICK} &fis now &d${NEWNICK}'
+		  kick: '&d${NICK} &ckicked by &d${OP}: &${REASON}'
+		  join: '&d${NICK} &fjoined &e${CHANNEL}'
+		  list: 'On [&e${CHANNEL}&f]: &d${LIST}'
+		  topic: '[&e${CHANNEL}&f] &dTopic: &${TOPIC}'
+		  action: '* &d${NICK} &b${ACTION}'
+		translations:
+		  hit the ground too hard: hit the ground
 
-The server address  setting is mandatory.  All other settings are optional.
+The server address setting is mandatory.  All other settings are optional.
 
 ### Normal Settings
 Your config.yml will look a lot like this:
@@ -49,9 +61,10 @@ Available commands:
     /me action to perform -- performs an irc action
     /topic -- get or set the channel topic
     /whois -- gets information about a nick
+	/irc_listbots -- lists all connected users on the system terminal
 
-[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.11.2.jar)  
-[Source](https://github.com/hef/IRCTransport)
+[Download](https://github.com/downloads/lostkhaos/IRCTransport/IRCTransport-0.11.4.jar)  
+[Source](https://github.com/lostkhaos/IRCTransport)
 
 Features:
 ---------
@@ -61,6 +74,10 @@ Features:
 
 Changelog:
 ----------
+### Version 0.11.4
+  * Merged in fensoft's fork
+  * Added color coding
+  * Fixed several command bugs
 
 ### Version 0.11.3
   * Fixed bugs caused by new PircBotX.
