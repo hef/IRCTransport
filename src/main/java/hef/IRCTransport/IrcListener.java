@@ -190,7 +190,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
      */
     @Override
     public void onNickChange(final NickChangeEvent<IrcAgent> event) {
-        if (event.getUser().equals(event.getBot().getUserBot())) {
+        if (event.getBot().getUserBot().getNick().equals(event.getOldNick())) {
             event.getBot().getPlayer().setDisplayName(event.getNewNick());
             event.getBot().getSettings().setIrcNick(event.getNewNick());
             event.getBot().saveSettings();
@@ -198,7 +198,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         String format = plugin.getConfig().getString("messages.rename");
         String oldNick = event.getOldNick();
         String newNick = event.getNewNick();
-        String message = format.replace("${NICK}", oldNick).replace("${NEWNICK}", newNick);
+        String message = format.replace("${OLDNICK}", oldNick).replace("${NEWNICK}", newNick);
         event.getBot().getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
