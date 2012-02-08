@@ -11,6 +11,7 @@ import org.pircbotx.PircBotX;
 import org.pircbotx.User;
 import org.pircbotx.UtilSSLSocketFactory;
 import org.pircbotx.exception.IrcException;
+import static org.pircbotx.ReplyConstants.*;
 
 /**
  * Represent a player to an IRC server. Every Bukkit player should have one!
@@ -30,6 +31,8 @@ public class IrcAgent extends PircBotX {
     private AgentSettings settings;
     /** Flag to indicate we should not reconnect. */
     private boolean shuttingDown;
+    /** Flag to indicate we are getting WHOIS. */
+    private boolean recvWho = false;
     /**
      * A set of channels to suppress onUserList. This is used to hide initial
      * join messages.
@@ -306,5 +309,26 @@ public class IrcAgent extends PircBotX {
      */
     public HashSet<Channel> getSuppressTopic() {
         return suppressTopic;
+    }
+    
+    /**
+     * Parse /WHOIS data since PircBotX does not.
+     * @param code the integer code for the message
+     * @param response the response from the server
+     */
+    @Override
+    protected void processServerResponse(int code, String response) {
+    	// Process WHOIS data
+    	if(code == RPL_WHOISUSER)
+    		recvWho = true;
+    	else if (code == RPL_ENDOFWHOIS)
+    		recvWho = false;
+    	if(recvWho)
+    	{
+    		response = response.replaceFirst(getNick()+" ", "&4");
+    		getPlayer().sendMessage(response.replace("&", "\u00A7"));
+    	}
+    	
+    	super.processServerResponse(code, response);
     }
 }

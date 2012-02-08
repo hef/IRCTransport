@@ -5,19 +5,15 @@ suppress:
 server:
   address: localhost
   port: 6667
-  password:
   ssl:
     enabled: false
     trust: false
-  webirc_password:
   nicksize: 16
 default:
-  prefix:
-  suffix:
+  prefix: '[MC]'
+  suffix: 
   channels:
     - channel: '#minecraft'
-  prefix: MC-
-  suffix: -IRC  
 autojoin: '#minecraft'
 messages:
   chat-irc: '[&e${CHANNEL}&f] &d${NICK}: &f${MESSAGE}'
