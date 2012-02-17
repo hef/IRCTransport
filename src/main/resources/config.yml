@@ -6,6 +6,8 @@ server:
   address: localhost
   port: 6667
   password:
+  ssl: false
+  webirc_password:
 default:
   prefix:
   suffix:

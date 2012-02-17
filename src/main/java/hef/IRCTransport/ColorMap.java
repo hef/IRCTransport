@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.ChatColor;
-import org.jibble.pircbot.Colors;
+import org.pircbotx.Colors;
 
 /** Minecraft <-> IRC Color Mapping class
  * Converts Color codes from IRC to Minecraft and from Minecraft to IRC.
