@@ -59,6 +59,9 @@ Features:
 Changelog:
 ----------
 
+### Version 0.12.0
+  * Works with Bukkit 1.1
+
 ### Version 0.11.2
   * Fixed /msg showing usage everytime.
 

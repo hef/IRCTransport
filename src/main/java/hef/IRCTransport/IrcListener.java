@@ -261,7 +261,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
      * Error message handler.
      * @param event Information derived from the event.
      * @param channel The channel that originated the message.
-     * @param message The error message.
+     * @param errorMessage The error message.
      */
     protected void onErrorMessage(final Event<IrcAgent> event, final String channel, final String errorMessage) {
         String format = "[%s] %s";
@@ -289,7 +289,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
             String formattedMessage = String.format(format, channel, topic);
             player.sendMessage(formattedMessage);
         } else {
-            format = ChatColor.YELLOW + String.format("[%s] Topic: %s");
+            format = ChatColor.YELLOW + "[%s] Topic: %s";
             String formattedMessage = String.format(format, channel, topic);
             player.sendMessage(formattedMessage);
         }

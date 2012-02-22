@@ -35,7 +35,6 @@ public class IrcAgent extends PircBotX {
      * join messages.
      */
     private HashSet<Channel> suppressNames = new HashSet<Channel>();
-    ;
     /**
      * A set of channels to suppress Topic message. This is used to hid initial
      * join messages.

@@ -12,8 +12,6 @@ import java.util.logging.Logger;
 import javax.persistence.PersistenceException;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,11 +26,10 @@ public class IRCTransport extends JavaPlugin {
     /** MC Player to IRCAgent map. */
     private final TIntObjectHashMap<IrcAgent> bots = new TIntObjectHashMap<IrcAgent>();
     /** The player action handler. */
-    private IRCTransportPlayerListener playerListener;
+    private BukkitListener bukkitListener;
     /** IRC event handler. */
     private IrcListener listener;
-    private IRCTransportEntityListener entityListener;
-    
+
     /**
      * Gets the maping of Bukkit Players to IRCAgents.
      * @return the map of player's to agents.
@@ -76,8 +73,8 @@ public class IRCTransport extends JavaPlugin {
     }
 
     /**
-     * Turnoff and cleanup the plugin. sets shutdown flag Signs all users out of
-     * IRC
+     * Turnoff and cleanup the plugin. Sets shutdown flag Signs all users out of
+     * IRC.
      */
     @Override
     public void onDisable() {
@@ -95,10 +92,9 @@ public class IRCTransport extends JavaPlugin {
      */
     @Override
     public void onEnable() {
-        this.playerListener = new IRCTransportPlayerListener(this);
+        this.bukkitListener = new BukkitListener(this);
         listener = new IrcListener(this);
-        this.entityListener = new IRCTransportEntityListener(this);
-        getConfig().options().copyDefaults(true);
+        getConfig() .options().copyDefaults(true);
         PluginManager pm = getServer().getPluginManager();
         PluginDescriptionFile pdfFile = this.getDescription();
         if (getConfig().getString("server.address") == null) {
@@ -122,17 +118,7 @@ public class IRCTransport extends JavaPlugin {
         }
 
         // register for events we care about
-        pm.registerEvent(Event.Type.PLAYER_CHAT, playerListener,
-                Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener,
-                Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_QUIT, playerListener,
-                Priority.Normal, this);
-        
-        // Using Highest to allow other plugins to manipulate this before we propagate it
-        pm.registerEvent(Event.Type.ENTITY_DEATH, entityListener,
-                Priority.Highest, this);
-        
+        pm.registerEvents(bukkitListener, this);
         // set command executors
         IRCTransportCommandExecutor commandExecutor = new IRCTransportCommandExecutor(this);
         getCommand("join").setExecutor(commandExecutor);
