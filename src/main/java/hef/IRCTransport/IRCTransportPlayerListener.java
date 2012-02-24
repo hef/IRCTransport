@@ -43,6 +43,15 @@ import org.bukkit.event.player.PlayerQuitEvent;
     @Override
     public void onPlayerJoin(final PlayerJoinEvent event) {
         Player player = event.getPlayer();
+        
+    	for (final int x : bots.keys())
+    	{
+    		IrcAgent current = bots.get(x);
+    		if (current.getPlayer().getName().equals(player.getName()))
+    			current.shutdown();
+    		current.getPlayer().getName();
+    	}
+    	
         int playerID = player.getEntityId();
         IrcAgent agent = new IrcAgent(plugin, player);
         agent.getListenerManager().addListener(plugin.getListener());

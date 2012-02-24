@@ -8,8 +8,24 @@ server:
   password:
   ssl: false
   webirc_password:
+  nicksize: 16
 default:
   prefix:
   suffix:
   channels:
     - channel: '#minecraft'
+autojoin: '#minecraft'
+messages:
+  chat-ingame: '[${PREFIX}${GROUP}${SUFFIX}&f] ${NICK}: ${MESSAGE}'
+  chat-irc: '[${CHANNEL}] ${NICK}: ${MESSAGE}'
+  quit: '${NICK} left'
+  private: '${NICK}: ${MESSAGE}'
+  part: '${NICK} left'
+  rename: ${OLDNICK} is now ${NEWNICK}
+  kick: '${NICK} kicked by ${OP}: ${REASON}'
+  join: '${NICK} joined'
+  list: 'On IRC: ${LIST}'
+  topic: '[${CHANNEL}] Topic: ${TOPIC}'
+  action: '* ${NICK} ${ACTION}'
+translations:
+  hit the ground too hard: hit the ground

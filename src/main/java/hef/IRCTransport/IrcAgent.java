@@ -1,4 +1,7 @@
 package hef.IRCTransport;
+import com.nijiko.permissions.PermissionHandler;
+import com.nijikokun.bukkit.Permissions.Permissions;
+import org.bukkit.plugin.Plugin;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -60,7 +63,12 @@ public class IrcAgent extends PircBotX {
             setSettings(new AgentSettings(player));
             String prefix = plugin.getConfig().getString("default.prefix", "");
             String suffix = plugin.getConfig().getString("default.suffix", "");
-            getSettings().setIrcNick(String.format("%s%s%s", prefix, player.getName(), suffix));
+        	int ircnicksize = plugin.getConfig().getInt("server.nicksize", 15);
+        	String nick = String.format("%s%s%s", prefix, player.getName(), suffix);
+        	if (nick.length() > ircnicksize)
+        		nick = nick.substring(0, ircnicksize);
+            getSettings().setIrcNick(nick);
+            
         } else {
             String format = "Player '%s' using persistent IRC nick '%s'";
             String name = player.getName();
@@ -88,12 +96,12 @@ public class IrcAgent extends PircBotX {
         }
 
         //setup WEBIRC
-        setWebIrcAddress(this.getPlayer().getAddress().getAddress());
-        setWebIrcHostname(player.getAddress().getHostName());
-        String webIrcPassword = getPlugin().getConfig().getString("server.webirc_password");
-        if (webIrcPassword != null) {
-            this.setWebIrcPassword(webIrcPassword);
-        }
+        //setWebIrcAddress(this.getPlayer().getAddress().getAddress());
+        //setWebIrcHostname(player.getAddress().getHostName());
+        //String webIrcPassword = getPlugin().getConfig().getString("server.webirc_password");
+        //if (webIrcPassword != null) {
+        //    this.setWebIrcPassword(webIrcPassword);
+        //}
 
         if (!isConnected()) {
             if (getServer() == null) {
@@ -102,6 +110,7 @@ public class IrcAgent extends PircBotX {
                 reconnect();
             }
         }
+        this.joinChannel(plugin.getConfig().getString("autojoin"));
     }
 
     /**
@@ -180,8 +189,13 @@ public class IrcAgent extends PircBotX {
      * @param action The content of the action.
      */
     public void sendAction(final String action) {
-        sendAction(activeChannel, action);
-        getPlayer().sendMessage(String.format("[%s] * %s %s", activeChannel.getName(), getPlayer().getDisplayName(), action));
+    	String actiontr = action;
+    	String trans = plugin.getConfig().getString("translations." + action, "");
+    	if (! trans.equals("")) {
+    		actiontr = trans;
+    	}
+        sendAction(activeChannel, actiontr);
+        getPlayer().sendMessage(String.format("* %s %s", /*activeChannel.getName(),*/ getPlayer().getDisplayName(), actiontr));
     }
 
     /**
@@ -191,8 +205,16 @@ public class IrcAgent extends PircBotX {
     public void sendMessage(final String message) {
         sendMessage(activeChannel, message);
         if (isConnected()) {
-            String msg = String.format("[%s] %s: %s", activeChannel.getName(), getPlayer().getDisplayName(), message);
-            getPlayer().sendMessage(msg);
+        	String formattedMessage = plugin.getConfig().getString("messages.chat-ingame");
+        	String group = IRCTransport.permissionHandler.getGroup(player.getWorld().getName(), player.getName());
+        	String prefix = IRCTransport.permissionHandler.getGroupRawPrefix(player.getWorld().getName(), group);
+        	String suffix = IRCTransport.permissionHandler.getGroupRawSuffix(player.getWorld().getName(), group);
+        	formattedMessage = formattedMessage.replace("${GROUP}", group);
+        	formattedMessage = formattedMessage.replace("${PREFIX}", prefix);
+        	formattedMessage = formattedMessage.replace("${SUFFIX}", suffix);
+        	formattedMessage = formattedMessage.replace("${NICK}", getPlayer().getDisplayName());
+            formattedMessage = formattedMessage.replace("${MESSAGE}", message);
+            getPlayer().sendMessage(formattedMessage.replace("&", "\u00A7"));
         }
     }
 
@@ -234,8 +256,11 @@ public class IrcAgent extends PircBotX {
      * Initiate agent shutdown Disconnects the agent, sets shutting down flag.
      */
     public void shutdown() {
-        shuttingDown = true;
-        disconnect();
+        if (isConnected() && shuttingDown == false)
+        {
+            shuttingDown = true;
+        	disconnect();
+        }
     }
 
     /** Request active topic. */
