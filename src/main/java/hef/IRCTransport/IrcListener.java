@@ -307,7 +307,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         } else {
             StringBuilder usersString = new StringBuilder();
             for (User user : event.getUsers()) {
-                usersString.append(user.toString());
+                usersString.append(user.getNick());
                 usersString.append(" ");
             }
             String format = "%s members: %s";
