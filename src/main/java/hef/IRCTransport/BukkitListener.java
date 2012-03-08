@@ -83,7 +83,7 @@ public class BukkitListener implements Listener {
         String deathMessage = event.getDeathMessage();
 
         IrcAgent bot = this.bots.get(event.getEntity().getEntityId());
-        if (bot.isConnected() && deathMessage != null && deathMessage.equals("")) {
+        if (bot.isConnected() && deathMessage != null && !deathMessage.equals("")) {
             String playerName = ((Player) event.getEntity()).getName();
 
             // deathMessage seems to be 'playerName died for some reason'
