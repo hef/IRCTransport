@@ -9,7 +9,7 @@
     <inceptionYear>2011</inceptionYear>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bukkit.version>1.2.2-R0.1-SNAPSHOT</bukkit.version>
+        <bukkit.version>1.2.3-R0.2-SNAPSHOT</bukkit.version>
         <pircbotx.version>1.7-SNAPSHOT</pircbotx.version>
         <trove4j.version>3.0.2</trove4j.version>
     </properties>
