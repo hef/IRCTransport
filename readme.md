@@ -60,7 +60,7 @@ Changelog:
 ----------
 
 ### Version 0.12.0
-  * Works with Bukkit 1.1
+  * Works with Bukkit 1.1 (and 1.2)
   * Fixed bug in DeathMessage
 
 ### Version 0.11.2
