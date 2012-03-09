@@ -1,4 +1,4 @@
-[CHAT] IRCTransport 0.11.2 - Minecraft Chat/IRC Integration
+[CHAT] IRCTransport 0.12.0 - Minecraft Chat/IRC Integration
 =============================================================
 
 This [Bukkit](http://bukkit.org/) plugin replaces minecraft chat system with a connection to an IRC Server.  All IRC Connections happen Bukkit server side, so either run your own IRC server, or make sure that you are allowed to use mutiple connections on the IRC server of your choice.
@@ -47,7 +47,7 @@ Available commands:
     /topic -- get or set the channel topic
     /whois -- gets information about a nick
 
-[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.11.2.jar)  
+[Download](https://github.com/downloads/hef/IRCTransport/IRCTransport-0.12.0.jar)  
 [Source](https://github.com/hef/IRCTransport)
 
 Features:
