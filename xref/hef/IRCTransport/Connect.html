@@ -15,14 +15,14 @@
 <a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> java.util.logging.Logger;
 <a class="jxr_linenumber" name="6" href="#6">6</a>   
 <a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> org.bukkit.ChatColor;
-<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> org.jibble.pircbot.IrcException;
-<a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> org.jibble.pircbot.NickAlreadyInUseException;
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> org.pircbotx.exception.IrcException;
+<a class="jxr_linenumber" name="9" href="#9">9</a>   <strong class="jxr_keyword">import</strong> org.pircbotx.exception.NickAlreadyInUseException;
 <a class="jxr_linenumber" name="10" href="#10">10</a>  
 <a class="jxr_linenumber" name="11" href="#11">11</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="12" href="#12">12</a>  <em class="jxr_javadoccomment"> * Connection Task This class us a Runnable class for connecting to the irc</em>
 <a class="jxr_linenumber" name="13" href="#13">13</a>  <em class="jxr_javadoccomment"> * server. It will reschedule a connection</em>
 <a class="jxr_linenumber" name="14" href="#14">14</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="../../hef/IRCTransport/Connect.html">Connect</a> <strong class="jxr_keyword">implements</strong> Runnable {
+<a class="jxr_linenumber" name="15" href="#15">15</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="../../hef/IRCTransport/Connect.html">Connect</a> <strong class="jxr_keyword">implements</strong> Runnable {
 <a class="jxr_linenumber" name="16" href="#16">16</a>      <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="17" href="#17">17</a>  <em class="jxr_javadoccomment">     * Time between connection retries after a failed connection attempt.</em>
 <a class="jxr_linenumber" name="18" href="#18">18</a>  <em class="jxr_javadoccomment">     * 4oo is 20 seconds.</em>
@@ -60,45 +60,36 @@
 <a class="jxr_linenumber" name="50" href="#50">50</a>          <em class="jxr_comment">// continually keep the agent alive.</em>
 <a class="jxr_linenumber" name="51" href="#51">51</a>          <strong class="jxr_keyword">if</strong> (!agent.isShuttingDown()) {
 <a class="jxr_linenumber" name="52" href="#52">52</a>              <strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="53" href="#53">53</a>                  <em class="jxr_comment">// If we never set the server i.e. havn't connected yet</em>
-<a class="jxr_linenumber" name="54" href="#54">54</a>                  <strong class="jxr_keyword">if</strong> (agent.getServer() == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="55" href="#55">55</a>                      <em class="jxr_comment">//TODO: these settings should be moved into the agent.</em>
-<a class="jxr_linenumber" name="56" href="#56">56</a>                      agent.connect(agent.getPlugin().getConfig().getString(<span class="jxr_string">"server.address"</span>),
-<a class="jxr_linenumber" name="57" href="#57">57</a>                                    agent.getPlugin().getConfig().getInt(<span class="jxr_string">"server.port"</span>),
-<a class="jxr_linenumber" name="58" href="#58">58</a>                                    agent.getPlugin().getConfig().getString(<span class="jxr_string">"server.password"</span>));
-<a class="jxr_linenumber" name="59" href="#59">59</a>                  } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="60" href="#60">60</a>                      <em class="jxr_comment">// reconnect should recycle settings the user already has</em>
-<a class="jxr_linenumber" name="61" href="#61">61</a>                      agent.reconnect();
-<a class="jxr_linenumber" name="62" href="#62">62</a>                  }
-<a class="jxr_linenumber" name="63" href="#63">63</a>              } <strong class="jxr_keyword">catch</strong> (NickAlreadyInUseException e) {
-<a class="jxr_linenumber" name="64" href="#64">64</a>                  <em class="jxr_comment">// This should not happen, the agent is set to auto retry new</em>
-<a class="jxr_linenumber" name="65" href="#65">65</a>                  <em class="jxr_comment">// names</em>
-<a class="jxr_linenumber" name="66" href="#66">66</a>                  LOG.log(Level.SEVERE, e.getMessage(), e);
-<a class="jxr_linenumber" name="67" href="#67">67</a>              } <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="68" href="#68">68</a>                  <strong class="jxr_keyword">if</strong> (e.getMessage().equalsIgnoreCase(<span class="jxr_string">"Connection refused"</span>)) {
-<a class="jxr_linenumber" name="69" href="#69">69</a>                      agent.getPlayer().sendMessage(
-<a class="jxr_linenumber" name="70" href="#70">70</a>                              ChatColor.YELLOW + <span class="jxr_string">"Failed to connect to Chat Server."</span>);
-<a class="jxr_linenumber" name="71" href="#71">71</a>                      <em class="jxr_comment">// 400 seems to be 20 seconds</em>
-<a class="jxr_linenumber" name="72" href="#72">72</a>                      agent.getPlugin()
-<a class="jxr_linenumber" name="73" href="#73">73</a>                              .getServer()
-<a class="jxr_linenumber" name="74" href="#74">74</a>                              .getScheduler()
-<a class="jxr_linenumber" name="75" href="#75">75</a>                              .scheduleAsyncDelayedTask(agent.getPlugin(), <strong class="jxr_keyword">this</strong>, RETRY_RATE);
-<a class="jxr_linenumber" name="76" href="#76">76</a>                  } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong>
-<a class="jxr_linenumber" name="77" href="#77">77</a>                      (e.getMessage().equalsIgnoreCase(<span class="jxr_string">"Connection reset"</span>)) {
-<a class="jxr_linenumber" name="78" href="#78">78</a>                      agent.getPlayer().sendMessage(ChatColor.YELLOW + <span class="jxr_string">"Connection reset while connecting to Chat Server"</span>);
-<a class="jxr_linenumber" name="79" href="#79">79</a>                      agent.getPlugin()
-<a class="jxr_linenumber" name="80" href="#80">80</a>                              .getServer()
-<a class="jxr_linenumber" name="81" href="#81">81</a>                              .getScheduler()
-<a class="jxr_linenumber" name="82" href="#82">82</a>                              .scheduleAsyncDelayedTask(agent.getPlugin(), <strong class="jxr_keyword">this</strong>, INITIAL_RETRY_DELAY);
-<a class="jxr_linenumber" name="83" href="#83">83</a>                  } <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="84" href="#84">84</a>                      LOG.log(Level.SEVERE, e.getMessage(), e);
-<a class="jxr_linenumber" name="85" href="#85">85</a>                  }
-<a class="jxr_linenumber" name="86" href="#86">86</a>              } <strong class="jxr_keyword">catch</strong> (IrcException e) {
-<a class="jxr_linenumber" name="87" href="#87">87</a>                  LOG.log(Level.SEVERE, e.getMessage(), e);
-<a class="jxr_linenumber" name="88" href="#88">88</a>              }
-<a class="jxr_linenumber" name="89" href="#89">89</a>          }
-<a class="jxr_linenumber" name="90" href="#90">90</a>      }
-<a class="jxr_linenumber" name="91" href="#91">91</a>  }
+<a class="jxr_linenumber" name="53" href="#53">53</a>                  agent.connect();
+<a class="jxr_linenumber" name="54" href="#54">54</a>              } <strong class="jxr_keyword">catch</strong> (NickAlreadyInUseException e) {
+<a class="jxr_linenumber" name="55" href="#55">55</a>                  <em class="jxr_comment">// This should not happen, the agent is set to auto retry new</em>
+<a class="jxr_linenumber" name="56" href="#56">56</a>                  <em class="jxr_comment">// names</em>
+<a class="jxr_linenumber" name="57" href="#57">57</a>                  LOG.log(Level.SEVERE, e.getMessage(), e);
+<a class="jxr_linenumber" name="58" href="#58">58</a>              } <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="59" href="#59">59</a>                  <strong class="jxr_keyword">if</strong> (e.getMessage().equalsIgnoreCase(<span class="jxr_string">"Connection refused"</span>)) {
+<a class="jxr_linenumber" name="60" href="#60">60</a>                      agent.getPlayer().sendMessage(
+<a class="jxr_linenumber" name="61" href="#61">61</a>                              ChatColor.YELLOW + <span class="jxr_string">"Failed to connect to Chat Server."</span>);
+<a class="jxr_linenumber" name="62" href="#62">62</a>                      <em class="jxr_comment">// 400 seems to be 20 seconds</em>
+<a class="jxr_linenumber" name="63" href="#63">63</a>                      agent.getPlugin()
+<a class="jxr_linenumber" name="64" href="#64">64</a>                              .getServer()
+<a class="jxr_linenumber" name="65" href="#65">65</a>                              .getScheduler()
+<a class="jxr_linenumber" name="66" href="#66">66</a>                              .scheduleAsyncDelayedTask(agent.getPlugin(), <strong class="jxr_keyword">this</strong>, RETRY_RATE);
+<a class="jxr_linenumber" name="67" href="#67">67</a>                  } <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong>
+<a class="jxr_linenumber" name="68" href="#68">68</a>                      (e.getMessage().equalsIgnoreCase(<span class="jxr_string">"Connection reset"</span>)) {
+<a class="jxr_linenumber" name="69" href="#69">69</a>                      agent.getPlayer().sendMessage(ChatColor.YELLOW + <span class="jxr_string">"Connection reset while connecting to Chat Server"</span>);
+<a class="jxr_linenumber" name="70" href="#70">70</a>                      agent.getPlugin()
+<a class="jxr_linenumber" name="71" href="#71">71</a>                              .getServer()
+<a class="jxr_linenumber" name="72" href="#72">72</a>                              .getScheduler()
+<a class="jxr_linenumber" name="73" href="#73">73</a>                              .scheduleAsyncDelayedTask(agent.getPlugin(), <strong class="jxr_keyword">this</strong>, INITIAL_RETRY_DELAY);
+<a class="jxr_linenumber" name="74" href="#74">74</a>                  } <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="75" href="#75">75</a>                      LOG.log(Level.SEVERE, e.getMessage(), e);
+<a class="jxr_linenumber" name="76" href="#76">76</a>                  }
+<a class="jxr_linenumber" name="77" href="#77">77</a>              } <strong class="jxr_keyword">catch</strong> (IrcException e) {
+<a class="jxr_linenumber" name="78" href="#78">78</a>                  LOG.log(Level.SEVERE, e.getMessage(), e);
+<a class="jxr_linenumber" name="79" href="#79">79</a>              }
+<a class="jxr_linenumber" name="80" href="#80">80</a>          }
+<a class="jxr_linenumber" name="81" href="#81">81</a>      }
+<a class="jxr_linenumber" name="82" href="#82">82</a>  }
 </pre>
 <hr/><div id="footer">This page was automatically generated by <a href="http://maven.apache.org/">Maven</a></div></body>
 </html>

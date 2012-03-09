@@ -15,7 +15,7 @@
 <a class="jxr_linenumber" name="5" href="#5">5</a>   <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
 <a class="jxr_linenumber" name="6" href="#6">6</a>   
 <a class="jxr_linenumber" name="7" href="#7">7</a>   <strong class="jxr_keyword">import</strong> org.bukkit.ChatColor;
-<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> org.jibble.pircbot.Colors;
+<a class="jxr_linenumber" name="8" href="#8">8</a>   <strong class="jxr_keyword">import</strong> org.pircbotx.Colors;
 <a class="jxr_linenumber" name="9" href="#9">9</a>   
 <a class="jxr_linenumber" name="10" href="#10">10</a>  <em class="jxr_javadoccomment">/**</em><em class="jxr_javadoccomment"> Minecraft &lt;-&gt; IRC Color Mapping class</em>
 <a class="jxr_linenumber" name="11" href="#11">11</a>  <em class="jxr_javadoccomment"> * Converts Color codes from IRC to Minecraft and from Minecraft to IRC.</em>
@@ -95,14 +95,14 @@
 <a class="jxr_linenumber" name="85" href="#85">85</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String fromIrc(<strong class="jxr_keyword">final</strong> String message) {
 <a class="jxr_linenumber" name="86" href="#86">86</a>          <em class="jxr_comment">// define IRC color pattern</em>
 <a class="jxr_linenumber" name="87" href="#87">87</a>          Matcher m = ircColorPattern.matcher(message);
-<a class="jxr_linenumber" name="88" href="#88">88</a>          String result = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="88" href="#88">88</a>          StringBuilder result = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="89" href="#89">89</a>          <strong class="jxr_keyword">int</strong> prev = 0;
 <a class="jxr_linenumber" name="90" href="#90">90</a>          <em class="jxr_comment">// Find all matches</em>
 <a class="jxr_linenumber" name="91" href="#91">91</a>          <strong class="jxr_keyword">while</strong> (m.find()) {
 <a class="jxr_linenumber" name="92" href="#92">92</a>              <strong class="jxr_keyword">int</strong> start = m.start();
 <a class="jxr_linenumber" name="93" href="#93">93</a>              <strong class="jxr_keyword">int</strong> end = m.end();
 <a class="jxr_linenumber" name="94" href="#94">94</a>              <em class="jxr_comment">// Add the unmatched parts to the result</em>
-<a class="jxr_linenumber" name="95" href="#95">95</a>              result += message.substring(prev, start);
+<a class="jxr_linenumber" name="95" href="#95">95</a>              result.append(message.substring(prev, start));
 <a class="jxr_linenumber" name="96" href="#96">96</a>              <strong class="jxr_keyword">char</strong> digit1 = message.charAt(start + 1);
 <a class="jxr_linenumber" name="97" href="#97">97</a>              <strong class="jxr_keyword">char</strong> digit2 = 'a';
 <a class="jxr_linenumber" name="98" href="#98">98</a>              <strong class="jxr_keyword">if</strong> (start + 2 &lt; message.length()) {
@@ -117,15 +117,15 @@
 <a class="jxr_linenumber" name="107" href="#107">107</a>                 color = <span class="jxr_string">""</span> + '\u0003' + <span class="jxr_string">"0"</span> + digit1;
 <a class="jxr_linenumber" name="108" href="#108">108</a>             }
 <a class="jxr_linenumber" name="109" href="#109">109</a>             <em class="jxr_comment">// Replace matched parts by the other color code</em>
-<a class="jxr_linenumber" name="110" href="#110">110</a>             result += ircToMinecraftColor.get(color);
+<a class="jxr_linenumber" name="110" href="#110">110</a>             result.append(ircToMinecraftColor.get(color));
 <a class="jxr_linenumber" name="111" href="#111">111</a>             prev = end;
 <a class="jxr_linenumber" name="112" href="#112">112</a>         }
 <a class="jxr_linenumber" name="113" href="#113">113</a>         <em class="jxr_comment">// Add the remaining string</em>
 <a class="jxr_linenumber" name="114" href="#114">114</a>         <strong class="jxr_keyword">if</strong> (prev &lt; message.length()) {
-<a class="jxr_linenumber" name="115" href="#115">115</a>             result += message.substring(prev, message.length());
+<a class="jxr_linenumber" name="115" href="#115">115</a>             result.append(message.substring(prev, message.length()));
 <a class="jxr_linenumber" name="116" href="#116">116</a>         }
 <a class="jxr_linenumber" name="117" href="#117">117</a> 
-<a class="jxr_linenumber" name="118" href="#118">118</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="118" href="#118">118</a>         <strong class="jxr_keyword">return</strong> result.toString();
 <a class="jxr_linenumber" name="119" href="#119">119</a>     }
 <a class="jxr_linenumber" name="120" href="#120">120</a> 
 <a class="jxr_linenumber" name="121" href="#121">121</a>     <em class="jxr_javadoccomment">/**</em>
@@ -138,25 +138,25 @@
 <a class="jxr_linenumber" name="128" href="#128">128</a> <em class="jxr_javadoccomment">     */</em>
 <a class="jxr_linenumber" name="129" href="#129">129</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String toIrc(<strong class="jxr_keyword">final</strong> String message) {
 <a class="jxr_linenumber" name="130" href="#130">130</a>         Matcher m = minecraftColorPattern.matcher(message);
-<a class="jxr_linenumber" name="131" href="#131">131</a>         String result = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="131" href="#131">131</a>         StringBuilder result = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="132" href="#132">132</a>         <strong class="jxr_keyword">int</strong> prev = 0;
 <a class="jxr_linenumber" name="133" href="#133">133</a> 
 <a class="jxr_linenumber" name="134" href="#134">134</a>         <strong class="jxr_keyword">while</strong> (m.find()) {
 <a class="jxr_linenumber" name="135" href="#135">135</a>             <strong class="jxr_keyword">int</strong> start = m.start();
 <a class="jxr_linenumber" name="136" href="#136">136</a>             <strong class="jxr_keyword">int</strong> end = m.end();
 <a class="jxr_linenumber" name="137" href="#137">137</a>             <em class="jxr_comment">// Add the unmatched parts to the result</em>
-<a class="jxr_linenumber" name="138" href="#138">138</a>             result += message.substring(prev, start);
+<a class="jxr_linenumber" name="138" href="#138">138</a>             result.append(message.substring(prev, start));
 <a class="jxr_linenumber" name="139" href="#139">139</a>             String code = <span class="jxr_string">""</span> + message.charAt(start) + message.charAt(start + 1);
 <a class="jxr_linenumber" name="140" href="#140">140</a>             <em class="jxr_comment">// System.out.println("Found code: " + code);</em>
-<a class="jxr_linenumber" name="141" href="#141">141</a>             result += minecraftToIrcColor.get(code);
+<a class="jxr_linenumber" name="141" href="#141">141</a>             result.append(minecraftToIrcColor.get(code));
 <a class="jxr_linenumber" name="142" href="#142">142</a>             prev = end;
 <a class="jxr_linenumber" name="143" href="#143">143</a>         }
 <a class="jxr_linenumber" name="144" href="#144">144</a>         <em class="jxr_comment">// Add the remaining string</em>
 <a class="jxr_linenumber" name="145" href="#145">145</a>         <strong class="jxr_keyword">if</strong> (prev &lt; message.length()) {
-<a class="jxr_linenumber" name="146" href="#146">146</a>             result += message.substring(prev, message.length());
+<a class="jxr_linenumber" name="146" href="#146">146</a>             result.append(message.substring(prev, message.length()));
 <a class="jxr_linenumber" name="147" href="#147">147</a>         }
 <a class="jxr_linenumber" name="148" href="#148">148</a> 
-<a class="jxr_linenumber" name="149" href="#149">149</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="149" href="#149">149</a>         <strong class="jxr_keyword">return</strong> result.toString();
 <a class="jxr_linenumber" name="150" href="#150">150</a>     }
 <a class="jxr_linenumber" name="151" href="#151">151</a> }
 </pre>
