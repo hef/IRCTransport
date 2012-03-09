@@ -5,11 +5,26 @@ suppress:
 server:
   address: localhost
   port: 6667
-  password:
-  ssl: false
-  webirc_password:
+  ssl:
+    enabled: false
+    trust: false
+  nicksize: 16
 default:
-  prefix:
-  suffix:
+  prefix: '[MC]'
+  suffix: 
   channels:
     - channel: '#minecraft'
+autojoin: '#minecraft'
+messages:
+  chat-irc: '[&e${CHANNEL}&f] &d${NICK}: &f${MESSAGE}'
+  quit: '&d${NICK} &fleft'
+  private: '&d${NICK}&f to &d${TO}: &f${MESSAGE}'
+  part: '&d${NICK} &fleft'
+  rename: '&d${OLDNICK} &fis now &d${NEWNICK}'
+  kick: '&d${NICK} &ckicked by &d${OP}: &${REASON}'
+  join: '&d${NICK} &fjoined &e${CHANNEL}'
+  list: 'On [&e${CHANNEL}&f]: &d${LIST}'
+  topic: '[&e${CHANNEL}&f] &dTopic: &${TOPIC}'
+  action: '* &d${NICK} &b${ACTION}'
+translations:
+  hit the ground too hard: hit the ground

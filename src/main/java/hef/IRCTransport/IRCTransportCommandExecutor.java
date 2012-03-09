@@ -70,6 +70,9 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
             return topic(bot, args);
         } else if (commandName.equals("whois")) {
             return whois(bot, args);
+        } else if (commandName.equals("irc_listbots")) {
+            log.info(plugin.getBots().toString());
+            return true;
         }
         return false;
     }
@@ -101,13 +104,14 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
     public boolean leave(final IrcAgent bot, final String[] args) {
         if (args.length == 1) {
             bot.partChannel(bot.getChannel(args[0]));
-            return true;
         } else if (args.length > 1) {
             String message = makeMessage(args, 1);
             bot.partChannel(bot.getChannel(args[0]), message);
-            return true;
         }
-        return false;
+
+        String newActive = bot.getChannels().iterator().next().getName();
+        channel(bot, newActive);
+        return true;
     }
 
     /** Change the active channel.
@@ -124,6 +128,15 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
         return false;
     }
 
+    /** Change the active channel.
+     * The agent must already be in the channel.
+     * @param bot The IRC agent that needs to handle the action
+     * @param args the channel to switch to.
+     */
+    public void channel(final IrcAgent bot, final String args) {
+        bot.setActiveChannel(bot.getChannel(args));
+    }
+
     /** Send a private message in IRC.
      * @param bot Target IRC agent.
      * @param args element 1 is the IRC reciever.  The rest are the words to send.
@@ -133,6 +146,10 @@ public class IRCTransportCommandExecutor implements CommandExecutor {
         if (args.length > 1) {
             String message = makeMessage(args, 1);
             bot.sendMessage(args[0], message);
+            String format = plugin.getConfig().getString("messages.private");
+            String user = bot.getNick();
+            message = format.replace("${NICK}", user).replace("${MESSAGE}", message).replace("${TO}", args[0]);
+            bot.getPlayer().sendMessage(message.replace("&", "\u00A7"));
             return true;
         }
         return false;

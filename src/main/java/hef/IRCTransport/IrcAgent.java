@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.net.SocketFactory;
 import org.bukkit.entity.Player;
 import org.pircbotx.Channel;
 import org.pircbotx.PircBotX;
+import static org.pircbotx.ReplyConstants.RPL_ENDOFWHOIS;
+import static org.pircbotx.ReplyConstants.RPL_WHOISUSER;
+import org.pircbotx.User;
 import org.pircbotx.UtilSSLSocketFactory;
 import org.pircbotx.exception.IrcException;
 
@@ -18,18 +20,34 @@ import org.pircbotx.exception.IrcException;
  */
 public class IrcAgent extends PircBotX {
 
-    /** Used to send message to the console. */
+    /**
+     * Used to send message to the console.
+     */
     private static final Logger LOG = Logger.getLogger("Minecraft");
-    /** The active channel. */
+    /**
+     * The active channel.
+     */
     private Channel activeChannel;
-    /** A reference to the Bukkit Player object. */
+    /**
+     * A reference to the Bukkit Player object.
+     */
     private Player player;
-    /** A reference to the IRCTransport plugin instance. */
+    /**
+     * A reference to the IRCTransport plugin instance.
+     */
     private final IRCTransport plugin;
-    /** The settings object associated with this agent. */
+    /**
+     * The settings object associated with this agent.
+     */
     private AgentSettings settings;
-    /** Flag to indicate we should not reconnect. */
+    /**
+     * Flag to indicate we should not reconnect.
+     */
     private boolean shuttingDown;
+    /**
+     * Flag to indicate we are getting WHOIS.
+     */
+    private boolean recvWho = false;
     /**
      * A set of channels to suppress onUserList. This is used to hide initial
      * join messages.
@@ -43,6 +61,7 @@ public class IrcAgent extends PircBotX {
 
     /**
      * Agent Constructor.
+     *
      * @param instance Reference to plugin instance.
      * @param bukkitPlayer Reference to Bukkit Player
      */
@@ -59,7 +78,13 @@ public class IrcAgent extends PircBotX {
             setSettings(new AgentSettings(player));
             String prefix = plugin.getConfig().getString("default.prefix", "");
             String suffix = plugin.getConfig().getString("default.suffix", "");
-            getSettings().setIrcNick(String.format("%s%s%s", prefix, player.getName(), suffix));
+            int ircnicksize = plugin.getConfig().getInt("server.nicksize", 15);
+            String nick = String.format("%s%s%s", prefix, player.getName(), suffix);
+            if (nick.length() > ircnicksize) {
+                nick = nick.substring(0, ircnicksize);
+            }
+            getSettings().setIrcNick(nick);
+
         } else {
             String format = "Player '%s' using persistent IRC nick '%s'";
             String name = player.getName();
@@ -67,12 +92,14 @@ public class IrcAgent extends PircBotX {
             LOG.log(Level.INFO, String.format(format, name, nick));
         }
         setNick(getSettings().getIrcNick());
+        this.getListenerManager().addListener(new IrcListener(instance));
         new Connect(this).run();
     }
 
     /**
      * Connect the agent. Don't call this directly, call `new
      * Connect(this).run()` instead.
+     *
      * @throws IOException If it was not possible to connect to the server.
      * @throws IrcException If the server would not let us join it.
      */
@@ -82,9 +109,6 @@ public class IrcAgent extends PircBotX {
         String password = getPlugin().getConfig().getString("server.password");
 
         SocketFactory socketFactory = null;
-        if (getPlugin().getConfig().getBoolean("server.ssl", false)) {
-            socketFactory = new UtilSSLSocketFactory();
-        }
 
         //setup WEBIRC
         setWebIrcAddress(this.getPlayer().getAddress().getAddress());
@@ -94,6 +118,14 @@ public class IrcAgent extends PircBotX {
             this.setWebIrcPassword(webIrcPassword);
         }
 
+        if (getPlugin().getConfig().getBoolean("server.ssl.enabled", false)) {
+            if (getPlugin().getConfig().getBoolean("server.ssl.trust", false)) {
+                socketFactory = new UtilSSLSocketFactory().trustAllCertificates();
+            } else {
+                socketFactory = new UtilSSLSocketFactory();
+            }
+        }
+
         if (!isConnected()) {
             if (getServer() == null) {
                 connect(address, port, password, socketFactory);
@@ -101,11 +133,13 @@ public class IrcAgent extends PircBotX {
                 reconnect();
             }
         }
+        this.joinChannel(plugin.getConfig().getString("autojoin"));
     }
 
     /**
      * Fetch the active channel. The active channel is the channel that a player
      * will talk in if they don't specify a channel.
+     *
      * @return a string with the active channel name.
      */
     public Channel getActiveChannel() {
@@ -114,6 +148,7 @@ public class IrcAgent extends PircBotX {
 
     /**
      * Get the Player.
+     *
      * @return Reference to Bukkit Player
      */
     public Player getPlayer() {
@@ -122,6 +157,7 @@ public class IrcAgent extends PircBotX {
 
     /**
      * The IRCTransport plugin instance.
+     *
      * @return a reference to the IRC plugin.
      */
     public IRCTransport getPlugin() {
@@ -137,6 +173,7 @@ public class IrcAgent extends PircBotX {
 
     /**
      * Shutting Down Flag Useful for preventing reconnection measures.
+     *
      * @return Is the agent shutting down?
      */
     public boolean isShuttingDown() {
@@ -145,6 +182,7 @@ public class IrcAgent extends PircBotX {
 
     /**
      * Log stuff. This method only logs to INFO if the Verbose flags is set.
+     *
      * @param line The line you want logged to console.
      */
     @Override
@@ -154,7 +192,9 @@ public class IrcAgent extends PircBotX {
         }
     }
 
-    /** call names(activechannel). */
+    /**
+     * call names(activechannel).
+     */
     protected void names() {
         names(activeChannel);
     }
@@ -162,41 +202,70 @@ public class IrcAgent extends PircBotX {
     /**
      * Get a list of playernames from a channel. removes muteNames flag for
      * channel.
+     *
      * @param activeChannel2 The channel to list names from.
      */
     protected void names(final Channel activeChannel2) {
-        getSuppressNames().remove(activeChannel2);
-        sendRawLine("NAMES " + activeChannel2.getName());
+        StringBuilder usersString = new StringBuilder();
+        for (User user : getUsers(activeChannel2)) {
+            usersString.append(user.getNick());
+            usersString.append(" ");
+        }
+        String format = plugin.getConfig().getString("messages.list");
+        String channel = activeChannel2.getName();
+        String message = format.replace("${LIST}", usersString.toString()).replace("${CHANNEL}", channel);
+        getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
-    /** Save agent settings to persistent data store. */
+    /**
+     * Save agent settings to persistent data store.
+     */
     protected void saveSettings() {
         plugin.getDatabase().save(getSettings());
     }
 
     /**
      * Action sender. triggers when player sends a /me
+     *
      * @param action The content of the action.
      */
     public void sendAction(final String action) {
-        sendAction(activeChannel, action);
-        getPlayer().sendMessage(String.format("[%s] * %s %s", activeChannel.getName(), getPlayer().getDisplayName(), action));
+        String actiontr = action;
+        String trans = plugin.getConfig().getString("translations." + action, "");
+        String format = plugin.getConfig().getString("messages.action");
+
+        if (!trans.equals("")) {
+            actiontr = trans;
+        }
+
+        sendAction(activeChannel, actiontr);
+
+        String message = format.replace("${CHANNEL}", activeChannel.getName());
+        message = message.replace("${NICK}", getPlayer().getDisplayName());
+        message = message.replace("${ACTION}", actiontr);
+
+        getPlayer().sendMessage(message.replace("&", "\u00A7"));
     }
 
     /**
      * Sends a message to the active channel.
+     *
      * @param message The message to send
      */
     public void sendMessage(final String message) {
         sendMessage(activeChannel, message);
         if (isConnected()) {
-            String msg = String.format("[%s] %s: %s", activeChannel.getName(), getPlayer().getDisplayName(), message);
-            getPlayer().sendMessage(msg);
+            String formattedMessage = plugin.getConfig().getString("messages.chat-irc");
+            formattedMessage = formattedMessage.replace("${NICK}", getPlayer().getDisplayName());
+            formattedMessage = formattedMessage.replace("${MESSAGE}", message);
+            formattedMessage = formattedMessage.replace("${CHANNEL}", activeChannel.getName());
+            getPlayer().sendMessage(formattedMessage.replace("&", "\u00A7"));
         }
     }
 
     /**
      * Change active channel.
+     *
      * @param channel The channel to make the active one.
      */
     public void setActiveChannel(final Channel channel) {
@@ -206,6 +275,7 @@ public class IrcAgent extends PircBotX {
     /**
      * Set name to attempt to use at login This function is not the same as
      * changeNick(String name) you probably don't want this function.
+     *
      * @param name the name to attempt to use.
      */
     @Override
@@ -215,6 +285,7 @@ public class IrcAgent extends PircBotX {
 
     /**
      * Set the settings object.
+     *
      * @param agentSettings the settings to set
      */
     public void setSettings(final AgentSettings agentSettings) {
@@ -223,6 +294,7 @@ public class IrcAgent extends PircBotX {
 
     /**
      * Attempt to set the channel topic. Sends to active channel.
+     *
      * @param topic The body of the topic to set.
      */
     protected void setTopic(final String topic) {
@@ -233,11 +305,15 @@ public class IrcAgent extends PircBotX {
      * Initiate agent shutdown Disconnects the agent, sets shutting down flag.
      */
     public void shutdown() {
-        shuttingDown = true;
-        disconnect();
+        if (isConnected() && !shuttingDown) {
+            shuttingDown = true;
+            disconnect();
+        }
     }
 
-    /** Request active topic. */
+    /**
+     * Request active topic.
+     */
     protected void topic() {
         getSuppressTopic().remove(activeChannel);
         sendRawLine(String.format("TOPIC %s", activeChannel.getName()));
@@ -245,6 +321,7 @@ public class IrcAgent extends PircBotX {
 
     /**
      * Request information about a nick.
+     *
      * @param nick a command delimited list of nicks.
      */
     protected void whois(final String nick) {
@@ -259,9 +336,31 @@ public class IrcAgent extends PircBotX {
     }
 
     /**
-     * @return  the Hash set of channels to suppress topic messages in.
+     * @return the Hash set of channels to suppress topic messages in.
      */
     public HashSet<Channel> getSuppressTopic() {
         return suppressTopic;
+    }
+
+    /**
+     * Parse /WHOIS data since PircBotX does not.
+     *
+     * @param code the integer code for the message
+     * @param response the response from the server
+     */
+    @Override
+    protected void processServerResponse(final int code, String response) {
+        // Process WHOIS data
+        if (code == RPL_WHOISUSER) {
+            recvWho = true;
+        } else if (code == RPL_ENDOFWHOIS) {
+            recvWho = false;
+        }
+        if (recvWho) {
+            response = response.replaceFirst(getNick() + " ", "&4");
+            getPlayer().sendMessage(response.replace("&", "\u00A7"));
+        }
+
+        super.processServerResponse(code, response);
     }
 }
