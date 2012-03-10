@@ -80,6 +80,7 @@ Changelog:
   * Disabling IRC <-> Minecraft color code mapping (for now).
   * Added message custimazation support.
   * Added basic translation support.
+  * Added trust all ssl option.
 
 ### Version 0.12.0
   * Works with Bukkit 1.1 (and 1.2)
