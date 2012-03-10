@@ -24,7 +24,6 @@ Put these in IRCTransport/config.yml file with appropriate values.
 		  suffix: 
 		  channels:
 			- channel: '#minecraft'
-		autojoin: '#minecraft'
 		messages:
 		  chat-irc: '[&e${CHANNEL}&f] &d${NICK}: &f${MESSAGE}'
 		  quit: '&d${NICK} &fleft'
@@ -80,6 +79,7 @@ Changelog:
   * Added message custimazation support.
   * Added basic translation support.
   * Added trust all ssl option.
+  * Fixed bog on player join.
 
 ### Version 0.12.0
   * Works with Bukkit 1.1 (and 1.2)

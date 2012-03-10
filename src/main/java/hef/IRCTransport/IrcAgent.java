@@ -132,7 +132,6 @@ public class IrcAgent extends PircBotX {
                 reconnect();
             }
         }
-        this.joinChannel(plugin.getConfig().getString("autojoin"));
     }
 
     /**
