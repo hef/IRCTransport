@@ -15,7 +15,7 @@ import org.pircbotx.exception.NickAlreadyInUseException;
 public class Connect implements Runnable {
     /**
      * Time between connection retries after a failed connection attempt.
-     * 4oo is 20 seconds.
+     * 400 is 20 seconds.
      */
     public static final int RETRY_RATE = 400;
     /**

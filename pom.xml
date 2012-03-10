@@ -26,6 +26,14 @@
             <name>Cheesy</name>
             <url>https://github.com/cheesy/IRCTransport/</url>
         </developer>
+        <developer>
+            <name>fensoft</name>
+            <url>https://github.com/fensoft/IRCTransport/</url>
+        </developer>
+        <developer>
+            <name>LostKhaos</name>
+            <url>https://github.com/LostKhaos/IRCTransport/</url>
+        </developer>
     </developers>
     <contributors>
         <contributor>
@@ -241,7 +249,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.2.3-R0.1</version>
+            <version>${bukkit.version}</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>

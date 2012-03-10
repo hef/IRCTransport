@@ -2,7 +2,6 @@ package hef.IRCTransport;
 
 import gnu.trove.map.hash.TIntObjectHashMap;
 import gnu.trove.procedure.TIntObjectProcedure;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +81,7 @@ public class IRCTransport extends JavaPlugin {
         TIntObjectProcedure<IrcAgent> shutdown = new ShutdownProcedure();
         bots.forEachEntry(shutdown);
         bots.clear();
+
         LOG.log(Level.INFO, this.getDescription().getFullName()
                 + " is disabled");
     }
@@ -119,6 +119,7 @@ public class IRCTransport extends JavaPlugin {
 
         // register for events we care about
         pm.registerEvents(bukkitListener, this);
+
         // set command executors
         IRCTransportCommandExecutor commandExecutor = new IRCTransportCommandExecutor(this);
         getCommand("join").setExecutor(commandExecutor);
@@ -130,6 +131,7 @@ public class IRCTransport extends JavaPlugin {
         getCommand("me").setExecutor(commandExecutor);
         getCommand("topic").setExecutor(commandExecutor);
         getCommand("whois").setExecutor(commandExecutor);
+        getCommand("irc_listbots").setExecutor(commandExecutor);
         LOG.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
     }
 
