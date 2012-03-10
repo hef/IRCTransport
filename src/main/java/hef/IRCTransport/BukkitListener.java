@@ -1,8 +1,7 @@
 package hef.IRCTransport;
 
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
-
-import gnu.trove.map.hash.TIntObjectHashMap;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,7 +17,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class BukkitListener implements Listener {
 
     /** Maps to retrieve associated IrcAggent from player. */
-    private TIntObjectHashMap<IrcAgent> bots;
+    private ConcurrentHashMap<Integer, IrcAgent> bots;
     /** Reference to the parent plugin. */
     private final IRCTransport plugin;
     /** Logger object. */
@@ -40,7 +39,7 @@ public class BukkitListener implements Listener {
     @EventHandler
     public void onPlayerChat(final PlayerChatEvent event) {
         IrcAgent bot = this.bots.get(event.getPlayer().getEntityId());
-        if (bot.isConnected()) {
+        if (null != bot && bot.isConnected()) {
             bot.sendMessage(event.getMessage());
             // prevent messages from being displayed twice.
             event.setCancelled(true);
@@ -54,11 +53,8 @@ public class BukkitListener implements Listener {
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        int playerID = player.getEntityId();
-        IrcAgent agent = new IrcAgent(plugin, player);
-        agent.getListenerManager().addListener(plugin.getListener());
-        this.bots.put(playerID, agent);
-        log.info(String.format("Created agent for Player ID: %d name: %s", playerID, player.getName()));
+        InitializeAgent initializeAgent = new InitializeAgent(plugin, player);
+        plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, initializeAgent);
     }
 
     /**
@@ -69,9 +65,12 @@ public class BukkitListener implements Listener {
     public void onPlayerQuit(final PlayerQuitEvent event) {
         Player player = event.getPlayer();
         int playerID = player.getEntityId();
-        this.bots.get(playerID).shutdown();
-        this.bots.remove(playerID);
-        log.info(String.format("Removed agent for Player ID: %d name: %s", playerID, player.getName()));
+        IrcAgent agent = bots.get(playerID);
+        if (null != agent) {
+            agent.shutdown();
+            bots.remove(playerID);
+            log.info(String.format("Removed agent for Player ID: %d name: %s", playerID, player.getName()));
+        }
     }
 
     /**
@@ -83,7 +82,7 @@ public class BukkitListener implements Listener {
         String deathMessage = event.getDeathMessage();
 
         IrcAgent bot = this.bots.get(event.getEntity().getEntityId());
-        if (bot.isConnected() && deathMessage != null && !deathMessage.equals("")) {
+        if (null != bot && bot.isConnected() && deathMessage != null && !deathMessage.equals("")) {
             String playerName = ((Player) event.getEntity()).getName();
 
             // deathMessage seems to be 'playerName died for some reason'

@@ -72,7 +72,6 @@ Features:
   * Private messaging works in game.
   * IRC channels are joinable in game.
 
-
 Changelog:
 ----------
 ### Version 0.13.0
@@ -85,6 +84,9 @@ Changelog:
 ### Version 0.12.0
   * Works with Bukkit 1.1 (and 1.2)
   * Fixed bug in DeathMessage
+  * Leaving a channel sets another channel active.
+  * Added server.nicksize to truncate nick intelligently
+  * Added basic translation support
  
 ### Version 0.11.2
   * Fixed /msg showing usage everytime.

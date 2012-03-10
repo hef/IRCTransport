@@ -166,9 +166,12 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
 
         try {
             int playerId = Integer.parseInt(event.getUser().getLogin().substring(1));
-            Player player = plugin.getBots().get(playerId).getPlayer();
-            if (null != player && sender.equals(player.getDisplayName())) {
-                sender = player.getDisplayName();
+            IrcAgent agent = plugin.getBots().get(playerId);
+            if (null != agent) {
+                Player player = agent.getPlayer();
+                if (null != player && sender.equals(player.getDisplayName())) {
+                    sender = player.getDisplayName();
+                }
             }
         } catch (NumberFormatException ex) {
             sender = event.getUser().getNick();

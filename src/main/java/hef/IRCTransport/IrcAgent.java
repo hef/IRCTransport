@@ -92,8 +92,7 @@ public class IrcAgent extends PircBotX {
             LOG.log(Level.INFO, String.format(format, name, nick));
         }
         setNick(getSettings().getIrcNick());
-        this.getListenerManager().addListener(new IrcListener(instance));
-        new Connect(this).run();
+        //this.getListenerManager().addListener(new IrcListener(instance));
     }
 
     /**

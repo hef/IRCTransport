@@ -1,15 +1,12 @@
 package hef.IRCTransport;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-import gnu.trove.procedure.TIntObjectProcedure;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import javax.persistence.PersistenceException;
-
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -23,7 +20,7 @@ public class IRCTransport extends JavaPlugin {
     /** The logging obect. Used internal to write to the console. */
     private static final Logger LOG = Logger.getLogger("Minecraft");
     /** MC Player to IRCAgent map. */
-    private final TIntObjectHashMap<IrcAgent> bots = new TIntObjectHashMap<IrcAgent>();
+    private final ConcurrentHashMap<Integer, IrcAgent> bots = new ConcurrentHashMap<Integer, IrcAgent>();
     /** The player action handler. */
     private BukkitListener bukkitListener;
     /** IRC event handler. */
@@ -33,7 +30,7 @@ public class IRCTransport extends JavaPlugin {
      * Gets the maping of Bukkit Players to IRCAgents.
      * @return the map of player's to agents.
      */
-    public TIntObjectHashMap<IrcAgent> getBots() {
+    public ConcurrentHashMap<Integer, IrcAgent> getBots() {
         return this.bots;
     }
 
@@ -78,8 +75,11 @@ public class IRCTransport extends JavaPlugin {
     @Override
     public void onDisable() {
         // disconnect all agents
-        TIntObjectProcedure<IrcAgent> shutdown = new ShutdownProcedure();
-        bots.forEachEntry(shutdown);
+        //TIntObjectProcedure<IrcAgent> shutdown = new ShutdownProcedure();
+        //bots.forEachEntry(shutdown);
+        for (IrcAgent bot : bots.values()) {
+            bot.shutdown();
+        }
         bots.clear();
 
         LOG.log(Level.INFO, this.getDescription().getFullName()
@@ -140,19 +140,5 @@ public class IRCTransport extends JavaPlugin {
      */
     public IrcListener getListener() {
         return listener;
-    }
-
-    /** ShutdownProcedure for shutting down agents. */
-    private static class ShutdownProcedure implements TIntObjectProcedure<IrcAgent> {
-        /** Shutdown an agent.
-         * @param a The key
-         * @param b The Agent to shutdown
-         * @return false.  Don't shutdown an already shutdown agent.
-         */
-        @Override
-        public boolean execute(final int a, final IrcAgent b) {
-            b.shutdown();
-            return false;
-        }
     }
 }
