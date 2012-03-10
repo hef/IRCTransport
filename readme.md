@@ -72,11 +72,14 @@ Features:
   * Private messaging works in game.
   * IRC channels are joinable in game.
 
+
 Changelog:
 ----------
 ### Version 0.13.0
   * Leaving a channel sets another channel active.
-  * Disabling IRC <-> Minecraft color code mapping (for now)
+  * Disabling IRC <-> Minecraft color code mapping (for now).
+  * Added message custimazation support.
+  * Added basic translation support.
 
 ### Version 0.12.0
   * Works with Bukkit 1.1 (and 1.2)
