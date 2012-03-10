@@ -301,7 +301,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         } else {
             format = plugin.getConfig().getString("messages.topic");
             String formattedMessage = format.replace("${CHANNEL}", channel).replace("${TOPIC}", topic);
-            player.sendMessage(formattedMessage);
+            player.sendMessage(formattedMessage.replace("&", "\u00A7"));
         }
     }
 
