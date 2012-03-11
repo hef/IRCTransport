@@ -42,6 +42,9 @@
         <contributor>
             <name>Evil Joel</name>
         </contributor>
+        <contributor>
+            <name>Nyssa</name>
+        </contributor>
     </contributors>
     <scm>
         <connection>scm:git:git://github.com/hef/IRCTransport.git/</connection>

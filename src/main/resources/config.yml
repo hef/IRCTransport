@@ -15,15 +15,15 @@ default:
   channels:
     - channel: '#minecraft'
 messages:
-  chat-irc: '[&e${CHANNEL}&f] &d${NICK}: &f${MESSAGE}'
-  quit: '&d${NICK} &fleft'
-  private: '&d${NICK}&f to &d${TO}: &f${MESSAGE}'
-  part: '&d${NICK} &fleft'
-  rename: '&d${OLDNICK} &fis now &d${NEWNICK}'
-  kick: '&d${NICK} &ckicked by &d${OP}: &${REASON}'
-  join: '&d${NICK} &fjoined &e${CHANNEL}'
-  list: 'On [&e${CHANNEL}&f]: &d${LIST}'
-  topic: '[&e${CHANNEL}&f] &dTopic: &${TOPIC}'
-  action: '* &d${NICK} &b${ACTION}'
+  chat-irc: '&9[&b${CHANNEL}&9] &3${NICK}: &f${MESSAGE}'
+  quit: '&3${NICK} &fleft'
+  private: '&2${NICK}&f to you: &f${MESSAGE}'
+  part: '&3${NICK} &fleft'
+  rename: '&3${OLDNICK} &fis now &3${NEWNICK}'
+  kick: '&3${NICK} &ckicked by &3${OP}: &${REASON}'
+  join: '&3${NICK} &fjoined &b${CHANNEL}'
+  list: 'On &9[&b${CHANNEL}&9]: &3${LIST}'
+  topic: '&9[&b${CHANNEL}&9] &3Topic: &f${TOPIC}'
+  action: '* &3${NICK} &a${ACTION}'
 translations:
   hit the ground too hard: hit the ground
