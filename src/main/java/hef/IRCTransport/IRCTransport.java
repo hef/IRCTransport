@@ -115,6 +115,7 @@ public class IRCTransport extends JavaPlugin {
             IrcAgent agent = new IrcAgent(this, player);
             agent.getListenerManager().addListener(getListener());
             this.bots.put(player.getEntityId(), agent);
+            new Connect(agent).run();
         }
 
         // register for events we care about
