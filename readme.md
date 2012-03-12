@@ -74,14 +74,15 @@ Features:
 
 Changelog:
 ----------
+
 ### Version 0.13.0
   * Leaving a channel sets another channel active.
   * Disabling IRC <-> Minecraft color code mapping (for now).
-  * Added message custimazation support.
+  * Added message customization support.
   * Added basic translation support.
-  * Added trust all ssl option.
+  * Added trust all SSL option.
   * Fixed bog on player join.
-  * Added WebIRC support
+  * Added WebIRC support.
 
 ### Version 0.12.0
   * Works with Bukkit 1.1 (and 1.2)
