@@ -19,6 +19,7 @@ Put these in IRCTransport/config.yml file with appropriate values.
 			enabled: false
 			trust: false
 		  nicksize: 16
+          webirc_password: p@$$w0rd
 		default:
 		  prefix: '[MC]'
 		  suffix: 
@@ -80,6 +81,7 @@ Changelog:
   * Added basic translation support.
   * Added trust all ssl option.
   * Fixed bog on player join.
+  * Added WebIRC support
 
 ### Version 0.12.0
   * Works with Bukkit 1.1 (and 1.2)
