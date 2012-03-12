@@ -27,3 +27,7 @@ messages:
   action: '* &3${NICK} &a${ACTION}'
 translations:
   hit the ground too hard: hit the ground
+groups:
+  - Op: 'permissions.kick'
+  - '': 'permissions.build'
+  - Guest: ''
