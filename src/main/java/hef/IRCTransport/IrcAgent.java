@@ -2,6 +2,8 @@ package hef.IRCTransport;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.net.SocketFactory;
@@ -58,6 +60,7 @@ public class IrcAgent extends PircBotX {
      * join messages.
      */
     private HashSet<Channel> suppressTopic = new HashSet<Channel>();
+    private String groupName = "";
 
     /**
      * Agent Constructor.
@@ -92,7 +95,7 @@ public class IrcAgent extends PircBotX {
             LOG.log(Level.INFO, String.format(format, name, nick));
         }
         setNick(getSettings().getIrcNick());
-        //this.getListenerManager().addListener(new IrcListener(instance));
+        
     }
 
     /**
@@ -361,4 +364,5 @@ public class IrcAgent extends PircBotX {
 
         super.processServerResponse(code, response);
     }
+
 }

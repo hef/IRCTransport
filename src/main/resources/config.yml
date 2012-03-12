@@ -28,6 +28,6 @@ messages:
 translations:
   hit the ground too hard: hit the ground
 groups:
-  - Op: 'permissions.kick'
-  - '': 'permissions.build'
-  - Guest: ''
+  Op: 'permissions.kick'
+  '': 'permissions.build'
+  Guest: ''
