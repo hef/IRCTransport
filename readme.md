@@ -83,6 +83,7 @@ Changelog:
   * Added trust all SSL option.
   * Fixed bog on player join.
   * Added WebIRC support.
+  * Added [Metrics](http://metrics.griefcraft.com/plugin/IRCTransport)
 
 ### Version 0.12.0
   * Works with Bukkit 1.1 (and 1.2)
