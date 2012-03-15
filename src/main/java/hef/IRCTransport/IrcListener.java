@@ -163,6 +163,7 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         String formattedMessage = plugin.getConfig().getString("messages.chat-irc");
         String channel = event.getChannel().getName();
         String sender = event.getUser().getNick();
+        String group = "";
 
         try {
             int playerId = Integer.parseInt(event.getUser().getLogin().substring(1));
@@ -170,17 +171,18 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
             if (null != agent) {
                 Player player = agent.getPlayer();
                 if (null != player && sender.equals(player.getDisplayName())) {
-                    sender = player.getDisplayName();
+                    group = new GroupName(plugin).getGroupName(player);
+                    sender = event.getUser().getNick();
                 }
             }
         } catch (NumberFormatException ex) {
             sender = event.getUser().getNick();
         }
-
         String message = event.getMessage();
         formattedMessage = formattedMessage.replace("${CHANNEL}", channel);
         formattedMessage = formattedMessage.replace("${NICK}", sender);
         formattedMessage = formattedMessage.replace("${MESSAGE}", message);
+        formattedMessage = formattedMessage.replace("${GROUP}", group);
         event.getBot().getPlayer().sendMessage(formattedMessage.replace("&", "\u00A7"));
         log.info(formattedMessage);
     }

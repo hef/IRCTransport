@@ -1,0 +1,5 @@
+groups:
+  permissions.ban: OP
+  permissions.kick: MOD
+  permissions.build: foo
+  default: foo

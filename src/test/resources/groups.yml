@@ -1,5 +1,0 @@
-groups:
-  OP: permissions.ban
-  MOD: permissions.kick
-  '': permissions.build
-  GUEST: ''
