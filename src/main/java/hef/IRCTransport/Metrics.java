@@ -225,15 +225,16 @@ public class Metrics {
         PluginDescriptionFile description = plugin.getDescription();
 
         // Construct the post data
-        String data = encode("guid") + '=' + encode(guid)
-                + encodeDataPair("version", description.getVersion())
-                + encodeDataPair("server", Bukkit.getVersion())
-                + encodeDataPair("players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length))
-                + encodeDataPair("revision", String.valueOf(REVISION));
+        StringBuilder data = new StringBuilder();
+        data.append(encode("guid")).append('=').append(encode(guid));
+        data.append(encodeDataPair("version", description.getVersion()));
+        data.append(encodeDataPair("server", Bukkit.getVersion()));
+        data.append(encodeDataPair("players", Integer.toString(Bukkit.getServer().getOnlinePlayers().length)));
+        data.append(encodeDataPair("revision", String.valueOf(REVISION)));
 
         // If we're pinging, append it
         if (isPing) {
-            data += encodeDataPair("ping", "true");
+            data.append(encodeDataPair("ping", "true"));
         }
 
         // Acquire a lock on the graphs, which lets us make the assumption we also lock everything
@@ -259,7 +260,7 @@ public class Metrics {
                     String value = Integer.toString(plotter.getValue());
 
                     // Add it to the http post data :)
-                    data += encodeDataPair(key, value);
+                    data.append(encodeDataPair(key, value));
                 }
             }
         }
@@ -281,19 +282,19 @@ public class Metrics {
         connection.setDoOutput(true);
 
         // Write the data
-        OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
-        writer.write(data);
+        OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
+        writer.write(data.toString());
         writer.flush();
 
         // Now read the response
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
         String response = reader.readLine();
 
         // close resources
         writer.close();
         reader.close();
 
-        if (response.startsWith("ERR")) {
+        if (null == response || response.startsWith("ERR")) {
             throw new IOException(response); //Throw the exception
         } else {
             // Is this the first update this hour?
