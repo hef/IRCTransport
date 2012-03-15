@@ -134,9 +134,9 @@ public class IRCTransport extends JavaPlugin {
         getCommand("topic").setExecutor(commandExecutor);
         getCommand("whois").setExecutor(commandExecutor);
         getCommand("irc_listbots").setExecutor(commandExecutor);
-        
+
         startMetrics();
-        
+
         LOG.log(Level.INFO, pdfFile.getFullName() + " is enabled!");
     }
 
@@ -146,10 +146,9 @@ public class IRCTransport extends JavaPlugin {
     public IrcListener getListener() {
         return listener;
     }
-    
-    /** start sending metric data to griefcraft */
-    private void startMetrics()
-    {
+
+    /** start sending metric data to griefcraft. */
+    private void startMetrics() {
         try {
             Metrics metrics = new Metrics(this);
             metrics.start();
