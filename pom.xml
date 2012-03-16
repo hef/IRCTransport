@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>hef.IRCTransport</groupId>
     <artifactId>IRCTransport</artifactId>
-    <version>0.13.0</version>
+    <version>0.14.0-SNAPSHOT</version>
     <name>IRCTransport</name>
     <description>Chat to IRC bridge plugin for the bukkit Minecraft server.</description>
     <url>http://github.com/hef/IRCTransport</url>
@@ -252,7 +252,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.2.3-R0.2</version>
+            <version>1.2.3-R0.3-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
