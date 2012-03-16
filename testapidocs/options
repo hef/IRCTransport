@@ -1,5 +1,5 @@
 -classpath
-'/Users/hef/projects/IRCTransport/target/classes:/Users/hef/projects/IRCTransport/target/test-classes:/Users/hef/.m2/repository/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar:/Users/hef/.m2/repository/net/sf/trove4j/trove4j/3.0.2/trove4j-3.0.2.jar:/Users/hef/.m2/repository/org/pircbotx/pircbotx/1.7-SNAPSHOT/pircbotx-1.7-SNAPSHOT.jar:/Users/hef/.m2/repository/junit/junit/4.10/junit-4.10.jar:/Users/hef/.m2/repository/org/bukkit/bukkit/1.2.3-R0.1/bukkit-1.2.3-R0.1.jar'
+'/Users/hef/projects/IRCTransport/target/classes:/Users/hef/projects/IRCTransport/target/test-classes:/Users/hef/.m2/repository/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar:/Users/hef/.m2/repository/org/pircbotx/pircbotx/1.7-SNAPSHOT/pircbotx-1.7-SNAPSHOT.jar:/Users/hef/.m2/repository/junit/junit/4.10/junit-4.10.jar:/Users/hef/.m2/repository/org/bukkit/bukkit/1.2.3-R0.2/bukkit-1.2.3-R0.2.jar'
 -encoding
 'UTF-8'
 -protected
@@ -15,7 +15,7 @@
 -docencoding
 'UTF-8'
 -doctitle
-'IRCTransport 0.12.0 Test API'
+'IRCTransport 0.13.0 Test API'
 -link
 '../apidocs'
 -linkoffline
@@ -23,4 +23,4 @@
 -use
 -version
 -windowtitle
-'IRCTransport 0.12.0 Test API'
+'IRCTransport 0.13.0 Test API'

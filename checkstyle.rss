@@ -8,8 +8,8 @@
     <language>en-us</language>
     <copyright>&#169;2011 - 2012</copyright>
     <item>
-      <title>File: 9,
-             Errors: 1,
+      <title>File: 11,
+             Errors: 3,
              Warnings: 0,
              Infos: 0
       </title>
@@ -27,6 +27,20 @@
             </tr>
           </thead>
           <tbody>
+                          <tr>
+                <td>
+                  <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.Metrics.java">hef/IRCTransport/Metrics.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
                           <tr>
                 <td>
                   <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.IRCTransport.java">hef/IRCTransport/IRCTransport.java</a>
@@ -94,12 +108,26 @@
                   0
                 </td>
                 <td>
-                  0
+                  2
                 </td>
               </tr>
                           <tr>
                 <td>
                   <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.BukkitListener.java">hef/IRCTransport/BukkitListener.java</a>
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+                <td>
+                  0
+                </td>
+              </tr>
+                          <tr>
+                <td>
+                  <a href="http://github.com/hef/IRCTransport/checkstyle.html#hef.IRCTransport.InitializeAgent.java">hef/IRCTransport/InitializeAgent.java</a>
                 </td>
                 <td>
                   0
