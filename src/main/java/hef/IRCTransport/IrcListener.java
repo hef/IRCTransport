@@ -182,7 +182,6 @@ public class IrcListener extends ListenerAdapter<IrcAgent> {
         formattedMessage = formattedMessage.replace("${NICK}", sender);
         formattedMessage = formattedMessage.replace("${MESSAGE}", message);
         event.getBot().getPlayer().sendMessage(formattedMessage.replace("&", "\u00A7"));
-        log.info(formattedMessage);
     }
 
     /**
