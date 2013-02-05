@@ -4,3 +4,4 @@ target/
 .settings/
 .checkstyle
 checkstyle-cache
+*.un~
