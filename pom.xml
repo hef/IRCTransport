@@ -9,8 +9,8 @@
     <inceptionYear>2011</inceptionYear>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bukkit.version>1.2.3-R0.3-SNAPSHOT</bukkit.version>
-        <pircbotx.version>1.7-SNAPSHOT</pircbotx.version>
+        <bukkit.version>1.4.7-R1.0</bukkit.version>
+        <pircbotx.version>1.8</pircbotx.version>
     </properties>
     <developers>
         <developer>
@@ -252,7 +252,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.2.3-R0.3-SNAPSHOT</version>
+	    <version>${bukkit.version}</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -265,7 +265,7 @@
         <dependency>
             <groupId>org.pircbotx</groupId>
             <artifactId>pircbotx</artifactId>
-            <version>1.7-SNAPSHOT</version>
+	    <version>${pircbotx.version}</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>
